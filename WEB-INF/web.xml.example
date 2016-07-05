@@ -1,0 +1,244 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE web-app 
+    PUBLIC "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN" 
+    "http://java.sun.com/dtd/web-app_2_3.dtd">
+
+<web-app>
+    <!-- General description of your web application -->
+	<welcome-file-list>
+    <welcome-file>index.jsp</welcome-file>
+	</welcome-file-list>
+  <display-name>AssetTrack</display-name>
+  <description>
+  </description>
+  <context-param>
+    <param-name>url</param-name>
+    <param-value>your server/assettrack/</param-value>
+  </context-param>
+	<context-param>
+    <param-name>url2</param-name>
+    <param-value>your server/assettrack/</param-value>
+  </context-param>
+	<context-param>
+    <param-name>url3</param-name>
+    <param-value>your server/assettrack/files/</param-value>
+  </context-param>
+	<context-param>
+    <param-name>sqliteDbFile</param-name>
+		<param-value>import file location</param-value>
+  </context-param>		
+	<context-param>
+    <param-name>debug</param-name>
+    <param-value>true</param-value>
+  </context-param>
+	<context-param>
+    <param-name>activeMail</param-name>
+    <param-value>false</param-value>
+  </context-param>
+	<context-param>
+    <param-name>server_path</param-name>
+    <param-value>your server/assettrack/files/</param-value>
+    <description> path to uploaded files
+    </description>
+  </context-param>
+	<context-param>
+    <param-name>cas_url</param-name>
+    <param-value>https://bloomington.in.gov/cas/logout</param-value>
+    <description> 
+    </description>
+  </context-param>
+
+    <!-- Context initialization parameters that define shared
+         String constants used within your application, which
+         can be customized by the system administrator who is
+         installing your application.  The values actually
+         assigned to these parameters can be retrieved in a
+         servlet or JSP page by calling:
+
+             String value =
+               getServletContext().getInitParameter("name");
+
+         where "name" matches the <param-name> element of
+         one of these initialization parameters.
+
+         You can define any number of context initialization
+         parameters, including zero.
+    -->
+
+
+    <!-- Servlet definitions for the servlets that make up
+         your web application, including initialization
+         parameters.  With Tomcat, you can also send requests
+         to servlets not listed here with a request like this:
+
+           http://localhost:8080/{context-path}/servlet/{classname}
+
+         but this usage is not guaranteed to be portable.  It also
+         makes relative references to images and other resources
+         required by your servlet more complicated, so defining
+         all of your servlets (and defining a mapping to them with
+         a servlet-mapping element) is recommended.
+
+         Servlet initialization parameters can be retrieved in a
+         servlet or JSP page by calling:
+
+             String value =
+               getServletConfig().getInitParameter("name");
+
+         where "name" matches the <param-name> element of
+         one of these initialization parameters.
+
+         You can define any number of servlets, including zero.
+    -->
+	<!-- donation -->
+    <servlet>
+      <servlet-name>Logout</servlet-name>
+      <description>
+      </description>
+      <servlet-class>assets.Logout</servlet-class>
+    </servlet>
+    <servlet>
+      <servlet-name>Login</servlet-name>
+      <description>
+      </description>
+      <servlet-class>assets.Login</servlet-class>
+    </servlet>
+    <servlet>
+      <servlet-name>AuctionService</servlet-name>
+      <description>
+				
+      </description>
+      <servlet-class>assets.AuctionService</servlet-class>
+    </servlet>
+    <servlet>
+      <servlet-name>SoftwareService</servlet-name>
+      <description>
+      </description>
+      <servlet-class>assets.SoftwareService</servlet-class>
+    </servlet>
+    <servlet>
+      <servlet-name>EmployeeService</servlet-name>
+      <description>
+      </description>
+      <servlet-class>assets.EmployeeService</servlet-class>
+    </servlet>				
+    <servlet>
+      <servlet-name>TypeService</servlet-name>
+      <description>
+      </description>
+      <servlet-class>assets.TypeService</servlet-class>
+    </servlet>
+    <servlet>
+      <servlet-name>DonationService</servlet-name>
+      <description>
+      </description>
+      <servlet-class>assets.DonationService</servlet-class>
+    </servlet>		
+    <servlet>
+      <servlet-name>UserService</servlet-name>
+      <description>
+      </description>
+      <servlet-class>assets.UserService</servlet-class>
+    </servlet>	
+
+	<servlet>
+      <servlet-name>log4j-init</servlet-name>
+       <servlet-class>assets.Log4jInit</servlet-class>
+       <init-param>
+		 <param-name>log4j-init-file</param-name>
+		 <param-value>WEB-INF/classes/log4j.lcf</param-value>
+       </init-param>
+       <load-on-startup>1</load-on-startup>
+	 </servlet>
+
+	 <!--
+	<servlet>
+	  <servlet-name>quartz</servlet-name>
+	  <display-name>Quartz Initializer Servlet</display-name>
+	  <servlet-class>org.quartz.ee.servlet.QuartzInitializerServlet</servlet-class>
+	  <init-param>
+		<param-name>start-scheduler-on-load</param-name>
+		<param-value>true</param-value>
+	  </init-param>
+	  <init-param>
+		<param-name>shutdown-on-unload</param-name>
+		<param-value>true</param-value>
+	  </init-param>
+	  <init-param>
+		<param-name>config-file</param-name>
+		<param-value>quartz.properties</param-value>
+	  </init-param>
+	  <load-on-startup>3</load-on-startup>
+	</servlet> 
+-->
+    <servlet-mapping>
+      <servlet-name>Login</servlet-name>
+      <url-pattern>/Login</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+      <servlet-name>Logout</servlet-name>
+      <url-pattern>/Logout</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+      <servlet-name>AuctionService</servlet-name>
+      <url-pattern>/AuctionService</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+      <servlet-name>UserService</servlet-name>
+      <url-pattern>/UserService</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+      <servlet-name>EmployeeService</servlet-name>
+      <url-pattern>/EmployeeService</url-pattern>
+    </servlet-mapping>		
+    <servlet-mapping>
+      <servlet-name>SoftwareService</servlet-name>
+      <url-pattern>/SoftwareService</url-pattern>
+    </servlet-mapping>		
+    <servlet-mapping>
+      <servlet-name>TypeService</servlet-name>
+      <url-pattern>/TypeService</url-pattern>
+    </servlet-mapping>
+		<servlet-mapping>
+      <servlet-name>DonationService</servlet-name>
+      <url-pattern>/DonationService</url-pattern>
+    </servlet-mapping>
+
+	<filter>
+	  <filter-name>CAS Filter</filter-name>
+	  <filter-class>edu.yale.its.tp.cas.client.filter.CASFilter</filter-class>
+	  <init-param>
+		<param-name>edu.yale.its.tp.cas.client.filter.loginUrl</param-name>
+		<param-value>your cas server/cas/login</param-value>
+	  </init-param>
+	  <init-param>
+		<param-name>edu.yale.its.tp.cas.client.filter.validateUrl</param-name>
+		<param-value>your cas server/cas/serviceValidate</param-value>
+	  </init-param>
+	  <init-param>
+		<param-name>edu.yale.its.tp.cas.client.filter.serverName</param-name>
+		<param-value>your server</param-value>
+	  </init-param>
+	  <init-param>
+		<param-name>edu.yale.its.tp.cas.client.filter.wrapRequest</param-name>
+		<param-value>true</param-value>
+	  </init-param>
+	</filter>
+  <filter>
+    <filter-name>struts2</filter-name>
+		<filter-class>org.apache.struts2.dispatcher.ng.filter.StrutsPrepareAndExecuteFilter</filter-class>
+  </filter>
+
+  <filter-mapping>
+    <filter-name>struts2</filter-name>
+    <url-pattern>/*</url-pattern>
+  </filter-mapping>	
+	<filter-mapping>
+	  <filter-name>CAS Filter</filter-name>
+	  <url-pattern>/Login</url-pattern>
+	</filter-mapping>
+  <session-config>
+    <session-timeout>60</session-timeout>    <!-- 60 minutes -->
+  </session-config>
+
+</web-app>

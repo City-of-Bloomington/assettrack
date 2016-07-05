@@ -1,0 +1,46 @@
+README
+======
+
+AssetTrack: It is an inventory system to track IT assets for an organization.
+This includes coputers (devices), monitors, printers and softwares.
+
+This system was built to help import inventory data from another system and
+build more intuitive interface to lookup devices, track their history.
+
+The main inventory is built around the device, that could be a computer, network printer, a server, a tablet, etc. Each device may be connected to one or more monitors, desktop printer and a bunch of installed softwares.
+
+The data can be imported from other system on schedule such as once a day. Items can be added that are not part of the import. New field are added to assets in addition to what is obtained from imports. These fields are preserved when new import is run.
+
+Data are updated each time a new import is run. The new added field are preserved to avoid any override.
+
+Asset number field is added to each item that reflects the barcode attached to the device to simplify searching for an item using barcode scanners.
+
+After the items are used for certain number of years are capital replaced. The replacement of an item caused to be disposed in one of multiple ways. Either donated, auctioned, recycled or discarded. This operation is tracked the asset disposal mechanism.
+
+Current imports are from sqlite database and the database in backend is mysql.
+
+The application provides the search engine of all asset types. Adding new or edit current assets. Provide reports as well (in progress).
+
+This application is built using java jsp and java struts 2. We are going to use java quartz for scheduling imports.
+
+We use java ant to compile and build the executables.
+
+Database tables are in ./docs/script.sql
+
+This software will not track the following activities as they are tracked through other software.
+1- Purchase orders and purchase history
+2- Helpdeks issues
+3- Any other activities not mentioned in the software.
+
+
+
+
+
+
+
+
+
+
+
+
+ 

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Context reloadable="false" crossContext="true">
+  <Resource name="jdbc/MySQL_assets"
+						auth="Container"
+						type="javax.sql.DataSource"
+            maxActive="5" maxIdle="2" maxWait="10000"
+            removeAbandoned="true"
+            removeAbandonedTimeout="60"
+						username="assettrack" 
+						password="your database pass"
+						testOnBorrow="true"
+						validationQuery="select 1+1"
+						driverClassName="com.mysql.jdbc.Driver"
+            url="jdbc:mysql://database server:3306/assettrack?autoReconnect=true"/>
+  
+</Context>

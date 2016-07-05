@@ -1,0 +1,362 @@
+package assets;
+/**
+ * @copyright Copyright (C) 2014-2016 City of Bloomington, Indiana. All rights reserved.
+ * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL, see LICENSE.txt
+ * @author W. Sibo <sibow@bloomington.in.gov>
+ */
+import java.util.*;
+import java.sql.*;
+import javax.sql.*;
+import java.io.*;
+import javax.naming.*;
+import javax.naming.directory.*;
+import java.text.SimpleDateFormat;
+import org.apache.log4j.Logger;
+
+
+public class Donation extends Item{
+	
+		static Logger logger = Logger.getLogger(Donation.class);
+		static final long serialVersionUID = 1310L;	
+		SimpleDateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy");
+    String organization_id ="";
+		float value = 0.0f;
+		Type organ = null;
+		List<Donation> donations = null;
+    public Donation(){
+				super();
+    }
+		public Donation(boolean deb, String val, String val2, String val3){
+
+				super(deb, val, val2, val3);
+    }	
+		public Donation(boolean deb,
+										String val,
+										String val2,
+										String val3,
+										String val4,
+										String val5,
+										String val6){
+
+				super(deb, val, val2, val3, val4);
+				//
+				// initialize
+				//
+				setOrganization_id(val5);				
+				setValue(val6);
+    }
+    //
+    // setters
+    //
+		
+    public void setOrganization_id(String val){
+				if(val != null && !val.equals("-1"))		
+						organization_id = val;
+    }
+		public void setValue(String val) {
+				if(val != null && !val.equals("")){
+						try{
+								value = Float.parseFloat(val);
+						}catch(Exception ex){}
+				}
+		}
+
+		public void setValue(float val) {
+				value = val;
+		}
+    //
+    // getters
+    //
+		public String  getOrganization_id(){
+				return organization_id;
+    }
+
+		public float getValue() {
+				return value;
+		}
+
+		public Type getOrgan(){
+				if(organ == null && !organization_id.equals("")){
+						Type one = new Type(debug, organization_id, null, false,"organizations");
+						String back = one.doSelect();
+						if(back.equals("")){
+								organ = one;
+						}
+				}
+				return organ;
+		}
+		public List<Donation> getDonations(){
+				if(donations == null && !organization_id.equals("")){
+						DonationList dl = new DonationList(debug, organization_id);
+						String back = dl.find();
+						if(back.equals("")){
+								List<Donation> ones = dl.getDonations();
+								if(ones != null)
+										donations = ones;
+						}
+				}
+				return donations;
+		}
+		//
+		public String doSave(){
+		
+				String back = "";
+				Connection con = null;
+				PreparedStatement pstmt = null;
+				ResultSet rs = null;
+				if(asset_id.equals("") && organization_id.equals("")) return "organization id or asset id not set ";
+				String qq = "insert into donations values(0,?,?,?,?,?)";
+				//
+				con = Helper.getConnection();
+				if(con == null){
+						back = "Could not connect to DB";
+						addError(back);
+						return back;
+				}
+				else{
+						try{
+								pstmt = con.prepareStatement(qq);
+								if(debug){
+										logger.debug(qq);
+								}
+								pstmt.setString(1,organization_id);								
+								pstmt.setString(2,asset_id);
+								if(type.equals(""))
+										pstmt.setNull(3, Types.INTEGER);
+								else
+										pstmt.setString(3, type);
+								if(date.equals(""))
+										date = Helper.getToday();
+								pstmt.setDate(4, new java.sql.Date(dateFormat.parse(date).getTime()));
+								pstmt.setFloat(5, value);
+								pstmt.executeUpdate();
+
+								qq = "select LAST_INSERT_ID() ";
+								if(debug){
+										logger.debug(qq);
+								}
+								pstmt = con.prepareStatement(qq);				
+								rs = pstmt.executeQuery();
+								if(rs.next()){
+										id = rs.getString(1);
+								}
+								if(type.equals("device")){
+										Device one = new Device(debug, asset_id);
+										back = one.updateStatus("Donated");
+										if(back.equals("")){
+												DeviceHistory ih = new DeviceHistory(debug, null, asset_id, "Donated",null,user_id);
+												back = ih.doSave();
+										}
+										if(!back.equals("")){
+												addError(back);
+										}
+								}
+								else if(type.equals("monitor")){
+										Monitor one = new Monitor(debug, asset_id);
+										back = one.updateStatus("Donated");					
+										if(!back.equals("")){
+												addError(back);
+										}		
+								}
+								else if (type.equals("printer")){
+										Printer one = new Printer(debug, asset_id);
+										back = one.updateStatus("Donated");					
+										if(!back.equals("")){
+												addError(back);
+										}		
+								}								
+						}
+						catch(Exception ex){
+								back += ex;
+								System.err.println(" except "+back);											
+								logger.error(ex);
+								addError(back);	
+						}
+						finally{
+								Helper.databaseDisconnect(con, pstmt, rs);
+						}
+				}
+				return back;
+
+		}
+		public String doUpdate(){
+		
+				String back = "";
+		
+				Connection con = null;
+				PreparedStatement pstmt = null;
+				ResultSet rs = null;
+				String str="";
+				String qq = "";
+				con = Helper.getConnection();
+				if(con == null){
+						back = "Could not connect to DB";
+						addError(back);
+						return back;
+				}
+				else{
+						try{
+								qq = "update donations set ";
+								qq += " value=? ";
+								qq += "where id = ? ";
+								if(debug){
+										logger.debug(qq);
+								}
+								pstmt = con.prepareStatement(qq);
+								pstmt.setFloat(1,value);
+								pstmt.setString(2,id);				
+								pstmt.executeUpdate();
+								message = "Updated Successfully";
+						}
+						catch(Exception ex){
+								back += ex+":"+qq;
+								logger.error(back);
+								addError(back);
+						}
+						finally{
+								Helper.databaseDisconnect(con, pstmt, rs);
+						}
+				}
+				return back;
+		}
+	
+		public String doDelete(){
+		
+				String back = "", qq = "";
+		
+				Connection con = null;
+				PreparedStatement pstmt = null;
+				ResultSet rs = null;
+		
+				con = Helper.getConnection();
+				if(con == null){
+						back = "Could not connect to DB";
+						addError(back);
+						return back;
+				}
+				else{
+						try{
+								qq = "delete from donations where id=? ";
+								if(debug){
+										logger.debug(qq);
+								}
+								pstmt = con.prepareStatement(qq);
+								pstmt.setString(1, id);
+								pstmt.executeUpdate();
+								message = "Deleted Successfully";
+						}
+						catch(Exception ex){
+								back += ex+":"+qq;
+								logger.error(back);
+								addError(back);
+						}
+						finally{
+								Helper.databaseDisconnect(con, pstmt, rs);
+						}
+				}
+				return back;
+		}
+	
+    //
+		public String doSelect(){
+		
+				String back = "";
+		
+				Connection con = null;
+				PreparedStatement pstmt = null;
+				ResultSet rs = null;
+				String qq = "select asset_id,type,date_format(date,'%m/%d/%Y'),organization_id,value "+
+						" from donations where id=?";		
+				con = Helper.getConnection();
+				if(con == null){
+						back = "Could not connect to DB";
+						addError(back);
+						return back;
+				}
+				else{
+						try{
+								if(debug){
+										logger.debug(qq);
+								}				
+								pstmt = con.prepareStatement(qq);
+								pstmt.setString(1,id);
+								rs = pstmt.executeQuery();
+								if(rs.next()){
+										setAsset_id(rs.getString(1));
+										setType(rs.getString(2));
+										setDate(rs.getString(3));
+										setOrganization_id(rs.getString(4));
+										setValue(rs.getFloat(5));
+								}
+								else{
+										back= "Record "+id+" Not found";
+										message = back;
+								}
+						}
+						catch(Exception ex){
+								back += ex+":"+qq;
+								logger.error(back);
+								addError(back);
+						}
+						finally{
+								Helper.databaseDisconnect(con, pstmt, rs);			
+						}
+				}
+				return back;
+		}
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

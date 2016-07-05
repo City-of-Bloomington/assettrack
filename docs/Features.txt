@@ -1,0 +1,15 @@
+AssetTrack Application
+======================
+
+Required features
+-----------------
+1-Monitor inventory levels
+2-Product history
+5-Inventory Cost, inventory list,  
+6-Vendor Info
+8-Dispose items
+9-Attach document and photos
+10-Using portable or barcode scanners
+
+
+
