@@ -24,12 +24,19 @@
       <s:actionmessage/>
 		</div>
   </s:elseif>
+	<s:if test="impman.hasErrors()">
+		<ul>
+		<s:iterator var="one" value="%{impman.errors}">
+			<li><s:property /> </li>
+		</s:iterator>
+		</ul>
+	</s:if>
 	<p>check the fields that you want to be imported from spiceworks</p>
 	<div class="tt-row-container">
 		<s:if test="impman.id != ''">
 			<dl class="fn1-output-field">
 				<dt>Date </dt>
-				<dd><s:textfield name="impman.date" value="%{impman.date}" size="10" /> 
+				<dd><s:property value="%{impman.date}" /> 
 				</dd>
 			</dl>
 		</s:if>
@@ -60,17 +67,27 @@
 		<dl class="fn1-output-field">
 			<dt>7 - </dt>
 			<dd><s:checkbox name="impman.printerFlag" value="%{impman.printerFlag}" /> Printers </dd>
+		</dl>
+		<dl class="fn1-output-field">
+			<dt>8 - </dt>
+			<dd><s:checkbox name="impman.autoImportFlag" value="%{impman.autoImportFlag}" /> Simulate Schedule Import (Test purpose only)</dd>
 		</dl>		
+		
 		<s:if test="id == ''">
 			<s:submit name="action" type="button" value="Run Imports" class="fn1-btn"/></dd>
 		</s:if>
 	</div>
 </s:form>
-<s:if test="imports != null && imports.size() > 0">
+<s:if test="impman.id != '' && impman.details != null">
+	<s:set var="details" value="impman.details" />
+	<s:set var="detailsTitle" value="'Import details'" />
+	<%@  include file="importDetails.jsp" %>
+</s:if>
+<s:elseif test="imports != null && imports.size() > 0">
 	<s:set var="imports" value="imports" />
 	<s:set var="importsTitle" value="importsTitle" />
 	<%@  include file="imports.jsp" %>
-</s:if>
+</s:elseif>
 
 <%@  include file="../gui/footer.jsp" %>
 

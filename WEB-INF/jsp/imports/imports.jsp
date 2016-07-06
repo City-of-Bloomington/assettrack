@@ -16,7 +16,7 @@
 	<tbody>
 		<s:iterator var="one" value="#imports">
 			<tr>
-				<td><a href="<s:property value='#application.url' />import.action?id=<s:property value='id' />"><s:property value="id" /> </a></td>
+				<td><a href="<s:property value='#application.url' />import.action?id=<s:property value='id' />"> <s:property value="id" /> Nore Details </a></td>
 				<td><s:property value="date" /></td>				
 			</tr>
 		</s:iterator>

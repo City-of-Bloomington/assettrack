@@ -32,6 +32,9 @@ public class ImportManager extends CommonInc{
 		boolean employeeFlag = false, deviceFlag = false, softwareFlag=false,
 				divisionFlag = false, locationFlag = false, monitorFlag = false,
 				printerFlag = false;
+		boolean autoImportFlag = false;
+		List<String> sqlArr = new ArrayList<String>();
+		List<ImportDetail> details = null;
 		//
 		public ImportManager(){
 				//
@@ -95,6 +98,15 @@ public class ImportManager extends CommonInc{
 		}
 		public void setPrinterFlag(boolean val){
 				printerFlag = val;
+		}
+		//
+		// To be used for scheduling imports with quarts
+		//
+		public void setAutoImportFlag(boolean val){
+				autoImportFlag = val;
+		}
+		public boolean getAutoImportFlag(){
+				return autoImportFlag; // for testing purpose
 		}		
 		public boolean getEmployeeFlag(){
 				return employeeFlag;
@@ -118,31 +130,119 @@ public class ImportManager extends CommonInc{
 				return printerFlag;
 		}		
 		public String doImport(){
-				String back = "";
+				if(autoImportFlag){
+						employeeFlag = true;
+						deviceFlag = true;
+						softwareFlag = true;
+						printerFlag = true;
+						monitorFlag = true;
+				}				
+				String back = "", qq = "";;
 				if(employeeFlag){
-						back += importEmployees();
+						back = importEmployees();
+						if(back.equals("")){
+								message += "Employees imported successfully\n";
+								qq = "insert into import_details values(0,?,'Employee','Success',null)";
+						}
+						else{
+								addError("Employee import error "+back);
+								qq = "insert into import_details values(0,?,'Employee','Failure','"+back+"')";								
+						}
+						sqlArr.add(qq);
 				}
 				if(divisionFlag){
-						back += importDivisions();
+						back = importDivisions();
+						if(back.equals("")){
+								message += "Divisions imported successfully\n";
+								qq = "insert into import_details values(0,?,'Division','Success',null)";								
+						}
+						else{
+								addError("Division import error "+back);
+								qq = "insert into import_details values(0,?,'Division','Failure','"+back+"')";										
+						}
+						sqlArr.add(qq);						
 				}
 				if(locationFlag){
-						back += importLocations();
+						back = importLocations();
+						if(back.equals("")){
+								message += "Locations imported successfully\n";
+								qq = "insert into import_details values(0,?,'Location','Success',null)";												
+						}
+						else{
+								addError("Location import error "+back);
+								qq = "insert into import_details values(0,?,'Location','Failure','"+back+"')";		
+						}
+						sqlArr.add(qq);
 				}
 				if(deviceFlag){
-						back += importDevices();
+						back = importDevices();
+						if(back.equals("")){
+								message += "Devices imported successfully\n";
+								qq = "insert into import_details values(0,?,'Device','Success',null)";				
+						}
+						else{
+								addError("Device import error "+back);
+								qq = "insert into import_details values(0,?,'Device','Failure','"+back+"')";										
+						}
+						sqlArr.add(qq);
 				}
 				if(monitorFlag){
-						back += importMonitors();
-				}
-				if(softwareFlag){
-						back += importSoftware();
-						back += importSoftwareLicense();
-						back += importSoftwareInstallations();
+						back = importMonitors();
+						if(back.equals("")){
+								message += "Monitors imported successfully\n";
+								qq = "insert into import_details values(0,?,'Monitor','Success',null)";												
+						}
+						else{
+								addError("Monitor import error "+back);
+								qq = "insert into import_details values(0,?,'Monitor','Failure','"+back+"')";		
+						}
+						sqlArr.add(qq);
 				}
 				if(printerFlag){
-						back += importPrinters();
+						back = importPrinters();
+						if(back.equals("")){
+								message += "Printers imported successfully\n";
+								qq = "insert into import_details values(0,?,'Printer','Success',null)";				
+						}
+						else{
+								addError("Printer import error "+back);
+								qq = "insert into import_details values(0,?,'Printer','Failure','"+back+"')";										
+						}
+						sqlArr.add(qq);
+				}				
+				if(softwareFlag){
+						back = importSoftware();
+						if(back.equals("")){
+								qq = "insert into import_details values(0,?,'Software','Success',null)";												
+								message += "Software imported successfully\n";	
+						}
+						else{
+								addError("Software import error "+back);
+								qq = "insert into import_details values(0,?,'Software','Failure','"+back+"')";		
+						}
+						sqlArr.add(qq);
+						back = importSoftwareLicense();
+						if(back.equals("")){
+								qq = "insert into import_details values(0,?,'Software','Success',null)";												
+								message += "Software imported successfully\n";	
+						}
+						else{
+								addError("Software license import error "+back);
+								qq = "insert into import_details values(0,?,'Software','Failure','"+back+"')";		
+						}
+						sqlArr.add(qq);						
+						back = importSoftwareInstallations();
+						if(back.equals("")){
+								qq = "insert into import_details values(0,?,'Software','Success',null)";												
+								message += "Software installation imported successfully\n";	
+						}
+						else{
+								addError("Software import error "+back);
+								qq = "insert into import_details values(0,?,'Software','Failure','"+back+"')";		
+						}
+						sqlArr.add(qq);
 				}
-				// back = doSave();
+				back = doSave();
 				return back;
 		}
 		public String getId(){
@@ -150,6 +250,19 @@ public class ImportManager extends CommonInc{
 		}
 		public String getDate(){
 				return date;
+		}
+		public List<ImportDetail> getDetails(){
+				if(!id.equals("") && details == null){
+						ImportDetailList idl = new ImportDetailList(debug, id);
+						String back = idl.find();
+						if(back.equals("")){
+								List<ImportDetail> ones = idl.getDetails();
+								if(ones != null && ones.size() > 0){
+										details = ones;
+								}
+						}
+				}
+				return details;
 		}
 		public String prepareHashes(){
 				String qq   = " select name,id from domains ";
@@ -371,7 +484,6 @@ public class ImportManager extends CommonInc{
 						"'Active',?,?,null,null,"+            // 2
 						"?,?,null)";                          // 2 = 14
 				String qq22 = " update devices set name=?,serial_num=?,model=?,employee_id=?,description=?,category_id=?,location_id=?,domain_id=?,processor=?,ram=?,mac_address=?,ip_address=? where external_id=? ";
-
 				//
 				// getting hard drive info
 				//
@@ -499,7 +611,6 @@ public class ImportManager extends CommonInc{
 								String str2 = rs.getString(2);
 								System.err.println(str+ " "+str2);
 								try{
-										
 										if(str != null && str2 != null){
 												long size = (rs.getLong(1))/1000000000; // gig
 												System.err.println(size+ " "+str2);
@@ -933,7 +1044,7 @@ public class ImportManager extends CommonInc{
 				PreparedStatement pstmt = null, pstmt2=null, pstmt3=null;
 				ResultSet rs = null;
 				String qq = " select s.id,s.display_name,s.vendor,s.install_date,s.software_installations_count from software s where s.id in(select i.software_id from software_installations i where i.software_license_id is not null); ";
-				String qq2 = " insert into softwares values(0,?,?,?,?,null) ";
+				String qq2 = " insert into softwares values(0,?,?,?,?,?,null) ";
 				String qq3 = " update softwares set display_name=?,vendor=?,install_count=? where external_id=? ";
 				Set<Integer> oldSet = getOldSoftwareSet();
 				//
@@ -1386,7 +1497,7 @@ public class ImportManager extends CommonInc{
 				Connection con = null;
 				PreparedStatement pstmt = null;
 				ResultSet rs = null;
-				String qq = " insert into spiceworks_imports values(0,now())";
+				String qq = " insert into data_imports values(0,now())";
 				con = Helper.getConnection();
 				if(con == null){
 						back = "Could not connect to DB";
@@ -1408,7 +1519,15 @@ public class ImportManager extends CommonInc{
 						rs = pstmt.executeQuery();
 						if(rs.next()){
 								id = rs.getString(1);
-						}						
+						}
+						for(String str:sqlArr){
+								if(debug){
+										logger.debug(str);
+								}				
+								pstmt = con.prepareStatement(str);
+								pstmt.setString(1, id);
+								pstmt.executeUpdate();
+						}
 				}
 				catch(Exception ex){
 						back += ex;
@@ -1426,7 +1545,7 @@ public class ImportManager extends CommonInc{
 				Connection con = null;
 				PreparedStatement pstmt = null;
 				ResultSet rs = null;
-				String qq = " select date_format(date,'%m/%d/%Y') from spiceworks_imports where id=? ";
+				String qq = " select date_format(date,'%m/%d/%Y') from data_imports where id=? ";
 				con = Helper.getConnection();
 				if(con == null){
 						back = "Could not connect to DB";

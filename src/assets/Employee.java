@@ -359,9 +359,12 @@ public class Employee extends CommonInc implements java.io.Serializable{
     public String saveImport(PreparedStatement stmt){
 
 				String msg = "";
-				if(id.equals("") || username.equals("") || last_name.equals("")){
+				if(!username.equals("") && last_name.equals("")){
+						last_name = username;
+				}
+				if(id.equals("") || last_name.equals("")){
 						msg = id;
-						msg += " Employee id, username or last name not set";
+						msg += " Employee id or last name not set";
 						
 						return msg;
 				}
@@ -374,8 +377,11 @@ public class Employee extends CommonInc implements java.io.Serializable{
 						// insert part
 						int jj=1;
 						stmt.setString(jj++, id);												
-						stmt.setString(jj++, external_id);						
-						stmt.setString(jj++, username);
+						stmt.setString(jj++, external_id);
+						if(username.equals(""))
+								stmt.setNull(jj++,Types.VARCHAR);
+						else
+								stmt.setString(jj++, username);
 						if(first_name.equals(""))
 								stmt.setNull(jj++,Types.VARCHAR);
 						else

@@ -50,7 +50,7 @@ public class ImportManagerList extends CommonInc{
 				Connection con = null;
 				PreparedStatement pstmt = null;
 				ResultSet rs = null;
-				String qq = " select id,date_format(date,'%m/%d/%Y') from spiceworks_imports order by date DESC limit 5 ";
+				String qq = " select id,date_format(date,'%m/%d/%Y') from data_imports order by id DESC limit 5 ";
 				con = Helper.getConnection();
 				if(con == null){
 						back = "Could not connect to DB";
@@ -62,7 +62,6 @@ public class ImportManagerList extends CommonInc{
 				}				
 				try{
 						pstmt = con.prepareStatement(qq);
-						// pstmt.setString(1, id);
 						rs = pstmt.executeQuery();
 						while(rs.next()){
 								if(imports == null){
