@@ -24,7 +24,7 @@ public class DeviceAction extends TopAction{
 		List<Dept> depts = null;
 		List<Division> divisions = null;
 		String devicesTitle = " Most recent Devices";
-		
+		String related_id = "";
 		public String execute(){
 				String ret = SUCCESS;
 				String back = doPrepare();
@@ -114,6 +114,9 @@ public class DeviceAction extends TopAction{
 						}
 						else{
 								device = new Device();
+								if(!related_id.equals("")){
+										device.setRelated_id(related_id);
+								}
 						}
 				}		
 				return device;
@@ -189,6 +192,13 @@ public class DeviceAction extends TopAction{
 				}
 				return id;
 		}
+		public String getRelated_id(){
+				return related_id;
+		}
+		public void setRelated_id(String val){
+				if(val != null && !val.equals(""))		
+						related_id = val;
+		}				
 		// most recent
 		public List<Device> getDevices(){ 
 				if(devices == null){

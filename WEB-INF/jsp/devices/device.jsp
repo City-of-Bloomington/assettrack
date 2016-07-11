@@ -57,6 +57,10 @@
 				<dd><s:textfield name="device.asset_num" value="%{device.asset_num}" size="10" maxlength="10" id="asset_num" /> </dd>
 			</dl>
 			<dl class="fn1-output-field">
+				<dt>Related Device </dt>
+				<dd><s:textfield name="device.related_id" value="%{device.related_id}" size="10" maxlength="10" /> (ID) </dd>
+			</dl>			
+			<dl class="fn1-output-field">
 				<dt>Serial Num </dt>
 				<dd><s:textfield name="device.serial_num" value="%{device.serial_num}" size="20" maxlength="30"  /> </dd>
 			</dl>
@@ -124,6 +128,11 @@
 				<dd><s:textfield name="device.age_length" value="%{device.age_length}" size="3" maxlength="3" />(Years) 
 				</dd>
 			</dl>
+			<dl class="fn1-output-field">
+				<dt>Cost ($) </dt>
+				<dd><s:textfield name="device.cost" value="%{device.cost}" size="10" maxlength="10" />
+				</dd>
+			</dl>			
 			<dl class="fn1-output-field">				
 				<dt>Notes </dt>
 				<dd><s:textarea name="device.notes" value="%{device.notes}" rows="5" cols="50" /></dd>
@@ -138,7 +147,8 @@
 		<s:if test="device.status == 'Active'">		
 			<a href="<s:property value='#application.url'/>installation.action?device_id=<s:property value='device.id' />" class="fn1-btn"> Software Installation</a>
 			<a href="<s:property value='#application.url'/>monitor.action?device_id=<s:property value='device.id' />" class="fn1-btn">New Monitor</a>
-			<a href="<s:property value='#application.url'/>printer.action?device_id=<s:property value='device.id' />" class="fn1-btn">New Printer</a>		
+			<a href="<s:property value='#application.url'/>printer.action?device_id=<s:property value='device.id' />" class="fn1-btn">New Printer</a>
+			<a href="<s:property value='#application.url'/>device.action?related_id=<s:property value='device.id' />" class="fn1-btn">New Related Device</a>	
 			<a href="<s:property value='#application.url'/>dispose.action?type=device&asset_id=<s:property value='device.id' />" class="fn1-btn"> Dispose This Device</a>
 		</s:if>
 		<s:if test="device.hasMonitors()" >
@@ -155,7 +165,12 @@
 			<s:set var="printersTitle" value="'Attached Printers'" />
 			<s:set var="printers" value="%{device.printers}" />
 			<%@  include file="../printers/printers.jsp" %>			
-		</s:if>		
+		</s:if>
+		<s:if test="device.hasRelatedDevices()" >
+			<s:set var="devicesTitle" value="'Attached Devices'" />
+			<s:set var="devices" value="%{device.relatedDevices}" />
+			<%@  include file="devices.jsp" %>			
+		</s:if>			
 	</s:else>
 </s:form>
 

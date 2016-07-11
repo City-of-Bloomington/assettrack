@@ -22,6 +22,7 @@
 			<th align="center"><b>Installed</b></th>
 			<th align="center"><b>Division</b></th>						
 			<th align="center"><b>Location</b></th>
+			<th align="center"><b>Cost</b></th>			
 			<th align="center"><b>Status</b></th>			
 		</tr>
 	</thead>
@@ -40,6 +41,7 @@
 				<td><s:property value="installed" /></td>
 				<td><s:property value="division" /></td>
 				<td><s:property value="location" /></td>
+				<td><s:property value="cost" /></td>						
 				<td><s:property value="status" /></td>				
 			</tr>
 		</s:iterator>

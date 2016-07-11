@@ -30,9 +30,9 @@ public class Device extends CommonInc{
 				service_tag="", express_service_tag="", category_id="", installed="",
 				warranty_expire="",location_id="", processor="", ram="", hd_size="",
 				division_id="",domain_id="",status="Active", notes="", age_length="3",
-				mac_address="",ip_address="";
+				mac_address="",ip_address="", cost="";
 
-		String user_id="", employee_id="";
+		String user_id="", employee_id="", related_id="";
 		//
 		Dept dept = null;
 		Division division = null;
@@ -45,6 +45,8 @@ public class Device extends CommonInc{
 		List<SoftwareInstallation> installations = null;
 		List<Monitor> monitors = null;
 		List<Printer> printers = null;
+		List<Device> relatedDevices = null;
+		boolean locationFlag = false; // needed for updated from external apps
 		public Device() {
 		}
 		public Device(boolean deb, String val) {
@@ -54,32 +56,33 @@ public class Device extends CommonInc{
 	
 		public Device(boolean deb,
 									String _id,
-									
 									String _external_id,
 									String _name,
 									String _asset_num,
 									String _serial_num,
-									String _model,
 									
+									String _model,
 									String _employee_id,
 									String _description,
 									String _category_id,
 									String _installed,
-									String _age_length,
 									
+									String _age_length,
 									String _location_id,
 									String _division_id,
 									String _domain_id,
-									String _status,									
-									String _processor,
+									String _status,
 									
+									String _processor,
 									String _ram,
 									String _hd_size,
 									String _notes,
 									String _mac_address,
-									String _ip_address,
 									
-									String _editable
+									String _ip_address,
+									String _editable,
+									String _related_id,
+									String _cost
 									) {
 				debug = deb;
 				setId(_id);
@@ -104,7 +107,8 @@ public class Device extends CommonInc{
 				setMac_address(_mac_address);
 				setIp_address(_ip_address);
 				setEditable(_editable);
-
+				setRelated_id(_related_id);
+				setCost(_cost);				
 		}	
 	
 		public String getId() {
@@ -117,6 +121,9 @@ public class Device extends CommonInc{
 				}
 				return ret;
 		}
+		public String getRelated_id() {
+				return related_id;
+		}		
 		public String getEditable() {
 				return editable;
 		}
@@ -191,6 +198,9 @@ public class Device extends CommonInc{
 		public void setExternal_id(String val) {
 				if(val != null)
 						external_id = val;
+		}
+		public String getCost() {
+				return cost;
 		}		
 		//
 		// setters
@@ -199,6 +209,10 @@ public class Device extends CommonInc{
 				if(val != null)
 						id = val;
 		}
+		public void setRelated_id(String val) {
+				if(val != null)
+						related_id = val;
+		}		
 		public void setEditable(String val) {
 				if(val != null)
 						editable = val;
@@ -309,6 +323,14 @@ public class Device extends CommonInc{
 						ip_address = val;
 				}
 		}
+		public void setCost(String val) {
+				if(val != null){
+						cost = val;
+				}
+		}
+		public void setLocationFlag(boolean val){
+				locationFlag = val;
+		}
 		public boolean anyUpdate(){
 				return status.equals("Active");
 		}
@@ -319,6 +341,9 @@ public class Device extends CommonInc{
 		// 
 		public boolean canBePartialUpdated(){
 				return editable.equals("") && status.equals("Active");
+		}
+		public boolean hasRelated(){
+				return !related_id.equals("");
 		}
 		//
 		public String toString(){
@@ -407,7 +432,25 @@ public class Device extends CommonInc{
 						}
 				}
 				return printers;
-		}		
+		}
+		public List<Device> getRelatedDevices(){
+				if(relatedDevices == null && !id.equals("")){
+						DeviceList sp = new DeviceList(debug);
+						sp.setRelated_id(id);
+						String back = sp.find();
+						if(back.equals("")){
+								List<Device> ones = sp.getDevices();
+								if(ones != null && ones.size() > 0){
+										relatedDevices = ones;
+								}
+						}
+				}
+				return relatedDevices;
+		}
+		public boolean hasRelatedDevices(){
+				getRelatedDevices();
+				return relatedDevices != null;
+		}
 		public boolean hasMonitors(){
 				getMonitors();
 				return monitors != null && monitors.size() > 0;
@@ -540,10 +583,12 @@ public class Device extends CommonInc{
 								pstmt.setNull(jj++,Types.VARCHAR);
 						else
 								pstmt.setString(jj++,category_id);
-						if(location_id.equals(""))
-								pstmt.setNull(jj++,Types.INTEGER);
-						else
-								pstmt.setString(jj++,location_id);
+						if(locationFlag){
+								//if(location_id.equals(""))
+								//	pstmt.setNull(jj++, Types.INTEGER);
+								// else
+								pstmt.setString(jj++, location_id);
+						}
 						if(domain_id.equals(""))
 								pstmt.setNull(jj++,Types.INTEGER);
 						else
@@ -584,7 +629,7 @@ public class Device extends CommonInc{
 						"?,?,?,?,?,"+
 						"?,?,?,?,?,"+
 						"?,?,?,?,?,"+			
-						"?,?,?,?,'y')";
+						"?,?,?,?,'y',?,?)";
 				editable = "y";
 				con = Helper.getConnection();
 				if(con == null){
@@ -715,6 +760,14 @@ public class Device extends CommonInc{
 						else
 								pstmt.setString(jj++,ip_address);						
 						editable = "y";
+						if(related_id.equals(""))
+								pstmt.setNull(jj++,Types.INTEGER);
+						else
+								pstmt.setString(jj++,related_id);
+						if(cost.equals(""))
+								pstmt.setNull(jj++,Types.VARCHAR);
+						else
+								pstmt.setString(jj++,cost);						
 				}
 				catch(Exception ex){
 						logger.error(ex);
@@ -743,7 +796,8 @@ public class Device extends CommonInc{
 								"description=?,"+
 								"category_id=?,installed=?,age_length=?, "+
 								"location_id=?,division_id=?,domain_id=?,status=?,processor=?, "+
-								"ram=?,hd_size=?,notes=?,mac_address=?,ip_address=? "+
+								"ram=?,hd_size=?,notes=?,mac_address=?,ip_address=?,"+
+								"related_id=?,cost=? "+
 								"where id=?";
 						
 						if(debug){
@@ -752,7 +806,7 @@ public class Device extends CommonInc{
 						pstmt = con.prepareStatement(qq);
 						back = fillPStatement(pstmt);
 						if(back.equals("")){
-								pstmt.setString(21,id); // 21 - 1 (editable)
+								pstmt.setString(23,id); // 24 - 1 (editable)
 								pstmt.executeUpdate();
 						}
 						DeviceHistory ih = new DeviceHistory(debug, null, id, status, null,user_id);
@@ -785,10 +839,9 @@ public class Device extends CommonInc{
 				}
 				try{
 						qq = "update devices set "+
-								"asset_num=?, installed=?, age_length=?, "+
-								"division_id=?, notes=? "+
+								"asset_num=?, age_length=?, "+
+								"division_id=?, notes=?, location_id=?, related_id=? "+
 								"where id=?";
-						
 						if(debug){
 								logger.debug(qq);
 						}
@@ -798,10 +851,6 @@ public class Device extends CommonInc{
 								pstmt.setNull(jj++,Types.VARCHAR);
 						else
 								pstmt.setString(jj++,asset_num);						
-						if(installed.equals(""))
-								pstmt.setNull(jj++,Types.DATE);
-						else
-								pstmt.setDate(jj++, new java.sql.Date(dateFormat.parse(installed).getTime()));						
 						pstmt.setString(jj++,""+age_length);
 						if(division_id.equals(""))
 								pstmt.setNull(jj++,Types.INTEGER);
@@ -811,7 +860,16 @@ public class Device extends CommonInc{
 								pstmt.setNull(jj++,Types.VARCHAR);
 						else
 								pstmt.setString(jj++,notes);
-						pstmt.setString(6,id); 
+						if(location_id.equals(""))
+								pstmt.setNull(jj++,Types.INTEGER);
+						else
+								pstmt.setString(jj++, location_id);								
+						if(related_id.equals(""))
+								
+								pstmt.setNull(jj++,Types.INTEGER);
+						else
+								pstmt.setString(jj++,related_id);							
+						pstmt.setString(7, id); 
 						pstmt.executeUpdate();
 						status="Active";
 						DeviceHistory ih = new DeviceHistory(debug, null, id, status, null,user_id);
@@ -916,7 +974,8 @@ public class Device extends CommonInc{
 						"category_id,"+
 						"date_format(installed,'%m/%d/%Y'),age_length,"+
 						"location_id,division_id,domain_id,status, "+
-						"processor,ram,hd_size,notes,mac_address,ip_address,editable "+
+						"processor,ram,hd_size,notes,mac_address,ip_address,editable, "+
+						"related_id,cost "+
 						" from devices where id=?";
 				con = Helper.getConnection();
 				if(con == null){
@@ -954,6 +1013,8 @@ public class Device extends CommonInc{
 										setMac_address(rs.getString(19));
 										setIp_address(rs.getString(20));
 										setEditable(rs.getString(21));
+										setRelated_id(rs.getString(22));
+										setCost(rs.getString(23));												
 								}
 								else{
 										return "Record "+id+" Not found";

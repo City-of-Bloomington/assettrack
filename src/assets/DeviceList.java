@@ -23,11 +23,11 @@ public class DeviceList extends CommonInc{
 		static final long serialVersionUID = 1200L;	
 		String whichDate="d.installed", date_from="", date_to="";
 		String id="", name="", external_id="";
-		String serial_num="", model="", 
+		String serial_num="", model="", related_id="", 
 				category_id="", installed="", 
 				warranty_expire="",cap_replace_date="",location_id="",
 				dept_id="", status="", asset_num="", domain_id="",
-				division_id="",
+				division_id="", cost_from="", cost_to="",
 				processor="", employee_id="", employee_name="", editable = "",
 				exclude_id="", ip_address="", mac_address="";
 		String limit ="30";
@@ -57,6 +57,9 @@ public class DeviceList extends CommonInc{
 		public String getExternal_id() {
 				return external_id;
 		}
+		public String getRelated_id() {
+				return related_id;
+		}		
 		public String getName() {
 				return name;
 		}
@@ -96,6 +99,12 @@ public class DeviceList extends CommonInc{
 		public String getDate_to() {
 				return date_to;
 		}
+		public String getCost_from() {
+				return cost_from;
+		}
+		public String getCost_to() {
+				return cost_to;
+		}		
 		public String getEmployee_id() {
 				return employee_id;
 		}
@@ -174,6 +183,14 @@ public class DeviceList extends CommonInc{
 				if(val != null)
 						date_to = val;
 		}
+		public void setCost_from(String val){
+				if(val != null)
+						cost_from = val;
+		}
+		public void setCost_to(String val){
+				if(val != null)
+						cost_to = val;
+		}		
 		public void setLocation_id(String val) {
 				if(val != null && !val.equals("-1"))
 						location_id = val;
@@ -195,6 +212,10 @@ public class DeviceList extends CommonInc{
 				if(val != null)
 						ip_address = val;
 		}
+		public void setRelated_id(String val) {
+				if(val != null)
+						related_id = val;
+		}		
 		public void setLimit(String val){
 				if(val != null)
 						limit = val;
@@ -217,7 +238,7 @@ public class DeviceList extends CommonInc{
 						"date_format(d.installed,'%m/%d/%Y'),d.age_length,"+
 						" d.location_id,d.division_id,d.domain_id,"+
 						" d.status,d.processor,d.ram,d.hd_size,d.notes,"+
-						" d.mac_address,d.ip_address,d.editable "+
+						" d.mac_address,d.ip_address,d.editable,d.related_id,d.cost "+
 						" from devices d ";
 				String qw = "";
 				if(con == null){
@@ -237,6 +258,9 @@ public class DeviceList extends CommonInc{
 								qw += " d.asset_num = ? ";
 						}														
 						else {
+								if(!related_id.equals("")){
+										qw += " d.related_id = ? ";
+								}								
 								if(!name.equals("")){
 										qw += " d.name like ? ";
 								}
@@ -288,6 +312,14 @@ public class DeviceList extends CommonInc{
 								if(!ip_address.equals("")){
 										if(!qw.equals("")) qw += " and ";	
 										qw += " d.ip_address like ? ";
+								}
+								if(!cost_from.equals("")){
+										if(!qw.equals("")) qw += " and ";
+										qw += " d.cost >= ? ";	
+								}
+								if(!cost_to.equals("")){
+										if(!qw.equals("")) qw += " and ";
+										qw += " d.cost <= ? ";		
 								}								
 								/*
 								if(forAuction){ // still in service but expired
@@ -319,6 +351,9 @@ public class DeviceList extends CommonInc{
 								pstmt.setString(jj++, asset_num);
 						}								
 						else{
+								if(!related_id.equals("")){
+										pstmt.setString(jj++, related_id);
+								}											
 								if(!name.equals("")){
 										pstmt.setString(jj++, "%"+name+"%");
 								}
@@ -351,6 +386,12 @@ public class DeviceList extends CommonInc{
 								}
 								if(!ip_address.equals("")){
 										pstmt.setString(jj++, "%"+ip_address+"%");
+								}
+								if(!cost_from.equals("")){
+										pstmt.setString(jj++, cost_from);
+								}
+								if(!cost_to.equals("")){
+										pstmt.setString(jj++, cost_to);
 								}								
 						}
 						rs = pstmt.executeQuery();
@@ -379,7 +420,9 @@ public class DeviceList extends CommonInc{
 																				rs.getString(19),
 																				rs.getString(20),
 																				rs.getString(21),
-																				rs.getString(22)
+																				rs.getString(22),
+																				rs.getString(23),
+																				rs.getString(24)
 																		);
 								devices.add(one);
 						}

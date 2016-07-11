@@ -30,7 +30,7 @@
 				<dt>External ID </dt>
 				<dd><s:textfield name="deviceList.external_id" value="%{deviceList.external_id}" size="10" maxlength="10" />
 				</dd>
-			</dl>			
+			</dl>
 			<dl class="fn1-output-field">
 				<dt>Employee Name</dt>
 				<dd><s:textfield name="deviceList.employee_name" value="%{deviceList.employee_name}" size="20" maxlength="20" id="employee_name" />
@@ -97,6 +97,12 @@
 			<s:textfield name="deviceList.date_to" value="%{deviceList.date_to}" size="10" maxlength="10" cssClass="date" />					
 		</dd>
 	</dl>
+	<dl class="fn1-output-field">
+		<dt>Cost ($) </dt>
+		<dd>from: <s:textfield name="deviceList.cost_from" value="%{deviceList.cost_from}" size="10" maxlength="10" /> to:
+			<s:textfield name="deviceList.cost_to" value="%{deviceList.cost_to}" size="10" maxlength="10" />					
+		</dd>
+	</dl>	
 	<s:submit name="action" type="button" value="Submit" class="fn1-btn"/>
 	<a href="<s:property value='#application.url' />device.action" class="fn1-btn">New Device </a>
 </s:form>

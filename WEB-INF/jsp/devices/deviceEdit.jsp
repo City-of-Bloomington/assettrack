@@ -35,6 +35,11 @@
 				</dd>
 			</dl>
 			<dl class="fn1-output-field">
+				<dt>Related Device </dt>
+				<dd><s:textfield name="device.related_id" value="%{device.related_id}" size="10" maxlength="10" /> (ID) 					
+				</dd>
+			</dl>			
+			<dl class="fn1-output-field">
 				<dt>Serial Num </dt>
 				<dd><s:property value="%{device.serial_num}" /> </dd>
 			</dl>
@@ -61,11 +66,6 @@
 				</dd>
 			</dl>				
 			<dl class="fn1-output-field">
-				<dt>Location </dt>
-				<dd><s:property value="%{device.location}" />
-				</dd>
-			</dl>
-			<dl class="fn1-output-field">
 				<dt>Division </dt>
 				<dd><s:select name="device.division_id" value="%{device.division_id}" list="%{divisions}" listKey="id" listValue="name" headerKey="-1" headerValue="Pick Division" /> 					
 				</dd>
@@ -75,12 +75,11 @@
 				<dd><s:property value="%{device.status}" /> 
 				</dd>
 			</dl>
-			
 		</div>
 		<div class="tt-split-container">
 			<dl class="fn1-output-field">
 				<dt>Installed Date </dt>
-				<dd><s:textfield name="device.installed" value="%{device.installed}" size="10" maxlength="10" cssClass="date" /> 					
+				<dd><s:property value="%{device.installed}" /> 					
 				</dd>
 			</dl>
 			<dl class="fn1-output-field">
@@ -107,6 +106,11 @@
 				</dd>
 			</dl>		
 			<dl class="fn1-output-field">
+				<dt>Cost ($) </dt>
+				<dd><s:textfield name="device.cost" value="%{device.cost}" size="10" maxlength="10" />
+				</dd>
+			</dl>
+			<dl class="fn1-output-field">
 				<dt>Expected Age </dt>
 				<dd><s:textfield name="device.age_length" value="%{device.age_length}" size="3" maxlength="3" />(Years) 
 				</dd>
@@ -116,11 +120,18 @@
 				<dd><s:textarea name="device.notes" value="%{device.notes}" rows="5" cols="50" /></dd>
 			</dl>
 		</div>
-	</div>		
+	</div>
+	<dl class="fn1-output-field">
+		<dt>Location </dt>
+		<dd><s:select name="device.location_id" value="%{device.location_id}" list="%{locations}" listKey="id" listValue="name" headerKey="-1" headerValue="Pick Location" /> 					
+		</dd>
+	</dl>
 	<s:submit name="action" type="button" value="Save Partial Changes" class="fn1-btn"/>
 	<a href="<s:property value='#application.url'/>installation.action?device_id=<s:property value='device.id' />" class="fn1-btn">New Software Installation</a>
 	<a href="<s:property value='#application.url'/>monitor.action?device_id=<s:property value='device.id' />" class="fn1-btn">New Monitor</a>
-	<a href="<s:property value='#application.url'/>printer.action?device_id=<s:property value='device.id' />" class="fn1-btn">New Printer</a>		
+	<a href="<s:property value='#application.url'/>printer.action?device_id=<s:property value='device.id' />" class="fn1-btn">New Printer</a>
+<a href="<s:property value='#application.url'/>device.action?related_id=<s:property value='device.id' />" class="fn1-btn">New Related Device</a>	
+	
 	<a href="<s:property value='#application.url'/>dispose.action?asset_id=<s:property value='device.id' />&type=device" class="fn1-btn"> Dispose This Device</a>
 </s:form>
 <s:if test="device.hasMonitors()" >
@@ -137,6 +148,11 @@
 	<s:set var="printersTitle" value="'Attached Printers'" />
 	<s:set var="printers" value="%{device.printers}" />
 	<%@  include file="../printers/printers.jsp" %>			
+</s:if>
+<s:if test="device.hasRelatedDevices()" >
+	<s:set var="devicesTitle" value="'Attached Devices'" />
+	<s:set var="devices" value="%{device.relatedDevices}" />
+	<%@  include file="devices.jsp" %>			
 </s:if>	
 <%@  include file="../gui/footer.jsp" %>
 

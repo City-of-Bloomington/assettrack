@@ -467,23 +467,27 @@ public class ImportManager extends CommonInc{
 				String back = "", msg="";
 		
 				Connection con = null, con2=null;
-				PreparedStatement pstmt = null, pstmt2=null, pstmt3=null;
+				PreparedStatement pstmt = null, pstmt2=null,
+						pstmt3=null, pstmt30=null;
 				ResultSet rs = null;
 				String qq = " select d.id, d.name, null, d.serial_number, d.model,"+
 						"d.current_user, d.description, d.device_type,"+ // 8
 						"d.install_date,null,d.location,null,d.domain,"+ // 13 location 11
 						"null,d.processor_type,d.memory,null,null,"+ // 18
-						"d.mac_address,d.ip_address,null from devices d ";// 21
+						"d.mac_address,d.ip_address,null,null,d.c_purchase_date from devices d ";// 21
 				//
 				// we may use replace instead
 				// replace into devices values(0,?,?,null,?,?, ...)
 				//
-				String qq2 = " insert into devices values(0,?,?,null,?,?,"+ // 4
-						"?,?,?,"+                         // 3
-						"?,null,?,null,?,"+                   // 3
-						"'Active',?,?,null,null,"+            // 2
-						"?,?,null)";                          // 2 = 14
+				String qq2 = " insert into devices values(0,?,?,null,?,?,"+ // 1,2,3,4
+						"?,?,?,"+                         // 5,6,7
+						"?,null,?,null,?,"+               // 8,9,10
+						"'Active',?,?,null,null,"+        // 11,12
+						"?,?,null)";                      // 13,14
+				
 				String qq22 = " update devices set name=?,serial_num=?,model=?,employee_id=?,description=?,category_id=?,location_id=?,domain_id=?,processor=?,ram=?,mac_address=?,ip_address=? where external_id=? ";
+				// skip location
+				String qq23 = " update devices set name=?,serial_num=?,model=?,employee_id=?,description=?,category_id=?,domain_id=?,processor=?,ram=?,mac_address=?,ip_address=? where external_id=? ";				
 				//
 				// getting hard drive info
 				//
@@ -517,8 +521,10 @@ public class ImportManager extends CommonInc{
 				try{
 						System.err.println(qq);
 						pstmt = con.prepareStatement(qq);
-						pstmt2 = con2.prepareStatement(qq2); // insert 
-						pstmt3 = con2.prepareStatement(qq22); // update	
+						pstmt2 = con2.prepareStatement(qq2); // device insert
+						pstmt3 = con2.prepareStatement(qq22); // update
+						pstmt30 = con2.prepareStatement(qq23); // update skip location
+						
 						rs = pstmt.executeQuery();
 						while(rs.next()){
 								String emp_id=null, type_id=null,
@@ -541,9 +547,11 @@ public class ImportManager extends CommonInc{
 										}
 								}
 								str3 = rs.getString(11); // location
+								boolean loc_flag = false;
 								if(str3 != null && !str3.equals("")){
 										if(locations.containsKey(str3)){
 												location_id = locations.get(str3);
+												loc_flag = true;
 										}
 								}								
 								str4 = rs.getString(13); // domain
@@ -559,6 +567,12 @@ public class ImportManager extends CommonInc{
 								if(str5 != null){
 										date = str5.substring(0,10);
 								}
+								else{
+										str5 = rs.getString(23); // purchase_date										
+										if(str5 != null){
+												date = str5.substring(0,10);
+										}
+								}
 								str5 = rs.getString(16);
 								if(str5 != null){
 										ram = rs.getLong(16)/1000000000; // to gig
@@ -570,29 +584,36 @@ public class ImportManager extends CommonInc{
 																				rs.getString(2),
 																				null,
 																				rs.getString(4),
-																				rs.getString(5),
 																				
+																				rs.getString(5),
 																				emp_id,
 																				rs.getString(7),
 																				type_id,
 																				date,
-																				null,
 																				
+																				null,
 																				location_id,
 																				null,
 																				domain_id,
 																				null,
-																				rs.getString(15),
 																				
+																				rs.getString(15),
 																				str5 == null?str5:""+ram,
 																				null,
 																				null,
 																				rs.getString(19),
-																				rs.getString(20),
 																				
-																				null);
+																				rs.getString(20),
+																				null, // editable
+																				null, // related id
+																				// skip purchase date
+																				null); // purchase price
+								one.setLocationFlag(loc_flag);
 								if(oldSet != null && oldSet.contains(id)){
-										back = one.updateImport(pstmt3);
+										if(loc_flag)										
+												back = one.updateImport(pstmt3);
+										else
+												back = one.updateImport(pstmt30);
 								}
 								else{
 										back = one.saveImport(pstmt2);
@@ -639,9 +660,8 @@ public class ImportManager extends CommonInc{
 						addError(back);
 				}
 				finally{
-						Helper.databaseDisconnect(con, pstmt, rs);
-						Helper.databaseDisconnect(con2, pstmt2, rs);
-						Helper.databaseDisconnect(con2, pstmt3, rs);						
+						Helper.databaseDisconnect(con, pstmt, rs);						
+						Helper.databaseDisconnect(con2, rs, pstmt2, pstmt3, pstmt30);
 				}
 				System.err.println(msg);
 				return msg;
@@ -670,7 +690,6 @@ public class ImportManager extends CommonInc{
 				String qq3 = " update monitors set device_id=?,name=?,serial_num=?,"+
 						"model=?,type=?,vertical_resolution=?,horizontal_resolution=?,"+
 						"manufacturer=? where external_id=? ";
-				
 				con = Helper.getConnectionSqlite(sqliteDbFile);
 				if(con == null){
 						back = "Could not connect to Sqlite DB";
