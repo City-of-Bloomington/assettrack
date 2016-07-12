@@ -8,7 +8,6 @@
 <%@ taglib prefix="s" uri="/struts-tags" %>
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
-<%@ taglib uri="/struts-tags" prefix="s" %>
 <head>
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <s:head />
@@ -38,21 +37,25 @@
         <div class="fn1-site-utilityBar">
           <nav id="user_menu">
             <div class="menuLauncher"><s:property value='#session.user.fullName' /></div>
-            <div class="menuLinks closed">
+            <div class="menuLinks closed" style="background-color:wheat">
+							<br />
               <a href="<s:property value='#application.url'/>logout.action">Logout</a>
             </div>
           </nav>
-          <nav id="admin_menu">
-            <div class="menuLauncher">Admin</div>
-            <div class="menuLinks closed">
-              <s:if test="#session.user.isAdmin()">
+          <s:if test="#session.user.isAdmin()">					
+						<nav id="admin_menu">
+							<div class="menuLauncher">Admin</div>
+							<div class="menuLinks closed" style="background-color:wheat">
+								<br />
 								<a href="<s:property value='#application.url'/>dept.action">Departments</a>
-								<a href="<s:property value='#application.url'/>division.action">Divisions</a>								
+								<a href="<s:property value='#application.url'/>division.action">Divisions</a>
+								<a href="<s:property value='#application.url'/>auction.action">Auctions</a>																
+								<a href="<s:property value='#application.url'/>type.action">Collections</a>								
 								<a href="<s:property value='#application.url'/>import.action">Import Data</a>						
 								<a href="<s:property value='#application.url'/>userSearch.action">Users</a>
-              </s:if>
-            </div>
-          </nav>
+							</div>
+						</nav>
+          </s:if>
         </div>
 	  </s:if>
 	</div>

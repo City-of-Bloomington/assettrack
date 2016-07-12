@@ -173,7 +173,6 @@ public class Auction extends Type{
 										pstmt.setDate(2, new java.sql.Date(dateFormat.parse(date).getTime()));
 								pstmt.setString(3,id);
 								pstmt.executeUpdate();
-								// removeDevices();
 						}
 						catch(Exception ex){
 								back += ex+":"+qq;

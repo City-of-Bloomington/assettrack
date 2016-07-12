@@ -54,14 +54,14 @@ public class AuctionAction extends TopAction{
 						}
 				}				
 				else if(!id.equals("")){
-						// nothing
+						getAuction();
 						back = auction.doSelect();
 						if(!back.equals("")){
 								addActionError(back);
 						}						
 				}				
 				else{
-
+						getAuction();
 				}
 				return ret;
 		}

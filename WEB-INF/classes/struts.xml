@@ -40,6 +40,18 @@
 			<result>/WEB-INF/jsp/depts/dept.jsp</result>
 			<result name="error">/WEB-INF/jsp/depts/dept.jsp</result>
 		</action>
+		<action name="type" 
+						class="assets.TypeAction" 
+						method="execute">
+			<result>/WEB-INF/jsp/types/type.jsp</result>
+			<result name="error">/WEB-INF/jsp/types/type.jsp</result>
+		</action>
+		<action name="auction" 
+						class="assets.AuctionAction" 
+						method="execute">
+			<result>/WEB-INF/jsp/types/auction.jsp</result>
+			<result name="error">/WEB-INF/jsp/types/auction.jsp</result>
+		</action>		
 		<action name="division" 
 						class="assets.DivisionAction" 
 						method="execute">
@@ -153,6 +165,7 @@
 			<result name="input">/WEB-INF/jsp/devices/deviceSearch.jsp</result>		
 			<result name="error">/WEB-INF/jsp/devices/deviceSearch.jsp</result>
 			<result name="success">/WEB-INF/jsp/devices/deviceSearch.jsp</result>
+			<result name="csv">/WEB-INF/jsp/devices/devicesCsv.jsp</result>			
 		</action>
 		<action name="barcodeSearch" 
 						class="assets.BarcodeSearchAction" 

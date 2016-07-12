@@ -34,7 +34,7 @@ public class Device extends CommonInc{
 
 		String user_id="", employee_id="", related_id="";
 		//
-		Dept dept = null;
+		Type dept = null;
 		Division division = null;
 		Type domain = null;
 		Type location = null;
@@ -42,6 +42,7 @@ public class Device extends CommonInc{
 		List<DeviceHistory> history = null;
 		User user = null;
 		Employee employee = null;
+
 		List<SoftwareInstallation> installations = null;
 		List<Monitor> monitors = null;
 		List<Printer> printers = null;
@@ -148,7 +149,6 @@ public class Device extends CommonInc{
 		public String getInstalled() {
 				return installed;
 		}
-		// probably will not be used
 		public String getdescription() {
 				return description;
 		}
@@ -372,6 +372,15 @@ public class Device extends CommonInc{
 						}
 				}
 				return division;
+		}
+		public Type getDept(){
+				if(dept == null){
+						getDivision();
+						if(division != null){
+								dept = division.getDept();
+						}
+				}
+				return dept;
 		}
 		public User getUser(){
 				if(user == null && !user_id.equals("")){

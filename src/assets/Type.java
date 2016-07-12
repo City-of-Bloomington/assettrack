@@ -188,6 +188,139 @@ public class Type extends CommonInc implements java.io.Serializable{
 				}
 				return msg; // success
     }				
+		public String doSave(){
 		
+				String back = "";
+		
+				Connection con = null;
+				PreparedStatement pstmt = null;
+				ResultSet rs = null;
+				String qq = "insert into "+table_name+" values(0,?,null)";
+				if(name.equals("")){
+						back = "department name not set ";
+						logger.error(back);
+						addError(back);
+						return back;
+				}
+				con = Helper.getConnection();
+				if(con == null){
+						back = "Could not connect to DB";
+						addError(back);
+						return back;
+				}
+				try{
+						pstmt = con.prepareStatement(qq);
+						if(debug){
+								logger.debug(qq);
+						}
+						pstmt.setString(1,name);
+						pstmt.executeUpdate();
+						//
+						// get the id of the new record
+						//
+						qq = "select LAST_INSERT_ID() ";
+						if(debug){
+								logger.debug(qq);
+						}
+						pstmt = con.prepareStatement(qq);				
+						rs = pstmt.executeQuery();
+						if(rs.next()){
+								id = rs.getString(1);
+						}
+				}
+				catch(Exception ex){
+						back += ex;
+						logger.error(back);
+						addError(back);
+				}
+				finally{
+						Helper.databaseDisconnect(con, pstmt, rs);
+				}
+				return back;
 
+		}
+		
+		public String doUpdate(){
+		
+				String back = "";
+				if(name.equals("")){
+						back = " name not set ";
+						logger.error(back);
+						addError(back);
+						return back;
+				}
+				Connection con = null;
+				PreparedStatement pstmt = null;
+				ResultSet rs = null;
+				String str="";
+				String qq = "";
+		
+				con = Helper.getConnection();
+				if(con == null){
+						back = "Could not connect to DB";
+						addError(back);
+						return back;
+				}
+				try{
+						qq = "update "+table_name+" set name=?,inactive=? "+
+								"where id=?";
+						if(debug){
+								logger.debug(qq);
+						}
+						pstmt = con.prepareStatement(qq);
+						pstmt.setString(1,name);
+						if(inactive.equals(""))
+								pstmt.setNull(2, Types.VARCHAR);
+						else
+								pstmt.setString(2, "y");
+						pstmt.setString(3,id);
+						pstmt.executeUpdate();
+				}
+				catch(Exception ex){
+						back += ex+":"+qq;
+						logger.error(back);
+						addError(back);
+				}
+				finally{
+						Helper.databaseDisconnect(con, pstmt, rs);
+				}
+				return back;
+
+		}		
+		public String doDelete(){
+		
+				String back = "", qq = "";
+		
+				Connection con = null;
+				PreparedStatement pstmt = null;
+				ResultSet rs = null;
+		
+				con = Helper.getConnection();
+				if(con == null){
+						back = "Could not connect to DB";
+						addError(back);
+						return back;
+				}
+				try{
+						qq = "delete from "+table_name+" where id=?";
+						if(debug){
+								logger.debug(qq);
+						}
+						pstmt = con.prepareStatement(qq);
+						pstmt.setString(1,id);
+						pstmt.executeUpdate();
+						message="Deleted Successfully";
+						id="";
+						name="";
+				}
+				catch(Exception ex){
+						back += ex+":"+qq;
+						logger.error(back);
+						addError(back);
+				}
+				finally{
+						Helper.databaseDisconnect(con, pstmt, rs);
+				}
+				return back;
+		}
 }

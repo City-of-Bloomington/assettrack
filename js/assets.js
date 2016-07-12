@@ -44,6 +44,11 @@ $("#user_name").autocomplete({
         }
     }
 });
+$("#selection_id").change(function() {
+		$("#type_id").val("");
+		$("#type_name_id").val("");
+    $("#form_id").submit();
+});
 jQuery(function ($) {
     var launcherClick = function(e)  {
             var openMenus   = $('.menuLinks.open'),

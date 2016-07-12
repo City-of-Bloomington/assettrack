@@ -47,18 +47,23 @@ public class DevicesAction extends TopAction{
 						else{
 								devices = deviceList.getDevices();
 								if(devices != null && devices.size() > 0){
-										if(devices.size() == 1){
-												Device one = devices.get(0);
-												try{
-														HttpServletResponse res = ServletActionContext.getResponse();
-														String str = url+"device.action?id="+one.getId();
-														res.sendRedirect(str);
-														return super.execute();
-												}catch(Exception ex){
-														System.err.println(ex);
-												}													
+										if(action.equals("Submit")){
+												if(devices.size() == 1){
+														Device one = devices.get(0);
+														try{
+																HttpServletResponse res = ServletActionContext.getResponse();
+																String str = url+"device.action?id="+one.getId();
+																res.sendRedirect(str);
+																return super.execute();
+														}catch(Exception ex){
+																System.err.println(ex);
+														}													
+												}
+												devicesTitle = "Found "+devices.size()+" records";
 										}
-										devicesTitle = "Found "+devices.size()+" records";
+										else{
+												ret="csv";
+										}
 								}
 								else{
 										addActionMessage("No match found");

@@ -104,11 +104,11 @@
 		</dd>
 	</dl>	
 	<s:submit name="action" type="button" value="Submit" class="fn1-btn"/>
+	<s:submit name="action" type="button" value="Save to CSV" class="fn1-btn"/>	
 	<a href="<s:property value='#application.url' />device.action" class="fn1-btn">New Device </a>
 </s:form>
-
 <s:if test="devices != null">
-	<s:set var="devices" value="devices" />
+	<s:set var="devices" value="devices" />	
 	<s:set var="devicesTitle" value="devicesTitle" />
 	<%@  include file="devices.jsp" %>
 </s:if>
