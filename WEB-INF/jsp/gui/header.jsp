@@ -50,8 +50,9 @@
 								<a href="<s:property value='#application.url'/>dept.action">Departments</a>
 								<a href="<s:property value='#application.url'/>division.action">Divisions</a>
 								<a href="<s:property value='#application.url'/>auction.action">Auctions</a>																
-								<a href="<s:property value='#application.url'/>type.action">Collections</a>								
-								<a href="<s:property value='#application.url'/>import.action">Import Data</a>						
+								<a href="<s:property value='#application.url'/>type.action">Collections</a>
+								<a href="<s:property value='#application.url'/>report.action">Reports</a>														
+								<a href="<s:property value='#application.url'/>import.action">Data Imports</a>						
 								<a href="<s:property value='#application.url'/>userSearch.action">Users</a>
 							</div>
 						</nav>

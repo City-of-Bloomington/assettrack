@@ -167,6 +167,14 @@
 			<result name="success">/WEB-INF/jsp/devices/deviceSearch.jsp</result>
 			<result name="csv">/WEB-INF/jsp/devices/devicesCsv.jsp</result>			
 		</action>
+		<action name="report" 
+						class="assets.ReportAction" 
+						method="execute">
+			<result name="input">/WEB-INF/jsp/devices/report.jsp</result>		
+			<result name="error">/WEB-INF/jsp/devices/report.jsp</result>
+			<result name="success">/WEB-INF/jsp/devices/report.jsp</result>
+			<result name="csv">/WEB-INF/jsp/devices/devicesCsv.jsp</result>			
+		</action>		
 		<action name="barcodeSearch" 
 						class="assets.BarcodeSearchAction" 
 						method="execute">

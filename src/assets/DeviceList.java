@@ -29,7 +29,7 @@ public class DeviceList extends CommonInc{
 				dept_id="", status="", asset_num="", domain_id="",
 				division_id="", cost_from="", cost_to="",
 				processor="", employee_id="", employee_name="", editable = "",
-				exclude_id="", ip_address="", mac_address="";
+				exclude_id="", ip_address="", mac_address="", year="";
 		String limit ="30";
 		//
 		// we need this flag to help find the devices that can be auctioned
@@ -63,6 +63,9 @@ public class DeviceList extends CommonInc{
 		public String getName() {
 				return name;
 		}
+		public String getYear() {
+				return year;
+		}		
 		public String getAsset_num() {
 				return asset_num;
 		}		
@@ -148,6 +151,10 @@ public class DeviceList extends CommonInc{
 				if(val != null)
 						name = val;
 		}
+		public void setYear(String val) {
+				if(val != null && !val.equals("-1"))
+						year = val;
+		}		
 		public void setAsset_num(String val) {
 				if(val != null)
 						asset_num = val;
@@ -199,7 +206,11 @@ public class DeviceList extends CommonInc{
 		public void setDivision_id(String val) {
 				if(val != null && !val.equals("-1"))
 						division_id = val;
-		}	
+		}
+		public void setDept_id(String val) {
+				if(val != null && !val.equals("-1"))
+						dept_id = val;
+		}			
 		public void setStatus(String val) {
 				if(val != null && !val.equals("-1"))
 						status = val;
@@ -239,7 +250,7 @@ public class DeviceList extends CommonInc{
 						" d.location_id,d.division_id,d.domain_id,"+
 						" d.status,d.processor,d.ram,d.hd_size,d.notes,"+
 						" d.mac_address,d.ip_address,d.editable,d.related_id,d.cost "+
-						" from devices d ";
+						" from devices d left join divisions v on d.division_id=v.id  ";
 				String qw = "";
 				if(con == null){
 						back = "Could not connect to DB";
@@ -258,13 +269,17 @@ public class DeviceList extends CommonInc{
 								qw += " d.asset_num = ? ";
 						}														
 						else {
+								if(!dept_id.equals("")){
+										qw += " v.dept_id = ? ";
+								}
 								if(!related_id.equals("")){
+										if(!qw.equals("")) qw += " and ";										
 										qw += " d.related_id = ? ";
 								}								
 								if(!name.equals("")){
+										if(!qw.equals("")) qw += " and ";
 										qw += " d.name like ? ";
 								}
-
 								if(!serial_num.equals("")){
 										if(!qw.equals("")) qw += " and ";
 										qw += " d.serial_num like ? ";
@@ -292,14 +307,20 @@ public class DeviceList extends CommonInc{
 								if(!status.equals("")){
 										if(!qw.equals("")) qw += " and ";
 										qw += " d.status = ? ";
-								}				
-								if(!date_from.equals("")){
-										if(!qw.equals("")) qw += " and ";
-										qw += whichDate+" >= str_to_date('"+date_from+"','%m/%d/%Y')";
 								}
-								if(!date_to.equals("")){
+								if(!year.equals("")){
 										if(!qw.equals("")) qw += " and ";
-										qw += whichDate+" <= str_to_date('"+date_to+"','%m/%d/%Y')";
+										qw += " year("+whichDate+") = ? ";
+								}
+								else {
+										if(!date_from.equals("")){
+												if(!qw.equals("")) qw += " and ";
+												qw += whichDate+" >= str_to_date('"+date_from+"','%m/%d/%Y')";
+										}
+										if(!date_to.equals("")){
+												if(!qw.equals("")) qw += " and ";
+												qw += whichDate+" <= str_to_date('"+date_to+"','%m/%d/%Y')";
+										}
 								}
 								if(!exclude_id.equals("")){
 										if(!qw.equals("")) qw += " and ";	
@@ -351,6 +372,9 @@ public class DeviceList extends CommonInc{
 								pstmt.setString(jj++, asset_num);
 						}								
 						else{
+								if(!dept_id.equals("")){
+										pstmt.setString(jj++, dept_id);
+								}										
 								if(!related_id.equals("")){
 										pstmt.setString(jj++, related_id);
 								}											
@@ -378,6 +402,9 @@ public class DeviceList extends CommonInc{
 								if(!status.equals("")){
 										pstmt.setString(jj++, status);
 								}
+								if(!year.equals("")){
+										pstmt.setString(jj++, year);
+								}								
 								if(!exclude_id.equals("")){
 										pstmt.setString(jj++, exclude_id);
 								}

@@ -525,7 +525,14 @@ public class Helper{
 				Calendar current_cal = Calendar.getInstance();
 				year = ""+ current_cal.get(Calendar.YEAR);
 				return year;
-    }	
+    }
+    public final static int getCurrentYear(){
+
+				int year=2016;
+				Calendar current_cal = Calendar.getInstance();
+				year = current_cal.get(Calendar.YEAR);
+				return year;
+    }		
     //
     // Non static methods and variables
     //
