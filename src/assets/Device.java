@@ -555,11 +555,11 @@ public class Device extends CommonInc{
 						if(ip_address.equals(""))
 								pstmt.setNull(jj++,Types.VARCHAR);
 						else
-								pstmt.setString(jj++,ip_address);						
+								pstmt.setString(jj++, ip_address);						
 						pstmt.executeUpdate();
 				}catch(Exception ex){
-						msg += ex;
-						System.err.println(id+" "+ex);
+						msg += "save "+external_id+" "+ex;
+						logger.error(msg);
 				}
 				return msg;
 		}
@@ -621,8 +621,8 @@ public class Device extends CommonInc{
 						pstmt.setString(jj++, external_id); 
 						pstmt.executeUpdate();
 				}catch(Exception ex){
-						msg += ex;
-						System.err.println(id+" "+ex);
+						msg += " update "+external_id+" "+ex;
+						logger.error(msg);
 				}
 				return msg;
 		}		

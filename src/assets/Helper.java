@@ -219,8 +219,6 @@ public class Helper{
 						return con; // null
 				}
         try{
-						// create a database connection
-						// jdbc:sqlite:c:/SqlLite/spiceworks/spiceworks_prod.db						
 						con = DriverManager.getConnection(sqliteDbFile);						
 						if(con == null){
 								String str = " Could not connect to DB ";

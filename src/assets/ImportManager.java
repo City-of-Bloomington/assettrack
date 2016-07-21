@@ -480,10 +480,10 @@ public class ImportManager extends CommonInc{
 				// replace into devices values(0,?,?,null,?,?, ...)
 				//
 				String qq2 = " insert into devices values(0,?,?,null,?,?,"+ // 1,2,3,4
-						"?,?,?,"+                         // 5,6,7
+						"?,?,?,"+   // 9                     // 5,6,7
 						"?,null,?,null,?,"+               // 8,9,10
 						"'Active',?,?,null,null,"+        // 11,12
-						"?,?,null)";                      // 13,14
+						"?,?,null,null,null)";                      // 13,14
 				
 				String qq22 = " update devices set name=?,serial_num=?,model=?,employee_id=?,description=?,category_id=?,location_id=?,domain_id=?,processor=?,ram=?,mac_address=?,ip_address=? where external_id=? ";
 				// skip location
