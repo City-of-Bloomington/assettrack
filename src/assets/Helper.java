@@ -36,9 +36,6 @@ public class Helper{
     // basic constructor
     public Helper(boolean deb){
 				//
-				// initialize
-				//
-				// debug = deb;
     }
     final static String getHashCodeOf(String buffer){
 
@@ -46,7 +43,6 @@ public class Helper{
 				byte[] out = performDigest(buffer.getBytes(),buffer.getBytes());
 				String ret = bytesToHex(out);
 				return ret;
-				// System.err.println(ret);
 
     }
     final static byte[] performDigest(byte[] buffer, byte[] key) {
@@ -212,6 +208,7 @@ public class Helper{
 				}
 				return ret;
     }
+		//
 		final static Connection getConnectionSqlite(String sqliteDbFile){
 
 				Connection con = null;
@@ -219,6 +216,7 @@ public class Helper{
 						return con; // null
 				}
         try{
+						Class.forName("org.sqlite.JDBC");
 						con = DriverManager.getConnection(sqliteDbFile);						
 						if(con == null){
 								String str = " Could not connect to DB ";
@@ -230,8 +228,6 @@ public class Helper{
 				}
 				return con;		
 		}
-
-		//
 		//	
 		final static Connection getConnection(){ // pooling
 

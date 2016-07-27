@@ -621,7 +621,7 @@ public class ImportManager extends CommonInc{
 								if(!back.equals("")){
 										msg += back+"\n";
 								}
-								System.err.println(one.getId()+" "+emp_id+" "+location_id+" "+type_id+" "+domain_id+" "+one.getName());
+								// System.err.println(one.getId()+" "+emp_id+" "+location_id+" "+type_id+" "+domain_id+" "+one.getName());
 						}
 						//
 						pstmt = con.prepareStatement(qq3);
@@ -663,7 +663,8 @@ public class ImportManager extends CommonInc{
 						Helper.databaseDisconnect(con, pstmt, rs);						
 						Helper.databaseDisconnect(con2, rs, pstmt2, pstmt3, pstmt30);
 				}
-				System.err.println(msg);
+				if(!msg.equals(""))
+						System.err.println(msg);
 				return msg;
 
 		}
@@ -757,7 +758,7 @@ public class ImportManager extends CommonInc{
 								if(!back.equals("")){
 										msg += back+"\n";
 								}
-								System.err.println(found+" "+external_id+" "+device_id+" "+one.getName());
+								// System.err.println(found+" "+external_id+" "+device_id+" "+one.getName());
 						}
 				}
 				catch(Exception ex){
@@ -770,7 +771,8 @@ public class ImportManager extends CommonInc{
 						Helper.databaseDisconnect(con2, pstmt2, rs);
 						Helper.databaseDisconnect(con2, pstmt3, rs);						
 				}
-				System.err.println(msg);
+				if(!msg.equals(""))
+						System.err.println(msg);
 				return msg;
 
 		}
@@ -822,7 +824,7 @@ public class ImportManager extends CommonInc{
 										if(!back.equals("")){
 												msg += back;
 										}
-										System.err.println(str+" "+str2+" "+str3+" "+str4+" "+str5+" "+back);
+										// System.err.println(str+" "+str2+" "+str3+" "+str4+" "+str5+" "+back);
 								}
 						}
 				}
@@ -835,6 +837,8 @@ public class ImportManager extends CommonInc{
 						Helper.databaseDisconnect(con, pstmt, rs);
 						Helper.databaseDisconnect(con2, pstmt2, rs);						
 				}
+				if(!msg.equals(""))
+						System.err.println(msg);
 				return msg;
 
 		}
@@ -936,7 +940,7 @@ public class ImportManager extends CommonInc{
 								if(!back.equals("")){
 										msg += back;
 								}
-								System.err.println(external_id+" "+str2+" "+old_device_id+" "+str4+" "+str5+" "+str6);
+								// System.err.println(external_id+" "+str2+" "+old_device_id+" "+str4+" "+str5+" "+str6);
 						}
 				}
 				catch(Exception ex){
@@ -948,6 +952,8 @@ public class ImportManager extends CommonInc{
 						Helper.databaseDisconnect(con, pstmt, rs);
 						Helper.databaseDisconnect(con2, pstmt2, rs);						
 				}
+				if(!msg.equals(""))
+						System.err.println(msg);				
 				return msg;
 
 		}
@@ -1115,7 +1121,7 @@ public class ImportManager extends CommonInc{
 								if(!back.equals("")){
 										msg += back;
 								}
-								System.err.println(old_id+" "+one.getDisplay_name()+" "+date);
+								// System.err.println(old_id+" "+one.getDisplay_name()+" "+date);
 						}
 				}
 				catch(Exception ex){
@@ -1127,6 +1133,8 @@ public class ImportManager extends CommonInc{
 						Helper.databaseDisconnect(con, pstmt, rs);
 						Helper.databaseDisconnect(con2, pstmt2, rs);						
 				}
+				if(!back.equals(""))
+						System.err.println(back);
 				return back;
 		}
 		
@@ -1188,7 +1196,7 @@ public class ImportManager extends CommonInc{
 								if(!back.equals("")){
 										msg += back;
 								}
-								System.err.println(old_id+" "+one.getKey_value()+" "+date);
+								// System.err.println(old_id+" "+one.getKey_value()+" "+date);
 						}
 				}
 				catch(Exception ex){
@@ -1200,6 +1208,8 @@ public class ImportManager extends CommonInc{
 						Helper.databaseDisconnect(con, pstmt, rs);
 						Helper.databaseDisconnect(con2, pstmt2, rs);						
 				}
+				if(!back.equals(""))
+						System.err.println(back);				
 				return back;
 		}		
 		Hashtable<Integer, Integer> getSoftwareHash(){
@@ -1356,7 +1366,7 @@ public class ImportManager extends CommonInc{
 								if(!back.equals("")){
 										msg += back;
 								}
-								System.err.println(old_id+" "+new_soft_id+" "+new_device_id+" "+" "+new_lic_id+" "+date);
+								// System.err.println(old_id+" "+new_soft_id+" "+new_device_id+" "+" "+new_lic_id+" "+date);
 						}
 						
 				}
@@ -1369,6 +1379,8 @@ public class ImportManager extends CommonInc{
 						Helper.databaseDisconnect(con, pstmt, rs);
 						Helper.databaseDisconnect(con2, pstmt2, rs);						
 				}
+				if(!back.equals(""))
+						System.err.println(back);				
 				return back;
 		}		
 		/**
@@ -1426,7 +1438,7 @@ public class ImportManager extends CommonInc{
 										if(!back.equals("")){
 												msg += back;
 										}
-										System.err.println(str);
+										// System.err.println(str);
 								}
 						}
 				}
@@ -1493,7 +1505,7 @@ public class ImportManager extends CommonInc{
 												if(!back.equals("")){
 														msg += back;
 												}
-												System.err.println(str);
+												// System.err.println(str);
 										}
 								}
 						}
@@ -1560,7 +1572,6 @@ public class ImportManager extends CommonInc{
 		}
 		public String doSelect(){
 				String back = "", msg="";
-		
 				Connection con = null;
 				PreparedStatement pstmt = null;
 				ResultSet rs = null;
