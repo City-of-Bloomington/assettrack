@@ -22,7 +22,7 @@
 				<td><s:property value="username" /></td>				
 				<td><s:property value="fullName" /></td>
 				<td><s:property value="office_phone" /></td>
-				<td><s:property value="role" /></td>
+				<td><s:property value="roleInfo" /></td>
 			</tr>
 		</s:iterator>
 	</tbody>

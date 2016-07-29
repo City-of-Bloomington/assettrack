@@ -5,7 +5,7 @@ package assets;
  * @author W. Sibo <sibow@bloomington.in.gov>
  */
 import java.sql.*;
-import java.util.List;
+import java.util.*;
 import org.apache.log4j.Logger;
 
 public class User extends CommonInc implements java.io.Serializable{
@@ -13,7 +13,7 @@ public class User extends CommonInc implements java.io.Serializable{
     String id="", username="", role="end_user";
 		String first_name="", last_name="",office_phone="", fullName = "";
 		static final long serialVersionUID = 1750L;
-		
+		static Hashtable<String, String> roles = null;
 		static Logger logger = Logger.getLogger(User.class);
 		List<Device> devices = null;
 		//
@@ -63,7 +63,17 @@ public class User extends CommonInc implements java.io.Serializable{
 				setLast_name(val4);
 				setOffice_phone(val5);
 				setRole(val6);
-    }		
+    }
+		private void setHashRoles(){
+				if(roles == null){
+						roles = new Hashtable<String, String>(4);
+						roles.put("end_user","End User");
+						roles.put("View","View only");
+						roles.put("Edit","Edit");
+						roles.put("Edit:Admin","All (Admin)");
+				}
+				
+		}
 		public String getId(){
 				return id;
 		}
@@ -72,6 +82,17 @@ public class User extends CommonInc implements java.io.Serializable{
 		}		
 		public String getRole(){
 				return role;
+		}
+		public String getRoleInfo(){
+				if(!role.equals("")){
+						if(roles == null){
+								setHashRoles();
+						}
+						if(roles != null && roles.containsKey(role)){
+								return roles.get(role);
+						}
+				}
+				return "";
 		}
 		public String getOffice_phone(){
 				return office_phone;
@@ -202,11 +223,11 @@ public class User extends CommonInc implements java.io.Serializable{
 		
 				String str="", msg="";
 				String qq = "";
-				if(id.equals("") || username.equals("") || last_name.equals("")){
-						msg = "User id, username or last name not set";
+				if(username.equals("") || last_name.equals("")){
+						msg = "username or last name not set";
 						return msg;
 				}
-				qq = "insert into users values(?,?,?,?,?,?)";
+				qq = "insert into users values(0,?,?,?,?,?)";
 				//
 				if(debug){
 						logger.debug(qq);
@@ -219,19 +240,27 @@ public class User extends CommonInc implements java.io.Serializable{
 				}			
 				try{
 						stmt = con.prepareStatement(qq);
-						stmt.setString(1, id);						
-						stmt.setString(2, username);
+						stmt.setString(1, username);
 						if(first_name.equals(""))
-								stmt.setNull(3,Types.VARCHAR);
+								stmt.setNull(2,Types.VARCHAR);
 						else
-								stmt.setString(3,first_name);
-						stmt.setString(4,last_name);
+								stmt.setString(2,first_name);
+						stmt.setString(3,last_name);
 						if(office_phone.equals(""))
-								stmt.setNull(5,Types.VARCHAR);
+								stmt.setNull(4,Types.VARCHAR);
 						else
-								stmt.setString(5, office_phone);
-						stmt.setString(6, role);
+								stmt.setString(4, office_phone);
+						stmt.setString(5, role);
 						stmt.executeUpdate();
+						qq = "select LAST_INSERT_ID() ";
+						if(debug){
+								logger.debug(qq);
+						}
+						stmt = con.prepareStatement(qq);				
+						rs = stmt.executeQuery();
+						if(rs.next()){
+								id = rs.getString(1);
+						}						
 				}
 				catch(Exception ex){
 						msg = ex+": "+qq;

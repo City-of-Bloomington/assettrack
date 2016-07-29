@@ -36,12 +36,12 @@
 	<div class="tt-row-container">
 		<dl class="fn1-output-field">
 			<dt>Collection Name </dt>
-			<dd><s:select id="selection_id" name="selection" value="%{selection}" list="#{'category':'categories','auction':'Auctions','organ':'Organizations','location':'Locations','recycle':'Recycle Location'}" onchange="" /> </dd>
+			<dd><s:select id="selection_id" name="selection" value="%{selection}" list="#{'category':'categories','organ':'Organizations','location':'Locations','recycle':'Recycle Location'}" /> </dd>
 		</dl>		
 		<s:if test="type.id != ''">
 			<dl class="fn1-output-field">
 				<dt>ID </dt>
-				<dd><s:property value="type.id" /> 
+				<dd><s:property value="type.id" /> </dd>
 			</dl>
 		</s:if>		
 		<dl class="fn1-output-field">

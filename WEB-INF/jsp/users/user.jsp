@@ -36,7 +36,7 @@
 		<dd><s:textfield name="user.username" size="10" value="%{user.username}" /></dd>
 	</dl>	
 	<dl class="fn1-output-field">
-		<dt>Full Name </dt>
+		<dt>First Name </dt>
 		<dd><s:textfield name="user.first_name" value="%{user.first_name}" size="30" maxlength="70" /> </dd>
 	</dl>
 	<dl class="fn1-output-field">

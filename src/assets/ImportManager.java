@@ -519,7 +519,7 @@ public class ImportManager extends CommonInc{
 						logger.debug(qq);
 				}				
 				try{
-						System.err.println(qq);
+						// System.err.println(qq);
 						pstmt = con.prepareStatement(qq);
 						pstmt2 = con2.prepareStatement(qq2); // device insert
 						pstmt3 = con2.prepareStatement(qq22); // update
@@ -630,11 +630,11 @@ public class ImportManager extends CommonInc{
 						while(rs.next()){
 								String str = rs.getString(1);
 								String str2 = rs.getString(2);
-								System.err.println(str+ " "+str2);
+								// System.err.println(str+ " "+str2);
 								try{
 										if(str != null && str2 != null){
 												long size = (rs.getLong(1))/1000000000; // gig
-												System.err.println(size+ " "+str2);
+												// System.err.println(size+ " "+str2);
 												pstmt2.setLong(1, size);
 												pstmt2.setString(2, str2);
 												pstmt2.executeUpdate();
@@ -1463,7 +1463,6 @@ public class ImportManager extends CommonInc{
 				Set<String> locSet = new HashSet<String>();
 				String qq = " select distinct(location) from users union "+
 						" select distinct(location) from devices ";
-				
 				//
 				// we may use replace instead
 				//
