@@ -6,7 +6,7 @@
 <struts>
    <constant name="struts.devMode" value="true" />
    <constant name="struts.ui.theme" value="simple" />
-   <constant name="struts.action.excludePattern" value="/Login*,/AuctionService*,/AuctionService*,/UserService*,/DonationService*,/TypeService*,/SoftwareService*,/EmployeeService*" />
+   <constant name="struts.action.excludePattern" value="/Login*,/AuctionService*,/AuctionService*,/UserService*,/DonationService*,/TypeService*,/SoftwareService*,/EmployeeService*,/doDownload*" />
 
    <!-- to use this we need to use annotation
 				<constant name="struts.convention.result.path" value="/WEB-INF/jsp/" />
@@ -51,6 +51,12 @@
 						method="execute">
 			<result>/WEB-INF/jsp/types/auction.jsp</result>
 			<result name="error">/WEB-INF/jsp/types/auction.jsp</result>
+		</action>
+		<action name="organization" 
+						class="assets.OrganizationAction" 
+						method="execute">
+			<result>/WEB-INF/jsp/types/organization.jsp</result>
+			<result name="error">/WEB-INF/jsp/types/organization.jsp</result>
 		</action>		
 		<action name="division" 
 						class="assets.DivisionAction" 
@@ -123,6 +129,20 @@
 			<result name="error">/WEB-INF/jsp/disposes/dispose.jsp</result>
 			<result name="success">/WEB-INF/jsp/disposes/dispose.jsp</result>
 		</action>
+		<action name="doUpload" 
+						class="assets.UploadAction" 
+						method="execute">
+			<result name="input">/WEB-INF/jsp/attachments/fileUpload.jsp</result>		
+			<result name="error">/WEB-INF/jsp/attachments/fileUpload.jsp</result>
+			<result name="success">/WEB-INF/jsp/attachments/fileUpload.jsp</result>
+		</action>
+		<action name="attachSearch" 
+						class="assets.AttachSearchAction" 
+						method="execute">
+			<result name="input">/WEB-INF/jsp/attachments/search.jsp</result>		
+			<result name="error">/WEB-INF/jsp/attachments/search.jsp</result>
+			<result name="success">/WEB-INF/jsp/attachments/search.jsp</result>
+		</action>		
 		<action name="donation" 
 						class="assets.DonationAction" 
 						method="execute">

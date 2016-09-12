@@ -90,6 +90,7 @@
 		<a href="<s:property value='#application.url'/>monitor.action?id=<s:property value='monitor.id' />&action=Edit" class="fn1-btn"> Edit </a>			
 	</s:if>
 	<a href="<s:property value='#application.url'/>dispose.action?asset_id=<s:property value='monitor.id' />&type=monitor" class="fn1-btn"> Dispose This Monitor</a>
+	<a href="<s:property value='#application.url' />doUpload.action?obj_type=Monitor&obj_id=<s:property value='id' />" class="fn1-btn">Attachments</a>		
 
 <%@  include file="../gui/footer.jsp" %>
 

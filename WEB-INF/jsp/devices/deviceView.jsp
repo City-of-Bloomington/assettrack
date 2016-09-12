@@ -134,8 +134,9 @@
 		<a href="<s:property value='#application.url'/>installation.action?device_id=<s:property value='device.id' />" class="fn1-btn">New Software Installation</a>
 		<a href="<s:property value='#application.url'/>monitor.action?device_id=<s:property value='device.id' />" class="fn1-btn">New Monitor</a>
 		<a href="<s:property value='#application.url'/>printer.action?device_id=<s:property value='device.id' />" class="fn1-btn">New Printer</a>
-			<a href="<s:property value='#application.url'/>device.action?related_id=<s:property value='device.id' />" class="fn1-btn">New Related Device</a>			
+		<a href="<s:property value='#application.url'/>device.action?related_id=<s:property value='device.id' />" class="fn1-btn">New Related Device</a>			
 		<a href="<s:property value='#application.url'/>dispose.action?asset_id=<s:property value='device.id' />&type=device" class="fn1-btn"> Dispose This Device</a>
+		<a href="<s:property value='#application.url' />doUpload.action?obj_type=Device&obj_id=<s:property value='id' />" class="fn1-btn">Attachments</a>				
 	</s:if>
 	<s:if test="device.hasMonitors()" >
 		<s:set var="monitorsTitle" value="'Related Monitors'" />

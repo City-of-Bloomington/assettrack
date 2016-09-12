@@ -49,7 +49,8 @@
 								<br />
 								<a href="<s:property value='#application.url'/>dept.action">Departments</a>
 								<a href="<s:property value='#application.url'/>division.action">Divisions</a>
-								<a href="<s:property value='#application.url'/>auction.action">Auctions</a>																
+								<a href="<s:property value='#application.url'/>auction.action">Auctions</a>
+								<a href="<s:property value='#application.url'/>organization.action">Organizations</a>								
 								<a href="<s:property value='#application.url'/>type.action">Collections</a>
 								<a href="<s:property value='#application.url'/>report.action">Reports</a>														
 								<a href="<s:property value='#application.url'/>import.action">Data Imports</a>						
@@ -68,7 +69,8 @@
 				<a href="<s:property value='#application.url'/>printerSearch.action">Printers</a>
 				<a href="<s:property value='#application.url'/>softwareSearch.action">Softwares</a>				
 				<a href="<s:property value='#application.url'/>employeeSearch.action">Employees</a>								
-				<a href="<s:property value='#application.url'/>disposes.action">Disposals</a>				
+				<a href="<s:property value='#application.url'/>disposes.action">Disposals</a>
+				<a href="<s:property value='#application.url'/>attachSearch.action">Attachments</a>				
       </nav>
     </div>
   </header>

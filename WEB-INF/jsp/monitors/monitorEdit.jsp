@@ -86,6 +86,7 @@
 	</div>
 	<s:submit name="action" type="button" value="Save Partial Changes" class="fn1-btn"/>
 	<a href="<s:property value='#application.url'/>dispose.action?asset_id=<s:property value='monitor.id' />&type=monitor" class="fn1-btn"> Dispose This Monitor</a>
+	<a href="<s:property value='#application.url' />doUpload.action?obj_type=Monitor&obj_id=<s:property value='id' />" class="fn1-btn">Attachments</a>		
 </s:form>
 <%@ include file="../gui/footer.jsp" %>
 

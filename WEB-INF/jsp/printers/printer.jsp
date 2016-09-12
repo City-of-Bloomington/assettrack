@@ -78,6 +78,7 @@
 	<s:else>
 		<a href="<s:property value='#application.url'/>dispose.action?asset_id=<s:property value='printer.id' />&type=printer" class="fn1-btn"> Dispose This Printer</a>				
 		<s:submit name="action" type="button" value="Save Changes" class="fn1-btn"/>
+		<a href="<s:property value='#application.url' />doUpload.action?obj_type=Printer&obj_id=<s:property value='id' />" class="fn1-btn">Attachments</a>		
 		<a href="<s:property value='#application.url' />printer.action" class="fn1-btn">New Printer </a>	
 	</s:else>
 </s:form>

@@ -36,7 +36,8 @@ public class TypeAction extends TopAction{
 								System.err.println(ex);
 						}	
 				}
-				if(action.equals("Save")){ 
+				if(action.equals("Save")){
+						type.setTable_name(table_name);
 						back = type.doSave();
 						if(!back.equals("")){
 								addActionError(back);
@@ -46,7 +47,8 @@ public class TypeAction extends TopAction{
 								addActionMessage("Saved Successfully");
 						}
 				}				
-				else if(action.equals("Save Changes")){ 
+				else if(action.equals("Save Changes")){
+						type.setTable_name(table_name);						
 						back = type.doUpdate();
 						if(!back.equals("")){
 								addActionError(back);
@@ -131,13 +133,11 @@ public class TypeAction extends TopAction{
 		}
 		void setTable_names(){
 				table_names.put("category","categories");
-				table_names.put("auction","auctions");
 				table_names.put("organ","organizations");
 				table_names.put("recycle","recycle_locations");
 				table_names.put("location","locations");
 				
 				title_names.put("category","All Categories");
-				title_names.put("auction","All Auctions");
 				title_names.put("organ","All Organizations");
 				title_names.put("recycle","All Recycle Locations");
 				title_names.put("location","All Locations");				
