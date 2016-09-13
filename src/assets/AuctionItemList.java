@@ -45,7 +45,7 @@ public class AuctionItemList extends CommonInc{
 				PreparedStatement pstmt = null;
 				ResultSet rs = null;
 				Connection con = Helper.getConnection();
-				String qq = "select id,asset_id,type,auction_id,value,description "+
+				String qq = "select id,asset_id,asset_num,type,auction_id,value,description "+
 						" from auction_items ";
 				String qw = "";
 				if(con == null){
@@ -80,7 +80,8 @@ public class AuctionItemList extends CommonInc{
 																				rs.getString(3),
 																				rs.getString(4),
 																				rs.getString(5),
-																				rs.getString(6));
+																				rs.getString(6),
+																				rs.getString(7));
 										auctionItems.add(one);
 								}
 						}

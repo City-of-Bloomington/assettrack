@@ -9,7 +9,8 @@
 	<h1>Dispose Asset</h1>	
 	<s:hidden name="action2" id="action2" value="" />
 	<s:hidden name="type" value="%{type}" />
-	<s:hidden name="asset_id" value="%{asset_id}" />	
+	<s:hidden name="asset_id" value="%{asset_id}" />
+	<s:hidden name="asset_num" value="%{asset_num}" />	
   <s:if test="hasActionErrors()">
 		<div class="errors">
       <s:actionerror/>
@@ -26,10 +27,21 @@
 		<dl class="fn1-output-field">
 			<dt>Asset ID </dt>
 			<dd>
-				<s:property value="%{asset_id}" /> Type:
-				<s:property value="%{type}" />				
+				<s:property value="%{asset_id}" />
 			</dd>
 		</dl>
+		<dl class="fn1-output-field">
+			<dt>Asset Num </dt>
+			<dd>
+				<s:property value="%{asset_num}" />
+			</dd>
+		</dl>
+		<dl class="fn1-output-field">
+			<dt>Type </dt>
+			<dd>
+				<s:property value="%{type}" />				
+			</dd>
+		</dl>		
 		<dl class="fn1-output-field">
 			<dt>Dispose Method </dt>
 			<dd><s:radio name="method" value="%{method}" list="#{'Recycle':'Recycle','Donation':'Donation','Auction':'Auction','Discard':'Discard'}" /> 

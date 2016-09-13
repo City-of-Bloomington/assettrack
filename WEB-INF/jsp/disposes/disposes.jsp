@@ -28,6 +28,11 @@
 			<dd><s:checkbox name="showAuctions" value="%{showAuctions}" /> Auctioned Items</dd>
 			<dd><s:checkbox name="showDiscards" value="%{showDiscards}" /> Discarded Items</dd>
 		</dl>
+		<dl class="fn1-output-field">
+			<dt>Date, from </dt>
+			<dd><s:textfield name="date_from" value="%{date_from}" size="10" cssClass="date" /> to <s:textfield name="date_to" value="%{date_to}" size="10" cssClass="date" />
+			</dd>
+		</dl>
 	</div>
 	<s:submit name="action" type="button" value="Submit" class="fn1-btn"/></dd>
 </s:form>			
@@ -46,6 +51,9 @@
 	<s:set var="items" value="items3" />
 	<s:set var="itemsTitle" value="donationsTitle" />
 	<%@  include file="donations.jsp" %>
+	<s:set var="donItems" value="donationData" />
+	<s:set var="donationsReportTitle" value="donationsReportTitle" />
+	<%@  include file="donationReport.jsp" %>	
 </s:if>
 <s:if test="showRecycles">
 	<s:set var="items" value="items4" />

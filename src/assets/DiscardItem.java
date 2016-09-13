@@ -31,10 +31,11 @@ public class DiscardItem extends Item{
 											 String val3,
 											 String val4,
 											 String val5,
-											 String val6) {
-				super(deb, val, val2, val3, val4);
-				setMethod(val5);
-				setDescription(val6);
+											 String val6,
+											 String val7) {
+				super(deb, val, val2, val3, val4, val5);
+				setMethod(val6);
+				setDescription(val7);
 		}	
 		public String getMethod() {
 				return method;
@@ -64,13 +65,14 @@ public class DiscardItem extends Item{
 				Connection con = null;
 				PreparedStatement pstmt = null;
 				ResultSet rs = null;
-				String qq = "insert into discarded_items values(0,?,?,?,?,?)";
+				String qq = "insert into discarded_items values(0,?,?,?,?,?,?)";
 				if(asset_id.equals("")){
 						back = "asset id not set ";
 						logger.error(back);
 						addError(back);
 						return back;
 				}
+				prepareAsset();
 				con = Helper.getConnection();
 				if(con == null){
 						back = "Could not connect to DB";
@@ -83,18 +85,22 @@ public class DiscardItem extends Item{
 								logger.debug(qq);
 						}
 						pstmt.setString(1,asset_id);
-						pstmt.setString(2,type);
+					if(asset_num.equals(""))
+								pstmt.setNull(2,Types.VARCHAR);
+						else
+								pstmt.setString(2,asset_num);						
+						pstmt.setString(3,type);
 						if(date.equals(""))
 								date = Helper.getToday();
-						pstmt.setDate(3, new java.sql.Date(dateFormat.parse(date).getTime()));
+						pstmt.setDate(4, new java.sql.Date(dateFormat.parse(date).getTime()));
 						if(method.equals(""))
-								pstmt.setNull(4,Types.VARCHAR);
-						else
-								pstmt.setString(4,method);
-						if(description.equals(""))
 								pstmt.setNull(5,Types.VARCHAR);
 						else
-								pstmt.setString(5,description);				
+								pstmt.setString(5,method);
+						if(description.equals(""))
+								pstmt.setNull(6,Types.VARCHAR);
+						else
+								pstmt.setString(6,description);				
 						pstmt.executeUpdate();
 						qq = "select LAST_INSERT_ID() ";
 						if(debug){
@@ -105,25 +111,22 @@ public class DiscardItem extends Item{
 						if(rs.next()){
 								id = rs.getString(1);
 						}
-						if(type.equals("device")){
-								Device one = new Device(debug, asset_id);
-								back = one.updateStatus("Disposed");								
+						if(device != null){
+								back = device.updateStatus("Disposed");								
 								DeviceHistory ih = new DeviceHistory(debug, null, asset_id, "Disposed",null,user_id);
 								back = ih.doSave();
 								if(!back.equals("")){
 										addError(back);
 								}								
 						}
-						else if(type.equals("monitor")){
-								Monitor one = new Monitor(debug, asset_id);
-								back = one.updateStatus("Disposed");					
+						else if(monitor != null){
+								back = monitor.updateStatus("Disposed");					
 								if(!back.equals("")){
 										addError(back);
 								}		
 						}
-						else if (type.equals("printer")){
-								Printer one = new Printer(debug, asset_id);
-								back = one.updateStatus("Disposed");					
+						else if (printer != null){
+								back = printer.updateStatus("Disposed");					
 								if(!back.equals("")){
 										addError(back);
 								}		
@@ -162,7 +165,7 @@ public class DiscardItem extends Item{
 						return back;
 				}
 				try{
-						qq = "update discarded_items set item_id=?,type=?,date=?,"+
+						qq = "update discarded_items set item_id=?,asset_num=?,type=?,date=?,"+
 								"method=?,description=? "+
 								"where id=?";
 			
@@ -170,22 +173,28 @@ public class DiscardItem extends Item{
 								logger.debug(qq);
 						}
 						pstmt = con.prepareStatement(qq);
-						pstmt.setString(1,asset_id);												
-						pstmt.setString(2,type);						
-						pstmt.setDate(3, new java.sql.Date(dateFormat.parse(date).getTime()));				
-						if(method.equals("")){
-								pstmt.setNull(4,Types.INTEGER);
+						pstmt.setString(1,asset_id);
+						if(asset_num.equals("")){
+								pstmt.setNull(2,Types.VARCHAR);
 						}
 						else{
-								pstmt.setString(4,method);
+								pstmt.setString(2, asset_num);
+						}						
+						pstmt.setString(3,type);						
+						pstmt.setDate(4, new java.sql.Date(dateFormat.parse(date).getTime()));				
+						if(method.equals("")){
+								pstmt.setNull(5,Types.INTEGER);
+						}
+						else{
+								pstmt.setString(5,method);
 						}
 						if(description.equals("")){
-								pstmt.setNull(5,Types.VARCHAR);
+								pstmt.setNull(6,Types.VARCHAR);
 						}
 						else{
-								pstmt.setString(5,description);
+								pstmt.setString(6,description);
 						}
-						pstmt.setString(6,id);
+						pstmt.setString(7, id);
 						pstmt.executeUpdate();
 						message="Updated Successfully";
 				}
@@ -243,7 +252,7 @@ public class DiscardItem extends Item{
 				Connection con = null;
 				PreparedStatement pstmt = null;
 				ResultSet rs = null;
-				String qq = "select item_id,type,"+
+				String qq = "select item_id,asset_num,type,"+
 						"date_format(date,'%m/%d/%Y'),method,description "+
 						"from discarded_items where id=?";
 				con = Helper.getConnection();
@@ -261,10 +270,11 @@ public class DiscardItem extends Item{
 						rs = pstmt.executeQuery();
 						if(rs.next()){
 								setAsset_id(rs.getString(1));
-								setType(rs.getString(2));
-								setDate(rs.getString(3));
-								setMethod(rs.getString(4));
-								setDescription(rs.getString(5));
+								setAsset_num(rs.getString(2));								
+								setType(rs.getString(3));
+								setDate(rs.getString(4));
+								setMethod(rs.getString(5));
+								setDescription(rs.getString(6));
 						}
 						else{
 								back = "Record "+id+" Not found";

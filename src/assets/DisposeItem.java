@@ -33,8 +33,9 @@ public class DisposeItem extends Item{
 											 String val,
 											 String val2,
 											 String val3,
-											 String val4){
-				super(deb, val, val2, val3, val4); 
+											 String val4,
+											 String val5){
+				super(deb, val, val2, val3, val4, val5); 
 
     }		
     //
@@ -107,21 +108,21 @@ public class DisposeItem extends Item{
 		
 				String back = "";
 				if(method.equals("Auction")){
-						AuctionItem one = new AuctionItem(debug, null, asset_id, type, auction_id, ""+value, description);
+						AuctionItem one = new AuctionItem(debug, null, asset_id, asset_num, type, auction_id, ""+value, description);
 						back = one.doSave();
 						id = one.getId();
 				}
 				else if(method.equals("Donation")){
-						Donation one = new Donation(debug, null, asset_id, type, date, organization_id, ""+value);
+						Donation one = new Donation(debug, null, asset_id, asset_num, type, date, organization_id, ""+value);
 						back = one.doSave();
 						id = one.getId();
 				}
 				else if(method.equals("Recycle")){
-						RecycledItem one = new RecycledItem(debug, null, asset_id, type, date, location_id, ""+weight, description);
+						RecycledItem one = new RecycledItem(debug, null, asset_id, asset_num, type, date, location_id, ""+weight, description);
 						back = one.doSave();
 				}
 				else if(method.equals("Discard")){
-						DiscardItem one = new DiscardItem(debug, null, asset_id, type, date,  method, description);
+						DiscardItem one = new DiscardItem(debug, null, asset_id, asset_num, type, date,  method, description);
 						back = one.doSave();
 						id = one.getId();
 				}

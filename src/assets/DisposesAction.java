@@ -19,13 +19,15 @@ public class DisposesAction extends TopAction{
 		List<DiscardItem> items2 = null;		
 		List<Donation> items3 = null;
 		List<RecycledItem> items4 = null;
+		List<String[]> donationData = null;
 		String auctionItemsTitle = "Most recent auctioned items";
 		String discardsTitle = "Most recent dicarded items";
 		String donationsTitle = "Most recent donations";
 		String recyclesTitle = "Most recent recycled items";
+		String donationsReportTitle = "Donations classified by Organization, Type and Date ";
 		boolean showDiscards = true, showAuctions = true,
 				showRecycles = true, showDonations = true;
-				
+		String date_from="", date_to="";
 		public String execute(){
 				String ret = SUCCESS;
 				String back = doPrepare();
@@ -65,14 +67,23 @@ public class DisposesAction extends TopAction{
 		public List<Donation> getItems3(){ 
 				if(items3 == null){
 						DonationList dl = new DonationList();
+						dl.setDate_from(date_from);
+						dl.setDate_to(date_to);
 						String back = dl.find();
 						items3 = dl.getDonations();
+						dl.prepareReport();
+						donationData = dl.getDataList();
 				}		
 				return items3;
+		}
+		public List<String[]> getDonationData(){
+				return donationData;
 		}
 		public List<RecycledItem> getItems4(){ 
 				if(items4 == null){
 						RecycledItemList dl = new RecycledItemList();
+						dl.setDate_from(date_from);
+						dl.setDate_to(date_to);
 						String back = dl.find();
 						items4 = dl.getRecycledItems();
 				}		
@@ -87,9 +98,13 @@ public class DisposesAction extends TopAction{
 		public String getDonationsTitle(){
 				return donationsTitle;
 		}
+		public String getDonationsReportTitle(){
+				return donationsReportTitle;
+		}		
 		public String getRecyclesTitle(){
 				return recyclesTitle;
 		}
+		
 		public boolean getShowRecycles(){
 				return showRecycles;
 		}
@@ -114,7 +129,20 @@ public class DisposesAction extends TopAction{
 		public void setShowAuctions(boolean val){
 				showAuctions = val;
 		}
-		
+		public void setDate_from(String val){
+				if(val != null)
+						date_from = val;
+		}
+		public void setDate_to(String val){
+				if(val != null)
+						date_to = val;
+		}
+		public String getDate_from(){
+				return date_from;
+		}
+		public String getDate_to(){
+				return date_to;
+		}		
 }
 
 

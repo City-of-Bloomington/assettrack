@@ -20,7 +20,7 @@ public class RecycleAction extends TopAction{
 		String recyclesTitle = " Most recent auction items";
 		List<RecycledItem> items = null;
 		List<Type> locations = null;		// donations
-		String asset_id = "";
+		String asset_id = "", asset_num="";
 		String type = "";		
 		public String execute(){
 				String ret = SUCCESS;
@@ -96,6 +96,9 @@ public class RecycleAction extends TopAction{
 				if(!asset_id.equals("")){
 						item.setAsset_id(asset_id);
 				}
+				if(!asset_num.equals("")){
+						item.setAsset_num(asset_num);
+				}				
 				return item;
 		}
 		public void setItem(RecycledItem val){
@@ -134,7 +137,15 @@ public class RecycleAction extends TopAction{
 		public void setAsset_id(String val){
 				if(val != null && !val.equals(""))		
 						asset_id = val;
+		}
+		public String getAsset_num(){
+				return asset_num;
+		}
+		public void setAsset_num(String val){
+				if(val != null && !val.equals(""))		
+						asset_num = val;
 		}		
+		
 }
 
 

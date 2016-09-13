@@ -18,7 +18,7 @@ public class DisposeAction extends TopAction{
 		//
 		DisposeItem item = null;
 		String method = "Donation";
-		String asset_id = "";
+		String asset_id = "", asset_num="";
 		String type = "";
 		public String execute(){
 				String ret = SUCCESS;
@@ -35,18 +35,19 @@ public class DisposeAction extends TopAction{
 				}
 				if(action.equals("Next")){
 						String str = "";
+						String linkStr = ".action?asset_id="+asset_id+"&type="+type+"&asset_num="+asset_num;
 						if(method.equals("Donation")){
-								str = url+"donation.action?asset_id="+asset_id+"&type="+type;
+								str = url+"donation"+linkStr;
 						}
 						else if(method.equals("Recycle")){
-								str = url+"recycle.action?asset_id="+asset_id+"&type="+type;
+								str = url+"recycle"+linkStr;
 								
 						}
 						else if(method.equals("Discard")){
-								str = url+"discard.action?asset_id="+asset_id+"&type="+type;
+								str = url+"discard"+linkStr;
 						}
 						else if(method.equals("Auction")){
-								str = url+"auctionItem.action?asset_id="+asset_id+"&type="+type;
+								str = url+"auctionItem"+linkStr;
 						}						
 						else {
 								back += " Unknown dispose method "+method;
@@ -92,7 +93,14 @@ public class DisposeAction extends TopAction{
 		public void setAsset_id(String val){
 				if(val != null && !val.equals(""))		
 						asset_id = val;
-		}		
+		}
+		public String getAsset_num(){
+				return asset_num;
+		}
+		public void setAsset_num(String val){
+				if(val != null && !val.equals(""))		
+						asset_num = val;
+		}				
 }
 
 

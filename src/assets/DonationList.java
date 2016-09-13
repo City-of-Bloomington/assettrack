@@ -16,6 +16,7 @@ public class DonationList extends CommonInc{
 		static final long serialVersionUID = 1330L;	
 		String organization_id="", organ_name="", device_id="";
 		String date_from="", date_to="";
+		String limit = " limit 50 ";
 		List<Donation> donations = null;
 		//
 		public DonationList(){
@@ -61,7 +62,9 @@ public class DonationList extends CommonInc{
 		public String  getDate_to(){
 				return date_to;
     }
-	
+		public void setNoLimit(){
+				limit = "";
+		}	
 		public List<Donation> getDonations(){
 				return donations;
 		}
@@ -72,7 +75,7 @@ public class DonationList extends CommonInc{
 				PreparedStatement pstmt = null;
 				ResultSet rs = null;
 				Connection con = Helper.getConnection();
-				String qq = "select id,asset_id,type,date_format(date,'%m/%d/%Y'),organization_id,value from donations ";
+				String qq = "select id,asset_id,asset_num,type,date_format(date,'%m/%d/%Y'),organization_id,value from donations ";
 				String qw = "";
 				if(con == null){
 						back = "Could not connect to DB";
@@ -100,7 +103,7 @@ public class DonationList extends CommonInc{
 								if(!qw.equals("")){
 										qq += " where "+qw;
 								}
-								qq += " order by date DESC ";
+								qq += " order by date DESC "+limit;
 								if(debug){
 										logger.debug(qq);
 								}
@@ -120,7 +123,8 @@ public class DonationList extends CommonInc{
 																								rs.getString(3),
 																								rs.getString(4),
 																								rs.getString(5),
-																								rs.getString(6)
+																								rs.getString(6),
+																								rs.getString(7)
 																								);
 										if(donations == null)
 												donations = new ArrayList<Donation>();
@@ -141,6 +145,85 @@ public class DonationList extends CommonInc{
 				}
 				return back;
 		}
+
+		List<String[]> dataList = new ArrayList<String[]>();
+		public List<String[]> getDataList(){
+				return dataList;
+		}
+		// String[] titleArray = {"Count","Type","Date","Organization","Total Value"};
+
+		public String prepareReport(){
+
+				// dataList.add(titleArray); // first row
+				String back = "";
+				PreparedStatement pstmt = null;
+				ResultSet rs = null;
+				Connection con = Helper.getConnection();
+				String qq = "select "+
+						" o.name name, "+
+						" d.type type, "+
+						" date_format(d.date,'%m/%d/%Y') date,"+						
+						" count(*), "+
+						" sum(d.value) total "+
+						" from donations d,organizations o ";
+				String qw = " d.organization_id=o.id ";
+				if(con == null){
+						back = "Could not connect to DB";
+						addError(back);
+						return back;
+				}
+				else{
+						try{
+								if(!organization_id.equals("")){
+										if(!qw.equals("")) qw += " and ";
+										qw += " d.organization_id = ? ";
+								}
+								if(!date_from.equals("")){
+										if(!qw.equals("")) qw += " and ";
+					
+										qw += " d.date >= str_to_date('"+date_from+"','%m/%d/%Y')";
+								}
+								if(!date_to.equals("")){
+										if(!qw.equals("")) qw += " and ";
+										qw += " d.date <= str_to_date('"+date_to+"','%m/%d/%Y')";
+								}
+								if(!qw.equals("")){
+										qq += " where "+qw;
+								}
+								qq += " group by type,date,name order by name,date ";
+								if(debug){
+										logger.debug(qq);
+								}
+								pstmt = con.prepareStatement(qq);
+								int jj = 1;
+								if(!organization_id.equals("")){
+										pstmt.setString(jj++, organization_id);
+								}
+								rs = pstmt.executeQuery();
+								while(rs.next()){
+										String[] arr = new String[5];
+										for(int i=0;i<5;i++){
+												String str = rs.getString(i+1);
+												if(str != null){
+														arr[i] = str;
+												}
+												else
+														arr[i] = "";
+										}
+										dataList.add(arr);
+								}
+						}
+						catch(Exception ex){
+								back += ex+" : "+qq;
+								logger.error(back);
+								addError(back);
+						}
+						finally{
+								Helper.databaseDisconnect(con, pstmt, rs);
+						}
+				}
+				return back;
+		}		
 }
 
 

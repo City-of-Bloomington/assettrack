@@ -38,20 +38,7 @@ public class AuctionItem extends Item{
 				setAuction_id(val);
 				setAsset_id(val2);
     }
-		public AuctionItem(boolean deb,
-												 String val,
-												 String val2,
-												 String val3,
-												 String val4,
-												 String val5){
-				super(deb, val, val2, val3, null); // no date for auction
-
-				//
-				// initialize
-				//
-				setAuction_id(val);
-				setDescription(val5);
-    }		
+		/*
 		public AuctionItem(boolean deb,
 											 String val,
 											 String val2,
@@ -59,12 +46,29 @@ public class AuctionItem extends Item{
 											 String val4,
 											 String val5,
 											 String val6){
+				super(deb, val, val2, val3, val4, null); // no date for auction
 
-				super(deb, val, val2, val3, null); // no date for auction
 				//
-				setAuction_id(val4);
-				setValue(val5);
-				setDescription(val6);
+				// initialize
+				//
+				setAuction_id(val);
+				setDescription(val5);
+    }
+		*/
+		public AuctionItem(boolean deb,
+											 String val,  // id
+											 String val2, // asset_id
+											 String val3, // asset_num
+											 String val4, // type
+											 String val5, // auction_id
+											 String val6, // value
+											 String val7){ // description
+
+				super(deb, val, val2, val3, val4, null); // no date for auction
+				//
+				setAuction_id(val5);
+				setValue(val6);
+				setDescription(val7);
     }
     //
     // setters
@@ -117,7 +121,8 @@ public class AuctionItem extends Item{
 						back = "auction id or asset id not set ";
 						addError(back);
 				}
-				String qq = "insert into auction_items values(0,?,?,?,?,?)";
+				prepareAsset();
+				String qq = "insert into auction_items values(0,?,?,?,?,?,?)";
 				//
 				con = Helper.getConnection();
 				if(con == null){
@@ -133,15 +138,19 @@ public class AuctionItem extends Item{
 								}
 								pstmt.setString(1,auction_id);				
 								pstmt.setString(2,asset_id);
+								if(!asset_num.equals(""))
+										pstmt.setString(3,asset_num);
+								else
+										pstmt.setNull(3,Types.VARCHAR);								
 								if(!type.equals(""))
-										pstmt.setString(3,type);
+										pstmt.setString(4,type);
 								else
-										pstmt.setNull(3,Types.INTEGER);
-								pstmt.setFloat(4,value);
+										pstmt.setNull(4,Types.INTEGER);
+								pstmt.setFloat(5,value);
 								if(!description.equals(""))
-										pstmt.setString(5,description);
+										pstmt.setString(6,description);
 								else
-										pstmt.setNull(5,Types.VARCHAR);								
+										pstmt.setNull(6,Types.VARCHAR);								
 								pstmt.executeUpdate();
 								qq = "select LAST_INSERT_ID() ";
 								if(debug){
@@ -152,9 +161,8 @@ public class AuctionItem extends Item{
 								if(rs.next()){
 										id = rs.getString(1);
 								}
-								if(type.equals("device")){
-										Device one = new Device(debug, asset_id);
-										back = one.updateStatus("Auctioned");
+								if(device != null){
+										back = device.updateStatus("Auctioned");
 										if(back.equals("")){
 												DeviceHistory ih = new DeviceHistory(debug, null, asset_id, "Auctioned",null,user_id);
 												back = ih.doSave();
@@ -162,17 +170,15 @@ public class AuctionItem extends Item{
 										if(!back.equals("")){
 												addError(back);
 										}
-								}								
-								else if(type.equals("monitor")){
-										Monitor one = new Monitor(debug, asset_id);
-										back = one.updateStatus("Auctioned");					
+								}
+								else if(monitor != null){
+										back = monitor.updateStatus("Auctioned");					
 										if(!back.equals("")){
 												addError(back);
 										}		
 								}
-								else if (type.equals("printer")){
-										Printer one = new Printer(debug, asset_id);
-										back = one.updateStatus("Auctioned");					
+								else if (printer != null){
+										back = printer.updateStatus("Auctioned");					
 										if(!back.equals("")){
 												addError(back);
 										}		
@@ -199,6 +205,7 @@ public class AuctionItem extends Item{
 				ResultSet rs = null;
 				String str="";
 				String qq = "";
+				prepareAsset();
 				con = Helper.getConnection();
 				if(con == null){
 						back = "Could not connect to DB";
@@ -208,7 +215,7 @@ public class AuctionItem extends Item{
 				else{
 						try{
 								qq = "update auction_items set ";
-								qq += "auction_id=?,asset_id=?, type=?,";								
+								qq += "auction_id=?,asset_id=?, asset_num=?,type=?,";
 								qq += "value=?,description=? ";
 								qq += "where id=? ";
 								if(debug){
@@ -216,17 +223,21 @@ public class AuctionItem extends Item{
 								}
 								pstmt = con.prepareStatement(qq);
 								pstmt.setString(1,auction_id);
-								pstmt.setString(2,asset_id);								
+								pstmt.setString(2,asset_id);
+								if(!asset_num.equals(""))
+										pstmt.setString(3,asset_num);
+								else
+										pstmt.setNull(3,Types.VARCHAR);											
 								if(!type.equals(""))
-										pstmt.setString(3,type);
+										pstmt.setString(4,type);
 								else
-										pstmt.setNull(3,Types.INTEGER);
-								pstmt.setFloat(4,value);
+										pstmt.setNull(4,Types.INTEGER);
+								pstmt.setFloat(5,value);
 								if(!description.equals(""))
-										pstmt.setString(5,description);
+										pstmt.setString(6,description);
 								else
-										pstmt.setNull(5,Types.VARCHAR);	
-								pstmt.setString(6,id);		
+										pstmt.setNull(6,Types.VARCHAR);	
+								pstmt.setString(7,id);		
 								pstmt.executeUpdate();
 								message="Updated Successfully";
 						}
@@ -288,7 +299,7 @@ public class AuctionItem extends Item{
 				Connection con = null;
 				PreparedStatement pstmt = null;
 				ResultSet rs = null;
-				String qq = "select asset_id,type,auction_id,value,description "+
+				String qq = "select asset_id,asset_num,type,auction_id,value,description "+
 						" from auction_items where id=?";		
 				con = Helper.getConnection();
 				if(con == null){
@@ -307,10 +318,11 @@ public class AuctionItem extends Item{
 								rs = pstmt.executeQuery();
 								if(rs.next()){
 										setAsset_id(rs.getString(1));
-										setType(rs.getString(2));
-										setAuction_id(rs.getString(3));
-										setValue(rs.getString(4));
-										setDescription(rs.getString(5));										
+										setAsset_num(rs.getString(2));
+										setType(rs.getString(3));
+										setAuction_id(rs.getString(4));
+										setValue(rs.getString(5));
+										setDescription(rs.getString(6));										
 								}
 								else{
 										back= "Record "+id+" Not found";

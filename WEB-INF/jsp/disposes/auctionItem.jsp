@@ -33,10 +33,21 @@
 		<dl class="fn1-output-field">
 			<dt>Asset ID </dt>
 			<dd>
-				<s:property value="%{item.asset_id}" /> Type:
-				<s:property value="%{item.type}" />				
+				<s:property value="%{item.asset_id}" /> 
 			</dd>
 		</dl>
+		<dl class="fn1-output-field">
+			<dt>Asset Num </dt>
+			<dd>
+				<s:property value="%{item.asset_num}" /> 
+			</dd>
+		</dl>		
+		<dl class="fn1-output-field">
+			<dt>Asset Type </dt>
+			<dd>
+				<s:property value="%{item.type}" />				
+			</dd>
+		</dl>		
 		<dl class="fn1-output-field">
 			<dt>Auction *</dt>
 			<dd><s:select name="item.auction_id" value="%{item.auction_id}" list="%{auctions}" listKey="id" listValue="name" headerKey="-1" headerValue="Pick an Auction" required="true" /> 

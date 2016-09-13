@@ -39,9 +39,16 @@
 				<s:elseif test="item.type == 'Monitor'">
 					<a href="<s:property value='#application.url' />monitor.action?id=<s:property value='item.asset_id' />"><s:property value="item.asset_id" /> </a>
 				</s:elseif>
-				Type <s:property value="%{item.type}" />				
 			</dd>
 		</dl>
+		<dl class="fn1-output-field">
+			<dt>Asset Num </dt>
+			<dd> <s:property value="%{item.asset_num}" />	</dd>
+		</dl>
+		<dl class="fn1-output-field">
+			<dt>Type </dt>
+			<dd> <s:property value="%{item.type}" />	</dd>
+		</dl>				
 		<dl class="fn1-output-field">
 			<dt>Discard Method</dt>
 			<dd><s:select name="item.method" value="%{item.method}" list="#{'Lost':'Lost','Discard':'Discard','Consumed':'Consumed'}" headerKey="-1" headerValue="Pick a Method" required="true" /> 

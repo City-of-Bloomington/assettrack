@@ -11,7 +11,8 @@
 	<thead>
 		<tr>
 			<th align="center"><b>ID</b></th>
-			<th align="center"><b>Asset ID</b></th>			
+			<th align="center"><b>Asset ID</b></th>
+			<th align="center"><b>Asset Num</b></th>						
 			<th align="center"><b>Type </b></th>
 			<th align="center"><b>Method</b></th>
 			<th align="center"><b>Notes</b></th>			
@@ -21,7 +22,8 @@
 		<s:iterator var="one" value="#items">
 			<tr>
 				<td><a href="<s:property value='#application.url' />discard.action?id=<s:property value='id' />"><s:property value="id" /> </a></td>
-				<td><s:property value="asset_id" /></td>				
+				<td><s:property value="asset_id" /></td>
+				<td><s:property value="asset_num" /></td>				
 				<td><s:property value="type" /></td>
 				<td><s:property value="method" /></td>				
 				<td><s:property value="description" /></td>				

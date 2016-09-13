@@ -90,22 +90,11 @@ public class AuctionAddItems extends CommonInc{
 												break;
 										}
 								}
-								AuctionItem one = new AuctionItem(debug, auction_id, item_ids[i], val, type, null);
+								AuctionItem one = new AuctionItem(debug, null, auction_id, item_ids[i], null, type, val, null);
 								String back = one.doSave();
 								if(!back.equals("")){
 										addError(back);
 								}
-								// TODO								
-								// change the item status to disposed
-								//
-								// Item item = new Item(debug, item_ids[i]);
-								// item.doSelect();
-								//
-								// need to change status here
-								//
-								// back = item.changeStatus("Auctioned", user_id);`
-	
-																
 						}
 				}
 		}

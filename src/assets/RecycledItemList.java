@@ -18,7 +18,7 @@ public class RecycledItemList extends CommonInc{
 		String location_id="";
 		String asset_id = "", type="";
 		String date_from = "", date_to="";
-	
+		String limit = " limit 50 ";
 		RecycledItem recycledItem = null;
 		ArrayList<RecycledItem> recycledItems = null;
 
@@ -42,12 +42,16 @@ public class RecycledItemList extends CommonInc{
 						type = val;
 		}		
 		public void setDate_from(String val){
-				if(val != null)
+				if(val != null && !val.equals("")){
+						setNoLimit();
 						date_from = val.trim();
+				}
 		}
 		public void setDate_to(String val){
-				if(val != null)
+				if(val != null && !val.equals("")){
+						setNoLimit();
 						date_to = val.trim();
+				}
 		}
 		public String  getAset_id(){
 				return asset_id;
@@ -63,7 +67,10 @@ public class RecycledItemList extends CommonInc{
     }
 		public String  getDate_to(){
 				return date_to;
-    }	
+    }
+		public void setNoLimit(){
+				limit = "";
+		}
 
 		public List<RecycledItem> getRecycledItems(){
 				return recycledItems;
@@ -75,7 +82,7 @@ public class RecycledItemList extends CommonInc{
 				PreparedStatement pstmt = null;
 				ResultSet rs = null;
 				Connection con = Helper.getConnection();
-				String qq = "select r.id,r.asset_id,r.type,  "+
+				String qq = "select r.id,r.asset_id,r.asset_num,r.type,  "+
 						" date_format(date,'%m/%d/%Y'),r.location_id,r.weight,r.description "+
 						" from recycled_items r ";
 				String qw = "";
@@ -86,21 +93,29 @@ public class RecycledItemList extends CommonInc{
 				}
 				try{
 						if(!location_id.equals("")){
+								if(!qw.equals("")) qw += " and ";								
 								qw += " r.location_id = ? ";
 						}
 						if(!asset_id.equals("")){
+								if(!qw.equals("")) qw += " and ";
 								qw += " r.asset_id = ? ";
 						}
 						if(!type.equals("")){
+								if(!qw.equals("")) qw += " and ";
 								qw += " r.type = ? ";
 						}						
 						if(!date_from.equals("")){
-								qw += " and r.date >= str_to_date('"+date_from+"','%m/%d/%Y')";
+								if(!qw.equals("")) qw += " and ";
+								qw += " r.date >= str_to_date('"+date_from+"','%m/%d/%Y')";
 						}
 						if(!date_to.equals("")){
-								qw += " and r.date <= str_to_date('"+date_to+"','%m/%d/%Y')";
+								if(!qw.equals("")) qw += " and ";
+								qw += " r.date <= str_to_date('"+date_to+"','%m/%d/%Y')";
 						}
-						qq = qq + qw +" order by r.date DESC ";
+						if(!qw.equals("")){
+								qq = qq+" where "+qw;
+						}
+						qq = qq + " order by r.date DESC "+limit;
 						if(debug){
 								logger.debug(qq);
 						}
@@ -127,7 +142,8 @@ public class RecycledItemList extends CommonInc{
 																		 rs.getString(4),
 																		 rs.getString(5),
 																		 rs.getString(6),
-																		 rs.getString(7)
+																		 rs.getString(7),
+																		 rs.getString(8)
 																		 );
 								recycledItems.add(one);
 						}

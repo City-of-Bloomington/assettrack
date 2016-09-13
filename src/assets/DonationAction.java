@@ -20,7 +20,7 @@ public class DonationAction extends TopAction{
 		String donationsTitle = " Most recent Donations";
 		List<Donation> items = null;
 		List<Type> organizations = null;		// donations
-		String asset_id = "";
+		String asset_id = "", asset_num="";
 		String type = "";		
 		public String execute(){
 				String ret = SUCCESS;
@@ -95,6 +95,9 @@ public class DonationAction extends TopAction{
 				if(!asset_id.equals("")){
 						item.setAsset_id(asset_id);
 				}
+				if(!asset_num.equals("")){
+						item.setAsset_num(asset_num);
+				}				
 				return item;
 		}
 		public void setItem(Donation val){
@@ -133,7 +136,14 @@ public class DonationAction extends TopAction{
 		public void setAsset_id(String val){
 				if(val != null && !val.equals(""))		
 						asset_id = val;
-		}		
+		}
+		public String getAsset_num(){
+				return asset_num;
+		}
+		public void setAsset_num(String val){
+				if(val != null && !val.equals(""))		
+						asset_num = val;
+		}				
 }
 
 

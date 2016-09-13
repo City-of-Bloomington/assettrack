@@ -78,7 +78,7 @@ public class DiscardItemList extends CommonInc{
 				PreparedStatement pstmt = null;
 				ResultSet rs = null;
 				Connection con = Helper.getConnection();
-				String qq = "select id,item_id,type,date_format(date,'%m/%d/%Y'),method, "+
+				String qq = "select id,item_id,asset_num,type,date_format(date,'%m/%d/%Y'),method, "+
 						"description from discarded_items ";
 				String qw = "";
 				if(con == null){
@@ -132,7 +132,8 @@ public class DiscardItemList extends CommonInc{
 																										 rs.getString(3),
 																										 rs.getString(4),
 																										 rs.getString(5),
-																										 rs.getString(6));
+																										 rs.getString(6),
+																										 rs.getString(7));
 										if(discards == null)
 												discards = new ArrayList<DiscardItem>();
 										discards.add(pp);

@@ -10,6 +10,7 @@
 
 	<s:hidden name="item.type" value="%{item.type}" />
 	<s:hidden name="item.asset_id" value="%{item.asset_id}" />
+	<s:hidden name="item.asset_num" value="%{item.asset_num}" />	
 	<s:if test="item.id == ''">
 		<h1>Asset Donation</h1>
 	</s:if>
@@ -33,10 +34,21 @@
 		<dl class="fn1-output-field">
 			<dt>Asset ID </dt>
 			<dd>
-				<s:property value="%{item.asset_id}" /> Type:
-				<s:property value="%{item.type}" />				
+				<s:property value="%{item.asset_id}" /> 
 			</dd>
 		</dl>
+		<dl class="fn1-output-field">
+			<dt>Asset Num </dt>
+			<dd>
+				<s:property value="%{item.asset_num}" /> 
+			</dd>
+		</dl>
+		<dl class="fn1-output-field">
+			<dt>Type </dt>
+			<dd>
+				<s:property value="%{item.type}" />				
+			</dd>
+		</dl>		
 		<dl class="fn1-output-field">
 			<dt>Organization *</dt>
 			<dd><s:select name="item.organization_id" value="%{item.organization_id}" list="%{organizations}" listKey="id" listValue="name" headerKey="-1" headerValue="Pick Organization" required="true" /> 

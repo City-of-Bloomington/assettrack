@@ -62,7 +62,7 @@
 	<s:if test="printer.anyUpdate()">
 		<a href="<s:property value='#application.url'/>printer.action?id=<s:property value='printer.id' />&action=Edit" class="fn1-btn"> Edit </a>
 	</s:if>
-	<a href="<s:property value='#application.url'/>dispose.action?asset_id=<s:property value='printer.id' />&type=printer" class="fn1-btn"> Dispose This Printer</a>		
+	<a href="<s:property value='#application.url'/>dispose.action?asset_id=<s:property value='printer.id' />&type=printer&asset_num=<s:property value='printer.asset_num' />" class="fn1-btn"> Dispose This Printer</a>	
 	<a href="<s:property value='#application.url' />doUpload.action?obj_type=Printer&obj_id=<s:property value='id' />" class="fn1-btn">Attachments</a>		
 	<a href="<s:property value='#application.url' />printer.action" class="fn1-btn">New Printer </a>		
 

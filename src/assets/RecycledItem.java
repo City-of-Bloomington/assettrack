@@ -36,16 +36,17 @@ public class RecycledItem extends Item{
 												String val4,
 												String val5,
 												String val6,
-												String val7
+												String val7,
+												String val8
 												){
 
-				super(deb, val, val2, val3, val4);
+				super(deb, val, val2, val3, val4, val5);
 				//
 				// initialize
 				//
-				setLocation_id(val5);				
-				setWeight(val6);
-				setDescription(val7);
+				setLocation_id(val6);				
+				setWeight(val7);
+				setDescription(val8);
     }	
     //
     // setters
@@ -102,7 +103,7 @@ public class RecycledItem extends Item{
 						addError(back);
 						return back;
 				}
-				String qq = "insert into recycled_items values(0,?,?,?,?,?,?)";
+				String qq = "insert into recycled_items values(0,?,?,?,?,?,?,?)";
 				//
 				con = Helper.getConnection();
 				if(con == null){
@@ -117,18 +118,22 @@ public class RecycledItem extends Item{
 						}
 						pstmt.setString(1, location_id);				
 						pstmt.setString(2, asset_id);
-						pstmt.setString(3, type);
+						if(asset_num.equals(""))
+								pstmt.setNull(3, Types.VARCHAR);
+						else
+								pstmt.setString(3, asset_num);						
+						pstmt.setString(4, type);
 						if(date.equals(""))
 								date = Helper.getToday();
-						pstmt.setDate(4, new java.sql.Date(dateFormat.parse(date).getTime()));						
+						pstmt.setDate(5, new java.sql.Date(dateFormat.parse(date).getTime()));						
 						if(weight.equals(""))
-								pstmt.setNull(5, Types.DOUBLE);
+								pstmt.setNull(6, Types.DOUBLE);
 						else
-								pstmt.setString(5, weight);
+								pstmt.setString(6, weight);
 						if(description.equals(""))
-								pstmt.setNull(6, Types.VARCHAR);
+								pstmt.setNull(7, Types.VARCHAR);
 						else
-								pstmt.setString(6, description);
+								pstmt.setString(7, description);
 						pstmt.executeUpdate();
 						qq = "select LAST_INSERT_ID() ";
 						if(debug){
@@ -223,7 +228,7 @@ public class RecycledItem extends Item{
 				Connection con = null;
 				PreparedStatement pstmt = null;
 				ResultSet rs = null;
-				String qq = "select asset_id,type,date_format(date,'%m/%d/%Y'),location_id,weight,description from recycled_items where id=?";		
+				String qq = "select asset_id,asset_num,type,date_format(date,'%m/%d/%Y'),location_id,weight,description from recycled_items where id=?";		
 				con = Helper.getConnection();
 				if(con == null){
 						back = "Could not connect to DB";
@@ -240,11 +245,12 @@ public class RecycledItem extends Item{
 								rs = pstmt.executeQuery();
 								if(rs.next()){
 										setAsset_id(rs.getString(1));
-										setType(rs.getString(2));
-										setDate(rs.getString(3));
-										setLocation_id(rs.getString(4));
-										setWeight(rs.getString(5));
-										setDescription(rs.getString(6));
+										setAsset_num(rs.getString(2));
+										setType(rs.getString(3));
+										setDate(rs.getString(4));
+										setLocation_id(rs.getString(5));
+										setWeight(rs.getString(6));
+										setDescription(rs.getString(7));
 								}
 								else{
 										back= "Record "+id+" Not found";

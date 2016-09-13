@@ -21,7 +21,8 @@ public class AuctionItemAction extends TopAction{
 		List<AuctionItem> items = null;
 		List<Auction> auctions = null;		// donations
 		String asset_id = "";
-		String type = "";		
+		String type = "";
+		String asset_num = "";
 		public String execute(){
 				String ret = SUCCESS;
 				String back = doPrepare();
@@ -96,6 +97,9 @@ public class AuctionItemAction extends TopAction{
 				if(!asset_id.equals("")){
 						item.setAsset_id(asset_id);
 				}
+				if(!asset_num.equals("")){
+						item.setAsset_num(asset_num);
+				}				
 				return item;
 		}
 		public void setItem(AuctionItem val){
@@ -131,9 +135,17 @@ public class AuctionItemAction extends TopAction{
 		public String getAsset_id(){
 				return asset_id;
 		}
+		public String getAsset_num(){
+				return asset_num;
+		}
+				
 		public void setAsset_id(String val){
 				if(val != null && !val.equals(""))		
 						asset_id = val;
+		}
+		public void setAsset_num(String val){
+				if(val != null && !val.equals(""))		
+						asset_num = val;
 		}		
 }
 

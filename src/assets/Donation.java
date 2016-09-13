@@ -36,14 +36,15 @@ public class Donation extends Item{
 										String val3,
 										String val4,
 										String val5,
-										String val6){
+										String val6,
+										String val7){
 
-				super(deb, val, val2, val3, val4);
+				super(deb, val, val2, val3, val4, val5);
 				//
 				// initialize
 				//
-				setOrganization_id(val5);				
-				setValue(val6);
+				setOrganization_id(val6);				
+				setValue(val7);
     }
     //
     // setters
@@ -104,8 +105,10 @@ public class Donation extends Item{
 				Connection con = null;
 				PreparedStatement pstmt = null;
 				ResultSet rs = null;
-				if(asset_id.equals("") && organization_id.equals("")) return "organization id or asset id not set ";
-				String qq = "insert into donations values(0,?,?,?,?,?)";
+				if(asset_id.equals("") && organization_id.equals(""))
+						return "organization id or asset id not set ";
+				prepareAsset();
+				String qq = "insert into donations values(0,?,?,?,?,?,?)";
 				//
 				con = Helper.getConnection();
 				if(con == null){
@@ -121,14 +124,18 @@ public class Donation extends Item{
 								}
 								pstmt.setString(1,organization_id);								
 								pstmt.setString(2,asset_id);
-								if(type.equals(""))
-										pstmt.setNull(3, Types.INTEGER);
+								if(asset_num.equals(""))
+										pstmt.setNull(3, Types.VARCHAR);
 								else
-										pstmt.setString(3, type);
+										pstmt.setString(3, asset_num);								
+								if(type.equals(""))
+										pstmt.setNull(4, Types.INTEGER);
+								else
+										pstmt.setString(4, type);
 								if(date.equals(""))
 										date = Helper.getToday();
-								pstmt.setDate(4, new java.sql.Date(dateFormat.parse(date).getTime()));
-								pstmt.setFloat(5, value);
+								pstmt.setDate(5, new java.sql.Date(dateFormat.parse(date).getTime()));
+								pstmt.setFloat(6, value);
 								pstmt.executeUpdate();
 
 								qq = "select LAST_INSERT_ID() ";
@@ -140,9 +147,8 @@ public class Donation extends Item{
 								if(rs.next()){
 										id = rs.getString(1);
 								}
-								if(type.equals("device")){
-										Device one = new Device(debug, asset_id);
-										back = one.updateStatus("Donated");
+								if(device != null){
+										back = device.updateStatus("Donated");
 										if(back.equals("")){
 												DeviceHistory ih = new DeviceHistory(debug, null, asset_id, "Donated",null,user_id);
 												back = ih.doSave();
@@ -151,16 +157,14 @@ public class Donation extends Item{
 												addError(back);
 										}
 								}
-								else if(type.equals("monitor")){
-										Monitor one = new Monitor(debug, asset_id);
-										back = one.updateStatus("Donated");					
+								else if(monitor != null){
+										back = monitor.updateStatus("Donated");					
 										if(!back.equals("")){
 												addError(back);
 										}		
 								}
-								else if (type.equals("printer")){
-										Printer one = new Printer(debug, asset_id);
-										back = one.updateStatus("Donated");					
+								else if (printer != null){
+										back = printer.updateStatus("Donated");					
 										if(!back.equals("")){
 												addError(back);
 										}		
@@ -265,7 +269,7 @@ public class Donation extends Item{
 				Connection con = null;
 				PreparedStatement pstmt = null;
 				ResultSet rs = null;
-				String qq = "select asset_id,type,date_format(date,'%m/%d/%Y'),organization_id,value "+
+				String qq = "select asset_id,asset_num,type,date_format(date,'%m/%d/%Y'),organization_id,value "+
 						" from donations where id=?";		
 				con = Helper.getConnection();
 				if(con == null){
@@ -283,10 +287,11 @@ public class Donation extends Item{
 								rs = pstmt.executeQuery();
 								if(rs.next()){
 										setAsset_id(rs.getString(1));
-										setType(rs.getString(2));
-										setDate(rs.getString(3));
-										setOrganization_id(rs.getString(4));
-										setValue(rs.getFloat(5));
+										setAsset_num(rs.getString(2));
+										setType(rs.getString(3));
+										setDate(rs.getString(4));
+										setOrganization_id(rs.getString(5));
+										setValue(rs.getFloat(6));
 								}
 								else{
 										back= "Record "+id+" Not found";

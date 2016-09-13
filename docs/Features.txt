@@ -10,6 +10,6 @@ Required features
 8-Dispose items
 9-Attach document and photos
 10-Using portable or barcode scanners
-
+11-Adding attachments to Organization, Devices, Printers, etc
 
 
