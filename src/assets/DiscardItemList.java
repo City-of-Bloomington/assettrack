@@ -16,6 +16,8 @@ public class DiscardItemList extends CommonInc{
 		static Logger logger = Logger.getLogger(DiscardItemList.class);
 		static final long serialVersionUID = 1240L;			
 		String method="", type="", date_from="", date_to="", item_id="";
+		String limit = " limit 50 ";
+		
 		List<DiscardItem> discards = null;
 		public DiscardItemList(){
 				super();
@@ -71,6 +73,10 @@ public class DiscardItemList extends CommonInc{
 		public String getDate_to(){
 				return date_to;
 		}
+		public void setNoLimit(){
+				limit = "";
+		}
+				
 		
 		public String find(){
 		

@@ -10,7 +10,10 @@ import org.apache.log4j.Logger;
 
 public class Printer extends CommonInc implements java.io.Serializable{
 
-    String id="", asset_num="", name="", description = "", device_id="", date="", print_processor="", editable="", status="", notes="", external_id="";
+    String id="", asset_num="", name="", description = "", device_id="",
+				date="", print_processor="", editable="", status="",
+				notes="", external_id="";
+		String serial_num = ""; // added by IT people
 		static final long serialVersionUID = 1540L;
 		SimpleDateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy");		
 		static Logger logger = Logger.getLogger(Printer.class);
@@ -54,7 +57,8 @@ public class Printer extends CommonInc implements java.io.Serializable{
 									 String val8,
 									 String val9,
 									 String val10,
-									 String val11
+									 String val11,
+									 String val12
 								){
 				//
 				// initialize
@@ -71,6 +75,7 @@ public class Printer extends CommonInc implements java.io.Serializable{
 				setStatus(val9);
 				setNotes(val10);
 				setEditable(val11);
+				setSerial_num(val12);
     }		
 		public String getId(){
 				return id;
@@ -111,6 +116,9 @@ public class Printer extends CommonInc implements java.io.Serializable{
 		}
 		public String getNotes() {
 				return notes;
+		}
+		public String getSerial_num() {
+				return serial_num;
 		}		
 		public void setExternal_id(String val) {
 				if(val != null)
@@ -120,6 +128,10 @@ public class Printer extends CommonInc implements java.io.Serializable{
 				if(val != null)
 						asset_num = val;
 		}
+		public void setSerial_num(String val) {
+				if(val != null)
+						serial_num = val;
+		}		
 		
 		public void setId(String val){
 				if(val != null)
@@ -179,7 +191,7 @@ public class Printer extends CommonInc implements java.io.Serializable{
 				Connection con = null;
 				PreparedStatement stmt = null;
 				ResultSet rs = null;		
-				String qq = " select external_id,asset_num,name,device_id,print_processor,description,date_format(date,'%m/%d/%Y'),status,notes,editable from printers where id=? ";
+				String qq = " select external_id,asset_num,name,device_id,print_processor,description,date_format(date,'%m/%d/%Y'),status,notes,editable,serial_num from printers where id=? ";
 				if(id.equals("")){
 						msg = " Printer id not set";
 						addError(msg);
@@ -209,6 +221,7 @@ public class Printer extends CommonInc implements java.io.Serializable{
 								setStatus(rs.getString(8));
 								setNotes(rs.getString(9));
 								setEditable(rs.getString(10));
+								setSerial_num(rs.getString(11));
 						}
 						else{
 								msg = " No found";
@@ -233,7 +246,7 @@ public class Printer extends CommonInc implements java.io.Serializable{
 				String str="", msg="";
 				String qq = "";
 
-				qq = "insert into printers values(0,?,?,?,?,?,?,?,'Active',?,'y')";
+				qq = "insert into printers values(0,?,?,?,?,?,?,?,'Active',?,'y',null)";
 				//
 				if(debug){
 						logger.debug(qq);
@@ -340,7 +353,7 @@ public class Printer extends CommonInc implements java.io.Serializable{
 		
 				String str="", msg="";
 				String qq = "";
-				qq = "update printers set external_id=?,asset_num=?,name=?,device_id=?,print_processor=?,description=?,date=?,notes=? where id=?";
+				qq = "update printers set external_id=?,asset_num=?,name=?,device_id=?,print_processor=?,description=?,date=?,notes=?,serial_num=? where id=?";
 				//
 				if(id.equals("")){
 						msg = " id not set ";
@@ -384,8 +397,12 @@ public class Printer extends CommonInc implements java.io.Serializable{
 						if(notes.equals(""))
 								stmt.setNull(8,Types.VARCHAR);
 						else
-								stmt.setString(8, notes);						
-						stmt.setString(9, id);
+								stmt.setString(8, notes);
+						if(serial_num.equals(""))
+								stmt.setNull(9,Types.VARCHAR);
+						else
+								stmt.setString(9, serial_num);						
+						stmt.setString(10, id);
 						editable="y";
 						status="Active";// we do not change this through printer form
 						stmt.executeUpdate();
@@ -409,7 +426,7 @@ public class Printer extends CommonInc implements java.io.Serializable{
 		
 				String str="", msg="";
 				String qq = "";
-				qq = "update printers set asset_num=?,date=?,notes=? where id=?";
+				qq = "update printers set asset_num=?,date=?,notes=?,serial_num=? where id=?";
 				//
 				if(id.equals("")){
 						msg = " id not set ";
@@ -439,7 +456,11 @@ public class Printer extends CommonInc implements java.io.Serializable{
 						if(notes.equals(""))
 								stmt.setNull(jj++,Types.VARCHAR);
 						else
-								stmt.setString(jj++, notes);						
+								stmt.setString(jj++, notes);
+						if(serial_num.equals(""))
+								stmt.setNull(jj++,Types.VARCHAR);
+						else
+								stmt.setString(jj++, serial_num);						
 						stmt.setString(jj++, id);
 						stmt.executeUpdate();
 				}

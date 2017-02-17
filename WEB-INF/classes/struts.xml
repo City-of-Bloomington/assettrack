@@ -6,7 +6,7 @@
 <struts>
    <constant name="struts.devMode" value="true" />
    <constant name="struts.ui.theme" value="simple" />
-   <constant name="struts.action.excludePattern" value="/Login*,/AuctionService*,/AuctionService*,/UserService*,/DonationService*,/TypeService*,/SoftwareService*,/EmployeeService*,/doDownload*" />
+   <constant name="struts.action.excludePattern" value="/Login*,/AuctionService*,/UserService*,/DonationService*,/TypeService*,/SoftwareService*,/EmployeeService*,/doDownload*,/TicketStatsService*,/LotPrintPdf*" />
 
    <!-- to use this we need to use annotation
 				<constant name="struts.convention.result.path" value="/WEB-INF/jsp/" />
@@ -178,7 +178,29 @@
 			<result name="error">/WEB-INF/jsp/disposes/disposes.jsp</result>
 			<result name="success">/WEB-INF/jsp/disposes/disposes.jsp</result>
 		</action>
-		
+		<action name="lot" 
+						class="assets.LotAction" 
+						method="execute">
+			<result name="input">/WEB-INF/jsp/disposes/lot.jsp</result>		
+			<result name="error">/WEB-INF/jsp/disposes/lot.jsp</result>
+			<result name="success">/WEB-INF/jsp/disposes/lot.jsp</result>
+			<result name="view">/WEB-INF/jsp/disposes/lotView.jsp</result>
+			<result name="print">/WEB-INF/jsp/disposes/lotPrint.jsp</result>			
+		</action>
+		<action name="lotOpt" 
+						class="assets.LotOptAction" 
+						method="execute">
+			<result name="input">/WEB-INF/jsp/disposes/lotOpt.jsp</result>		
+			<result name="error">/WEB-INF/jsp/disposes/lotOpt.jsp</result>
+			<result name="success">/WEB-INF/jsp/disposes/lotOpt.jsp</result>
+		</action>		
+		<action name="lots" 
+						class="assets.LotsAction" 
+						method="execute">
+			<result name="input">/WEB-INF/jsp/disposes/lotsSearch.jsp</result>		
+			<result name="error">/WEB-INF/jsp/disposes/lotsSearch.jsp</result>
+			<result name="success">/WEB-INF/jsp/disposes/lotsSearch.jsp</result>
+		</action>		
 		<action name="deviceSearch" 
 						class="assets.DevicesAction" 
 						method="execute">

@@ -23,6 +23,8 @@ public class AuctionItemAction extends TopAction{
 		String asset_id = "";
 		String type = "";
 		String asset_num = "";
+		String lot_id = "";
+		List<Lot> lots = null;
 		public String execute(){
 				String ret = SUCCESS;
 				String back = doPrepare();
@@ -99,6 +101,9 @@ public class AuctionItemAction extends TopAction{
 				}
 				if(!asset_num.equals("")){
 						item.setAsset_num(asset_num);
+				}
+				if(!lot_id.equals("")){
+						item.setLot_id(lot_id);
 				}				
 				return item;
 		}
@@ -146,7 +151,26 @@ public class AuctionItemAction extends TopAction{
 		public void setAsset_num(String val){
 				if(val != null && !val.equals(""))		
 						asset_num = val;
+		}
+		public String getLot_id(){
+				return lot_id;
 		}		
+		public void setLot_id(String val){
+				if(val != null && !val.equals(""))		
+						lot_id = val;
+		}				
+		public List<Lot> getLots(){
+				if(lots == null){
+						LotList ll = new LotList(debug);
+						ll.setStatus("Active");
+						String back = ll.find();
+						if(back.equals("")){
+								lots = ll.getLots();
+						}
+				}
+				return lots;
+		}		
+		
 }
 
 

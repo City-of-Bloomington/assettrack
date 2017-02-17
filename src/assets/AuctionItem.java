@@ -19,10 +19,10 @@ public class AuctionItem extends Item{
 		static Logger logger = Logger.getLogger(AuctionItem.class);
 		static final long serialVersionUID = 1040L;			
 		SimpleDateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy");
-    String auction_id="", description="";
+    String auction_id="", description="", lot_id="";
 		float value = 0.0f;
 		Auction auction = null;
-
+		Lot lot = null;
     public AuctionItem(){
 
 				//
@@ -62,21 +62,27 @@ public class AuctionItem extends Item{
 											 String val4, // type
 											 String val5, // auction_id
 											 String val6, // value
-											 String val7){ // description
+											 String val7, // description
+											 String val8){  // lot_id
 
 				super(deb, val, val2, val3, val4, null); // no date for auction
 				//
 				setAuction_id(val5);
 				setValue(val6);
 				setDescription(val7);
+				setLot_id(val8);
     }
     //
     // setters
     //
     public void setAuction_id(String val){
-				if(val != null)		
-						auction_id = val.trim();
+				if(val != null && !val.equals("-1"))		
+						auction_id = val;
     }
+    public void setLot_id(String val){
+				if(val != null && !val.equals("-1"))		
+						lot_id = val;
+    }		
 		public void setValue(String val) {
 				if(val != null && !val.equals("")){
 						try{
@@ -94,6 +100,9 @@ public class AuctionItem extends Item{
     public String  getAuction_id(){
 				return auction_id;
     }
+    public String  getLot_id(){
+				return lot_id;
+    }		
 		public String getValue() {
 				return ""+value;
 		}
@@ -109,7 +118,17 @@ public class AuctionItem extends Item{
 						}
 				}
 				return auction;
-		}	
+		}
+		public Lot getLot(){
+				if(lot == null && !lot_id.equals("")){
+						Lot one = new Lot(debug, lot_id);
+						String back = one.doSelect();
+						if(back.equals("")){
+								lot = one;
+						}
+				}
+				return lot;
+		}		
 		//
 		public String doSave(){
 		
@@ -117,12 +136,13 @@ public class AuctionItem extends Item{
 				Connection con = null;
 				PreparedStatement pstmt = null;
 				ResultSet rs = null;
-				if(asset_id.equals("") || auction_id.equals("")){
-						back = "auction id or asset id not set ";
+				if(asset_id.equals("") || auction_id.equals("") || lot_id.equals("")){
+						back = "auction id, asset id or lot id not set ";
 						addError(back);
+						return back;
 				}
 				prepareAsset();
-				String qq = "insert into auction_items values(0,?,?,?,?,?,?)";
+				String qq = "insert into auction_items values(0,?,?,?,?, ?,?,?)";
 				//
 				con = Helper.getConnection();
 				if(con == null){
@@ -130,68 +150,67 @@ public class AuctionItem extends Item{
 						addError(back);
 						return back;
 				}
-				else{
-						try{
-								pstmt = con.prepareStatement(qq);
-								if(debug){
-										logger.debug(qq);
-								}
-								pstmt.setString(1,auction_id);				
-								pstmt.setString(2,asset_id);
-								if(!asset_num.equals(""))
-										pstmt.setString(3,asset_num);
-								else
-										pstmt.setNull(3,Types.VARCHAR);								
-								if(!type.equals(""))
-										pstmt.setString(4,type);
-								else
-										pstmt.setNull(4,Types.INTEGER);
-								pstmt.setFloat(5,value);
-								if(!description.equals(""))
-										pstmt.setString(6,description);
-								else
-										pstmt.setNull(6,Types.VARCHAR);								
-								pstmt.executeUpdate();
-								qq = "select LAST_INSERT_ID() ";
-								if(debug){
-										logger.debug(qq);
-								}
-								pstmt = con.prepareStatement(qq);				
-								rs = pstmt.executeQuery();
-								if(rs.next()){
-										id = rs.getString(1);
-								}
-								if(device != null){
-										back = device.updateStatus("Auctioned");
-										if(back.equals("")){
-												DeviceHistory ih = new DeviceHistory(debug, null, asset_id, "Auctioned",null,user_id);
-												back = ih.doSave();
-										}
-										if(!back.equals("")){
-												addError(back);
-										}
-								}
-								else if(monitor != null){
-										back = monitor.updateStatus("Auctioned");					
-										if(!back.equals("")){
-												addError(back);
-										}		
-								}
-								else if (printer != null){
-										back = printer.updateStatus("Auctioned");					
-										if(!back.equals("")){
-												addError(back);
-										}		
-								}										
+				try{
+						pstmt = con.prepareStatement(qq);
+						if(debug){
+								logger.debug(qq);
 						}
-						catch(Exception ex){
-								back += ex;
-								logger.error(ex);
-								addError(back);
+						pstmt.setString(1,auction_id);				
+						pstmt.setString(2,asset_id);
+						if(!asset_num.equals(""))
+								pstmt.setString(3,asset_num);
+						else
+								pstmt.setNull(3,Types.VARCHAR);								
+						if(!type.equals(""))
+								pstmt.setString(4,type);
+						else
+								pstmt.setNull(4,Types.INTEGER);
+						pstmt.setFloat(5,value);
+						if(!description.equals(""))
+								pstmt.setString(6,description);
+						else
+								pstmt.setNull(6,Types.VARCHAR);
+						pstmt.setString(7,lot_id);
+						pstmt.executeUpdate();
+						qq = "select LAST_INSERT_ID() ";
+						if(debug){
+								logger.debug(qq);
 						}
-						finally{
-								Helper.databaseDisconnect(con, pstmt, rs);
+						pstmt = con.prepareStatement(qq);				
+						rs = pstmt.executeQuery();
+						if(rs.next()){
+								id = rs.getString(1);
 						}
+						if(device != null){
+								back = device.updateStatus("Auctioned");
+								if(back.equals("")){
+										DeviceHistory ih = new DeviceHistory(debug, null, asset_id, "Auctioned",null,user_id);
+										back = ih.doSave();
+								}
+								if(!back.equals("")){
+												addError(back);
+								}
+						}
+						else if(monitor != null){
+								back = monitor.updateStatus("Auctioned");					
+								if(!back.equals("")){
+										addError(back);
+								}		
+						}
+						else if (printer != null){
+								back = printer.updateStatus("Auctioned");					
+								if(!back.equals("")){
+										addError(back);
+								}		
+						}
+				}
+				catch(Exception ex){
+						back += ex;
+						logger.error(ex);
+						addError(back);
+				}
+				finally{
+						Helper.databaseDisconnect(con, pstmt, rs);
 				}
 				return back;
 
@@ -212,44 +231,44 @@ public class AuctionItem extends Item{
 						addError(back);
 						return back;
 				}
-				else{
-						try{
-								qq = "update auction_items set ";
-								qq += "auction_id=?,asset_id=?, asset_num=?,type=?,";
-								qq += "value=?,description=? ";
-								qq += "where id=? ";
-								if(debug){
-										logger.debug(qq);
-								}
-								pstmt = con.prepareStatement(qq);
-								pstmt.setString(1,auction_id);
-								pstmt.setString(2,asset_id);
-								if(!asset_num.equals(""))
-										pstmt.setString(3,asset_num);
-								else
-										pstmt.setNull(3,Types.VARCHAR);											
-								if(!type.equals(""))
-										pstmt.setString(4,type);
-								else
-										pstmt.setNull(4,Types.INTEGER);
-								pstmt.setFloat(5,value);
-								if(!description.equals(""))
-										pstmt.setString(6,description);
-								else
-										pstmt.setNull(6,Types.VARCHAR);	
-								pstmt.setString(7,id);		
-								pstmt.executeUpdate();
-								message="Updated Successfully";
+				try{
+						qq = "update auction_items set ";
+						qq += "auction_id=?,asset_id=?, asset_num=?,type=?,";
+						qq += "value=?,description=?,lot_id=? ";
+						qq += "where id=? ";
+						if(debug){
+								logger.debug(qq);
 						}
-						catch(Exception ex){
-								back += ex+":"+qq;
-								logger.error(qq);
-								addError(back);
-						}
-						finally{
-								Helper.databaseDisconnect(con, pstmt, rs);
-						}
+						pstmt = con.prepareStatement(qq);
+						pstmt.setString(1,auction_id);
+						pstmt.setString(2,asset_id);
+						if(!asset_num.equals(""))
+								pstmt.setString(3,asset_num);
+						else
+								pstmt.setNull(3,Types.VARCHAR);											
+						if(!type.equals(""))
+								pstmt.setString(4,type);
+						else
+								pstmt.setNull(4,Types.INTEGER);
+						pstmt.setFloat(5,value);
+						if(!description.equals(""))
+								pstmt.setString(6,description);
+						else
+								pstmt.setNull(6,Types.VARCHAR);	
+						pstmt.setString(7,lot_id);
+						pstmt.setString(8,id);								
+						pstmt.executeUpdate();
+						message="Updated Successfully";
 				}
+				catch(Exception ex){
+						back += ex+":"+qq;
+						logger.error(qq);
+						addError(back);
+				}
+				finally{
+						Helper.databaseDisconnect(con, pstmt, rs);
+				}
+				doSelect();
 				return back;
 
 		}
@@ -268,25 +287,23 @@ public class AuctionItem extends Item{
 						addError(back);
 						return back;
 				}
-				else{
-						try{
-								qq = "delete from auction_items where id=?";
-								if(debug){
-										logger.debug(qq);
-								}
-								pstmt = con.prepareStatement(qq);
-								pstmt.setString(1,id);
-								pstmt.executeUpdate();
-								message="Deleted Successfully";
+				try{
+						qq = "delete from auction_items where id=?";
+						if(debug){
+								logger.debug(qq);
 						}
-						catch(Exception ex){
-								back += ex+":"+qq;
-								logger.error(back);
-								addError(back);
-						}
-						finally{
-								Helper.databaseDisconnect(con, pstmt, rs);
-						}
+						pstmt = con.prepareStatement(qq);
+						pstmt.setString(1,id);
+						pstmt.executeUpdate();
+						message="Deleted Successfully";
+				}
+				catch(Exception ex){
+						back += ex+":"+qq;
+						logger.error(back);
+						addError(back);
+				}
+				finally{
+						Helper.databaseDisconnect(con, pstmt, rs);
 				}
 				return back;
 		}
@@ -299,7 +316,7 @@ public class AuctionItem extends Item{
 				Connection con = null;
 				PreparedStatement pstmt = null;
 				ResultSet rs = null;
-				String qq = "select asset_id,asset_num,type,auction_id,value,description "+
+				String qq = "select asset_id,asset_num,type,auction_id,value,description,lot_id "+
 						" from auction_items where id=?";		
 				con = Helper.getConnection();
 				if(con == null){
@@ -307,37 +324,35 @@ public class AuctionItem extends Item{
 						addError(back);
 						return back;
 				}
-				else{
-						try{
-								if(debug){
-										logger.debug(qq);
-								}				
-								pstmt = con.prepareStatement(qq);
-								
-								pstmt.setString(1,id);
-								rs = pstmt.executeQuery();
-								if(rs.next()){
-										setAsset_id(rs.getString(1));
-										setAsset_num(rs.getString(2));
-										setType(rs.getString(3));
-										setAuction_id(rs.getString(4));
-										setValue(rs.getString(5));
-										setDescription(rs.getString(6));										
-								}
-								else{
-										back= "Record "+id+" Not found";
-										message=back;
-								}
+				try{
+						if(debug){
+								logger.debug(qq);
+						}				
+						pstmt = con.prepareStatement(qq);
+						
+						pstmt.setString(1,id);
+						rs = pstmt.executeQuery();
+						if(rs.next()){
+								setAsset_id(rs.getString(1));
+								setAsset_num(rs.getString(2));
+								setType(rs.getString(3));
+								setAuction_id(rs.getString(4));
+								setValue(rs.getString(5));
+								setDescription(rs.getString(6));
+								setLot_id(rs.getString(7));
 						}
-						catch(Exception ex){
-								back += ex+":"+qq;
-								logger.error(back);
-								addError(back);
-
+						else{
+								back= "Record "+id+" Not found";
+								message=back;
 						}
-						finally{
-								Helper.databaseDisconnect(con, pstmt, rs);			
-						}
+				}
+				catch(Exception ex){
+						back += ex+":"+qq;
+						logger.error(back);
+						addError(back);
+				}
+				finally{
+						Helper.databaseDisconnect(con, pstmt, rs);			
 				}
 				return back;
 		}

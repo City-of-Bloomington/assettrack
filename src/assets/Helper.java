@@ -204,6 +204,7 @@ public class Helper{
 				boolean noSlashBefore = true;
 				while (c < len) {                           
 						if ((safe.charAt(c) == '\'' ||
+								 safe.charAt(c) == '/' ||
 								 safe.charAt(c) == '"') && noSlashBefore){
 								safe.insert(c, '\\');
 								c += 2;
@@ -651,6 +652,39 @@ public class Helper{
 				day += dd;
 				return month+"/"+day+"/"+year;
     }
+		//
+		// find a date given a date and number of
+		// months (negative value is allowed e.g one month before)
+		// 
+    public final static String getDateFrom(String date, int months){
+
+				String day="",month="",year="";
+				Calendar cal = Calendar.getInstance();
+				if(!date.equals("")){
+						month = date.substring(0,date.indexOf("/"));
+						day = date.substring(date.indexOf("/")+1,date.lastIndexOf("/"));
+						year = date.substring(date.lastIndexOf("/")+1);
+				}
+				try{
+						int mm =  Integer.parseInt(month);
+						int dd = Integer.parseInt(day);
+						int yy = Integer.parseInt(year);
+						cal.set(Calendar.YEAR, yy);
+						cal.set(Calendar.MONTH, mm-1);
+						cal.set(Calendar.DATE, dd);
+						cal.add(Calendar.MONTH, months);
+						dd = cal.get(Calendar.DATE);
+						year = ""+cal.get(Calendar.YEAR);
+						mm = cal.get(Calendar.MONTH)+1;
+						month="";day="";
+						if(mm < 10) month = "0";
+						month += mm;
+						if(dd < 10) day = "0";
+						day += dd;
+						return month+"/"+day+"/"+year;
+				}catch(Exception ex){}
+				return "";
+    }		
 	
 		//
     public final static String getToday2(){

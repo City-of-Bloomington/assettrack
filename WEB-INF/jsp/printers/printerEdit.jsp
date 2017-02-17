@@ -32,7 +32,11 @@
 			<dl class="fn1-output-field">
 				<dt>Asset Num</dt>
 				<dd><s:textfield name="printer.asset_num" value="%{printer.asset_num}" size="15" maxlength="15" /></dd>
-			</dl>					
+			</dl>
+			<dl class="fn1-output-field">
+				<dt>Serial Num</dt>
+				<dd><s:textfield name="printer.serial_num" value="%{printer.serial_num}" size="20" maxlength="30" /></dd>
+			</dl>			
 			<dl class="fn1-output-field">
 				<dt>Name</dt>
 				<dd><s:property value="%{printer.name}" /></dd>
@@ -63,7 +67,7 @@
 		</div>
 	</div>
 	<s:submit name="action" type="button" value="Save Partial Changes" class="fn1-btn" />
-<a href="<s:property value='#application.url'/>dispose.action?asset_id=<s:property value='printer.id' />&type=printer&asset_num=<s:property value='printer.asset_num' />" class="fn1-btn"> Dispose This Printer</a>
+<a href="<s:property value='#application.url'/>dispose.action?asset_id=<s:property value='printer.id' />&type=Printer&asset_num=<s:property value='printer.asset_num' />" class="fn1-btn"> Dispose This Printer</a>
 
 	<a href="<s:property value='#application.url' />doUpload.action?obj_type=Printer&obj_id=<s:property value='id' />" class="fn1-btn">Attachments</a>			
 </s:form>

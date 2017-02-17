@@ -45,7 +45,7 @@ public class ImportDetailList extends CommonInc{
 				Connection con = null;
 				PreparedStatement pstmt = null;
 				ResultSet rs = null;
-				String qq = " select id,import_id,type,status,message from import_details where import_id=? order by id ";
+				String qq = " select id,import_id,type,status,message,date_format(date_time,'%m/%d/%Y %H:%i') from import_details where import_id=? order by id ";
 				con = Helper.getConnection();
 				if(con == null){
 						back = "Could not connect to DB";
@@ -63,7 +63,7 @@ public class ImportDetailList extends CommonInc{
 								if(details == null){
 										details = new ArrayList<ImportDetail>();
 								}
-								ImportDetail one = new ImportDetail(debug, rs.getString(1), rs.getString(2),rs.getString(3),rs.getString(4),rs.getString(5));
+								ImportDetail one = new ImportDetail(debug, rs.getString(1), rs.getString(2),rs.getString(3),rs.getString(4),rs.getString(5),rs.getString(6));
 								details.add(one);
 						}
 				}

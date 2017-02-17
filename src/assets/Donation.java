@@ -19,9 +19,10 @@ public class Donation extends Item{
 		static Logger logger = Logger.getLogger(Donation.class);
 		static final long serialVersionUID = 1310L;	
 		SimpleDateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy");
-    String organization_id ="";
+    String organization_id ="", lot_id="";
 		float value = 0.0f;
 		Type organ = null;
+		Lot lot = null;
 		List<Donation> donations = null;
     public Donation(){
 				super();
@@ -37,7 +38,8 @@ public class Donation extends Item{
 										String val4,
 										String val5,
 										String val6,
-										String val7){
+										String val7,
+										String val8){
 
 				super(deb, val, val2, val3, val4, val5);
 				//
@@ -45,6 +47,7 @@ public class Donation extends Item{
 				//
 				setOrganization_id(val6);				
 				setValue(val7);
+				setLot_id(val8);
     }
     //
     // setters
@@ -61,7 +64,11 @@ public class Donation extends Item{
 						}catch(Exception ex){}
 				}
 		}
-
+		public void setLot_id(String val) {
+				if(val != null && !val.equals("-1")){
+						lot_id = val;
+				}
+		}
 		public void setValue(float val) {
 				value = val;
 		}
@@ -75,7 +82,10 @@ public class Donation extends Item{
 		public float getValue() {
 				return value;
 		}
-
+		public String getLot_id() {
+				if(lot_id.equals("")) return "-1";
+				return lot_id;
+		}
 		public Type getOrgan(){
 				if(organ == null && !organization_id.equals("")){
 						Type one = new Type(debug, organization_id, null, false,"organizations");
@@ -86,6 +96,16 @@ public class Donation extends Item{
 				}
 				return organ;
 		}
+		public Lot getLot(){
+				if(lot == null && !lot_id.equals("")){
+						Lot one = new Lot(debug, lot_id);
+						String back = one.doSelect();
+						if(back.equals("")){
+								lot = one;
+						}
+				}
+				return lot;
+		}		
 		public List<Donation> getDonations(){
 				if(donations == null && !organization_id.equals("")){
 						DonationList dl = new DonationList(debug, organization_id);
@@ -105,10 +125,10 @@ public class Donation extends Item{
 				Connection con = null;
 				PreparedStatement pstmt = null;
 				ResultSet rs = null;
-				if(asset_id.equals("") && organization_id.equals(""))
-						return "organization id or asset id not set ";
+				if(asset_id.equals("") || lot_id.equals("") )
+						return " asset id or lot id not set ";
 				prepareAsset();
-				String qq = "insert into donations values(0,?,?,?,?,?,?)";
+				String qq = "insert into donations values(0,?,?,?,?,?,?,?)";
 				//
 				con = Helper.getConnection();
 				if(con == null){
@@ -116,69 +136,71 @@ public class Donation extends Item{
 						addError(back);
 						return back;
 				}
-				else{
-						try{
-								pstmt = con.prepareStatement(qq);
-								if(debug){
-										logger.debug(qq);
-								}
+				try{
+						pstmt = con.prepareStatement(qq);
+						if(debug){
+								logger.debug(qq);
+						}
+						if(organization_id.equals(""))
+								pstmt.setNull(1, Types.INTEGER);
+						else
 								pstmt.setString(1,organization_id);								
-								pstmt.setString(2,asset_id);
-								if(asset_num.equals(""))
-										pstmt.setNull(3, Types.VARCHAR);
-								else
-										pstmt.setString(3, asset_num);								
-								if(type.equals(""))
-										pstmt.setNull(4, Types.INTEGER);
-								else
-										pstmt.setString(4, type);
-								if(date.equals(""))
-										date = Helper.getToday();
-								pstmt.setDate(5, new java.sql.Date(dateFormat.parse(date).getTime()));
-								pstmt.setFloat(6, value);
-								pstmt.executeUpdate();
-
-								qq = "select LAST_INSERT_ID() ";
-								if(debug){
-										logger.debug(qq);
-								}
-								pstmt = con.prepareStatement(qq);				
-								rs = pstmt.executeQuery();
-								if(rs.next()){
-										id = rs.getString(1);
-								}
-								if(device != null){
-										back = device.updateStatus("Donated");
-										if(back.equals("")){
-												DeviceHistory ih = new DeviceHistory(debug, null, asset_id, "Donated",null,user_id);
-												back = ih.doSave();
-										}
-										if(!back.equals("")){
-												addError(back);
-										}
-								}
-								else if(monitor != null){
-										back = monitor.updateStatus("Donated");					
-										if(!back.equals("")){
-												addError(back);
-										}		
-								}
-								else if (printer != null){
-										back = printer.updateStatus("Donated");					
-										if(!back.equals("")){
-												addError(back);
-										}		
-								}								
+						pstmt.setString(2,asset_id);
+						if(asset_num.equals(""))
+								pstmt.setNull(3, Types.VARCHAR);
+						else
+								pstmt.setString(3, asset_num);								
+						if(type.equals(""))
+								pstmt.setNull(4, Types.INTEGER);
+						else
+								pstmt.setString(4, type);
+						if(date.equals(""))
+								date = Helper.getToday();
+						pstmt.setDate(5, new java.sql.Date(dateFormat.parse(date).getTime()));
+						pstmt.setFloat(6, value);
+						pstmt.setString(7, lot_id);								
+						pstmt.executeUpdate();
+						
+						qq = "select LAST_INSERT_ID() ";
+						if(debug){
+								logger.debug(qq);
 						}
-						catch(Exception ex){
-								back += ex;
-								System.err.println(" except "+back);											
-								logger.error(ex);
-								addError(back);	
+						pstmt = con.prepareStatement(qq);				
+						rs = pstmt.executeQuery();
+						if(rs.next()){
+								id = rs.getString(1);
 						}
-						finally{
-								Helper.databaseDisconnect(con, pstmt, rs);
+						if(device != null){
+								back = device.updateStatus("Donated");
+								if(back.equals("")){
+										DeviceHistory ih = new DeviceHistory(debug, null, asset_id, "Donated",null,user_id);
+										back = ih.doSave();
+								}
+								if(!back.equals("")){
+										addError(back);
+								}
 						}
+						else if(monitor != null){
+								back = monitor.updateStatus("Donated");					
+								if(!back.equals("")){
+										addError(back);
+								}		
+						}
+						else if (printer != null){
+								back = printer.updateStatus("Donated");					
+								if(!back.equals("")){
+										addError(back);
+								}		
+						}								
+				}
+				catch(Exception ex){
+						back += ex;
+						System.err.println(" except "+back);											
+						logger.error(ex);
+						addError(back);	
+				}
+				finally{
+						Helper.databaseDisconnect(con, pstmt, rs);
 				}
 				return back;
 
@@ -201,14 +223,25 @@ public class Donation extends Item{
 				else{
 						try{
 								qq = "update donations set ";
-								qq += " value=? ";
+								qq += " value=?,organization_id=?, lot_id=?,date=? ";
 								qq += "where id = ? ";
 								if(debug){
 										logger.debug(qq);
 								}
 								pstmt = con.prepareStatement(qq);
 								pstmt.setFloat(1,value);
-								pstmt.setString(2,id);				
+								if(organization_id.equals(""))
+										pstmt.setNull(2,Types.INTEGER);
+								else
+										pstmt.setString(2,organization_id);
+								if(lot_id.equals(""))
+										pstmt.setNull(3,Types.INTEGER);
+								else
+										pstmt.setString(3, lot_id);
+								if(date.equals(""))
+										date = Helper.getToday();
+								pstmt.setDate(4, new java.sql.Date(dateFormat.parse(date).getTime()));
+								pstmt.setString(5,id);				
 								pstmt.executeUpdate();
 								message = "Updated Successfully";
 						}
@@ -269,7 +302,7 @@ public class Donation extends Item{
 				Connection con = null;
 				PreparedStatement pstmt = null;
 				ResultSet rs = null;
-				String qq = "select asset_id,asset_num,type,date_format(date,'%m/%d/%Y'),organization_id,value "+
+				String qq = "select asset_id,asset_num,type,date_format(date,'%m/%d/%Y'),organization_id,value,lot_id "+
 						" from donations where id=?";		
 				con = Helper.getConnection();
 				if(con == null){
@@ -292,6 +325,7 @@ public class Donation extends Item{
 										setDate(rs.getString(4));
 										setOrganization_id(rs.getString(5));
 										setValue(rs.getFloat(6));
+										setLot_id(rs.getString(7));
 								}
 								else{
 										back= "Record "+id+" Not found";

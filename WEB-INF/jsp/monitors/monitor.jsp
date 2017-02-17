@@ -104,7 +104,7 @@
 	</s:if>
 	<s:else>
 		<s:submit name="action" type="button" value="Save Changes" class="fn1-btn"/>
-		<a href="<s:property value='#application.url'/>dispose.action?type=monitor&asset_id=<s:property value='monitor.id' />&asset_num=<s:property value='monitor.asset_num' />" class="fn1-btn"> Dispose This Monitor</a>
+		<a href="<s:property value='#application.url'/>dispose.action?type=Monitor&asset_id=<s:property value='monitor.id' />&asset_num=<s:property value='monitor.asset_num' />" class="fn1-btn"> Dispose This Monitor</a>
 		<a href="<s:property value='#application.url' />doUpload.action?obj_type=Monitor&obj_id=<s:property value='id' />" class="fn1-btn">Attachments</a>				
 	</s:else>
 </s:form>

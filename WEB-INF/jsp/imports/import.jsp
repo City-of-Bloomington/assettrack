@@ -70,6 +70,10 @@
 		</dl>
 		<dl class="fn1-output-field">
 			<dt>8 - </dt>
+			<dd><s:checkbox name="impman.ticketsFlag" value="%{impman.ticketsFlag}" /> Tickets </dd>
+		</dl>		
+		<dl class="fn1-output-field">
+			<dt>9 - </dt>
 			<dd><s:checkbox name="impman.autoImportFlag" value="%{impman.autoImportFlag}" /> Simulate Schedule Import (Test purpose only)</dd>
 		</dl>		
 		

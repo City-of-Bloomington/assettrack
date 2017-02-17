@@ -20,7 +20,8 @@ public class DonationAction extends TopAction{
 		String donationsTitle = " Most recent Donations";
 		List<Donation> items = null;
 		List<Type> organizations = null;		// donations
-		String asset_id = "", asset_num="";
+		List<Lot> lots = null;
+		String asset_id = "", asset_num="", lot_id="";
 		String type = "";		
 		public String execute(){
 				String ret = SUCCESS;
@@ -92,6 +93,9 @@ public class DonationAction extends TopAction{
 				if(!type.equals("")){
 						item.setType(type);
 				}
+				if(!lot_id.equals("")){
+						item.setLot_id(lot_id);
+				}				
 				if(!asset_id.equals("")){
 						item.setAsset_id(asset_id);
 				}
@@ -137,13 +141,32 @@ public class DonationAction extends TopAction{
 				if(val != null && !val.equals(""))		
 						asset_id = val;
 		}
+		public String getLot_id(){
+				return lot_id;
+		}		
+		public void setLot_id(String val){
+				if(val != null && !val.equals(""))		
+						lot_id = val;
+		}		
 		public String getAsset_num(){
 				return asset_num;
 		}
 		public void setAsset_num(String val){
 				if(val != null && !val.equals(""))		
 						asset_num = val;
-		}				
+		}
+		public List<Lot> getLots(){
+				if(lots == null){
+						LotList ll = new LotList(debug);
+						ll.setStatus("Active");
+						String back = ll.find();
+						if(back.equals("")){
+								lots = ll.getLots();
+						}
+				}
+				return lots;
+		}
+		
 }
 
 

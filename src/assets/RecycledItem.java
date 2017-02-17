@@ -19,10 +19,11 @@ public class RecycledItem extends Item{
 		static Logger logger = Logger.getLogger(RecycledItem.class);
 		SimpleDateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy");
 		static final long serialVersionUID = 1580L;	
-    String location_id="";
+    String location_id="", lot_id="";
 		String weight="", description="";
 
 		Type location = null;
+		Lot lot = null;
     public RecycledItem(){
 
 				//
@@ -37,7 +38,8 @@ public class RecycledItem extends Item{
 												String val5,
 												String val6,
 												String val7,
-												String val8
+												String val8,
+												String val9
 												){
 
 				super(deb, val, val2, val3, val4, val5);
@@ -47,14 +49,19 @@ public class RecycledItem extends Item{
 				setLocation_id(val6);				
 				setWeight(val7);
 				setDescription(val8);
+				setLot_id(val9);
     }	
     //
     // setters
     //
     public void setLocation_id(String val){
-				if(val != null)		
+				if(val != null && !val.equals("-1"))		
 						location_id = val;
     }
+    public void setLot_id(String val){
+				if(val != null && !val.equals("-1"))		
+						lot_id = val;
+    }		
     public void setWeight(String val){
 				if(val != null)
 						weight = val;
@@ -75,7 +82,19 @@ public class RecycledItem extends Item{
     public String  getLocation_id(){
 				return location_id;
     }
-
+    public String  getLot_id(){
+				return lot_id;
+    }
+		public Lot getLot(){
+				if(lot == null && !lot_id.equals("")){
+						Lot one = new Lot(debug, lot_id);
+						String back = one.doSelect();
+						if(back.equals("")){
+								lot = one;
+						}
+				}
+				return lot;
+		}
 		public Type getLocation(){
 				if(location == null && !location_id.equals("")){
 						Type one = new Type(debug, location_id, null, false,"recycle_locations");
@@ -93,8 +112,8 @@ public class RecycledItem extends Item{
 				Connection con = null;
 				PreparedStatement pstmt = null;
 				ResultSet rs = null;
-				if(asset_id.equals("") || location_id.equals("")){
-						back = "recycle location or item not set ";
+				if(asset_id.equals("") || location_id.equals("") || lot_id.equals("")){
+						back = "recycle location, lot id or item not set ";
 						addError(back);
 						return back;
 				}
@@ -103,7 +122,8 @@ public class RecycledItem extends Item{
 						addError(back);
 						return back;
 				}
-				String qq = "insert into recycled_items values(0,?,?,?,?,?,?,?)";
+				prepareAsset();
+				String qq = "insert into recycled_items values(0,?,?,?,?,?,?,?,?)";
 				//
 				con = Helper.getConnection();
 				if(con == null){
@@ -134,6 +154,7 @@ public class RecycledItem extends Item{
 								pstmt.setNull(7, Types.VARCHAR);
 						else
 								pstmt.setString(7, description);
+						pstmt.setString(8, lot_id);
 						pstmt.executeUpdate();
 						qq = "select LAST_INSERT_ID() ";
 						if(debug){
@@ -143,30 +164,29 @@ public class RecycledItem extends Item{
 						rs = pstmt.executeQuery();
 						if(rs.next()){
 								id = rs.getString(1);
-						}			
-						if(type.equals("device")){
-								Device one = new Device(debug, asset_id);
-								back = one.updateStatus("Recycled");								
-								DeviceHistory ih = new DeviceHistory(debug, null, asset_id, "Recycled",null,user_id);
-								back = ih.doSave();
+						}
+						if(device != null){
+								back = device.updateStatus("Recycled");
+								if(back.equals("")){
+										DeviceHistory ih = new DeviceHistory(debug, null, asset_id, "Recycled",null,user_id);
+										back = ih.doSave();
+								}
 								if(!back.equals("")){
 										addError(back);
-								}								
+								}
 						}
-						else if(type.equals("monitor")){
-								Monitor one = new Monitor(debug, asset_id);
-								back = one.updateStatus("Recycled");					
-								if(!back.equals("")){
-										addError(back);
-								}		
-						}
-						else if (type.equals("printer")){
-								Printer one = new Printer(debug, asset_id);
-								back = one.updateStatus("Recycled");					
+						else if(monitor != null){
+								back = monitor.updateStatus("Recycled");					
 								if(!back.equals("")){
 										addError(back);
 								}		
 						}
+						else if (printer != null){
+								back = printer.updateStatus("Recycled");					
+								if(!back.equals("")){
+										addError(back);
+								}		
+						}														
 				}
 				catch(Exception ex){
 						back += ex;
@@ -228,43 +248,42 @@ public class RecycledItem extends Item{
 				Connection con = null;
 				PreparedStatement pstmt = null;
 				ResultSet rs = null;
-				String qq = "select asset_id,asset_num,type,date_format(date,'%m/%d/%Y'),location_id,weight,description from recycled_items where id=?";		
+				String qq = "select asset_id,asset_num,type,date_format(date,'%m/%d/%Y'),location_id,weight,description,lot_id from recycled_items where id=?";		
 				con = Helper.getConnection();
 				if(con == null){
 						back = "Could not connect to DB";
 						addError(back);
 						return back;
 				}
-				else{
-						try{
-								if(debug){
-										logger.debug(qq);
-								}				
-								pstmt = con.prepareStatement(qq);
-								pstmt.setString(1,id);
-								rs = pstmt.executeQuery();
-								if(rs.next()){
-										setAsset_id(rs.getString(1));
-										setAsset_num(rs.getString(2));
-										setType(rs.getString(3));
-										setDate(rs.getString(4));
-										setLocation_id(rs.getString(5));
-										setWeight(rs.getString(6));
-										setDescription(rs.getString(7));
-								}
-								else{
-										back= "Record "+id+" Not found";
-										message = back;
-								}
+				try{
+						if(debug){
+								logger.debug(qq);
+						}				
+						pstmt = con.prepareStatement(qq);
+						pstmt.setString(1,id);
+						rs = pstmt.executeQuery();
+						if(rs.next()){
+								setAsset_id(rs.getString(1));
+								setAsset_num(rs.getString(2));
+								setType(rs.getString(3));
+								setDate(rs.getString(4));
+								setLocation_id(rs.getString(5));
+								setWeight(rs.getString(6));
+								setDescription(rs.getString(7));
+								setLot_id(rs.getString(8));
 						}
-						catch(Exception ex){
-								back += ex+":"+qq;
-								logger.error(back);
-								addError(back);
+						else{
+								back= "Record "+id+" Not found";
+								message = back;
 						}
-						finally{
-								Helper.databaseDisconnect(con, pstmt, rs);			
-						}
+				}
+				catch(Exception ex){
+						back += ex+":"+qq;
+						logger.error(back);
+						addError(back);
+				}
+				finally{
+						Helper.databaseDisconnect(con, pstmt, rs);			
 				}
 				return back;
 		}

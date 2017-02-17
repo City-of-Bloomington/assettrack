@@ -15,7 +15,7 @@ public class DonationList extends CommonInc{
 		static Logger logger = Logger.getLogger(DonationList.class);
 		static final long serialVersionUID = 1330L;	
 		String organization_id="", organ_name="", device_id="";
-		String date_from="", date_to="";
+		String date_from="", date_to="", lot_id="";
 		String limit = " limit 50 ";
 		List<Donation> donations = null;
 		//
@@ -29,8 +29,12 @@ public class DonationList extends CommonInc{
 		}
 		public void setDevice_id(String val){
 				if(val != null)
-						device_id = val.trim();
+						device_id = val;
 		}
+		public void setLot_id(String val){
+				if(val != null && !val.equals("-1"))
+						lot_id = val;
+		}		
 		public void setOrganization_id(String val){
 				if(val != null)
 					 organization_id = val.trim();
@@ -50,6 +54,9 @@ public class DonationList extends CommonInc{
 		public String  getDevice_id(){
 				return device_id;
     }
+		public String  getLot_id(){
+				return lot_id;
+    }		
 		public String  getOrganization_id(){
 				return organization_id;
     }
@@ -75,7 +82,7 @@ public class DonationList extends CommonInc{
 				PreparedStatement pstmt = null;
 				ResultSet rs = null;
 				Connection con = Helper.getConnection();
-				String qq = "select id,asset_id,asset_num,type,date_format(date,'%m/%d/%Y'),organization_id,value from donations ";
+				String qq = "select id,asset_id,asset_num,type,date_format(date,'%m/%d/%Y'),organization_id,value,lot_id from donations ";
 				String qw = "";
 				if(con == null){
 						back = "Could not connect to DB";
@@ -90,7 +97,11 @@ public class DonationList extends CommonInc{
 								if(!device_id.equals("")){
 										if(!qw.equals("")) qw += " and ";
 										qw += " device_id = ? ";
-								}			
+								}
+								if(!lot_id.equals("")){
+										if(!qw.equals("")) qw += " and ";
+										qw += " lot_id = ? ";
+								}								
 								if(!date_from.equals("")){
 										if(!qw.equals("")) qw += " and ";
 					
@@ -114,7 +125,10 @@ public class DonationList extends CommonInc{
 								}
 								if(!device_id.equals("")){
 										pstmt.setString(jj++, device_id);
-								}	
+								}
+								if(!lot_id.equals("")){
+										pstmt.setString(jj++, lot_id);
+								}								
 								rs = pstmt.executeQuery();
 								while(rs.next()){
 										Donation one = new Donation(debug,
@@ -124,7 +138,8 @@ public class DonationList extends CommonInc{
 																								rs.getString(4),
 																								rs.getString(5),
 																								rs.getString(6),
-																								rs.getString(7)
+																								rs.getString(7),
+																								rs.getString(8)
 																								);
 										if(donations == null)
 												donations = new ArrayList<Donation>();
@@ -178,6 +193,10 @@ public class DonationList extends CommonInc{
 										if(!qw.equals("")) qw += " and ";
 										qw += " d.organization_id = ? ";
 								}
+								if(!lot_id.equals("")){
+										if(!qw.equals("")) qw += " and ";
+										qw += " d.lot_id = ? ";
+								}								
 								if(!date_from.equals("")){
 										if(!qw.equals("")) qw += " and ";
 					
@@ -199,6 +218,9 @@ public class DonationList extends CommonInc{
 								if(!organization_id.equals("")){
 										pstmt.setString(jj++, organization_id);
 								}
+								if(!lot_id.equals("")){
+										pstmt.setString(jj++, lot_id);
+								}								
 								rs = pstmt.executeQuery();
 								while(rs.next()){
 										String[] arr = new String[5];

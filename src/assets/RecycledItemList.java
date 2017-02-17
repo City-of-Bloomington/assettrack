@@ -15,7 +15,7 @@ public class RecycledItemList extends CommonInc{
 
 		static Logger logger = Logger.getLogger(RecycledItemList.class);
 		static final long serialVersionUID = 1590L;	
-		String location_id="";
+		String location_id="", lot_id="";
 		String asset_id = "", type="";
 		String date_from = "", date_to="";
 		String limit = " limit 50 ";
@@ -37,6 +37,10 @@ public class RecycledItemList extends CommonInc{
 				if(val != null)
 						asset_id = val;
 		}
+		public void setLot_id(String val){
+				if(val != null)
+						lot_id = val;
+		}		
 		public void setType(String val){
 				if(val != null)
 						type = val;
@@ -56,6 +60,9 @@ public class RecycledItemList extends CommonInc{
 		public String  getAset_id(){
 				return asset_id;
     }
+		public String  getLot_id(){
+				return lot_id;
+    }		
 		public String  getType(){
 				return type;
     }		
@@ -83,7 +90,7 @@ public class RecycledItemList extends CommonInc{
 				ResultSet rs = null;
 				Connection con = Helper.getConnection();
 				String qq = "select r.id,r.asset_id,r.asset_num,r.type,  "+
-						" date_format(date,'%m/%d/%Y'),r.location_id,r.weight,r.description "+
+						" date_format(date,'%m/%d/%Y'),r.location_id,r.weight,r.description ,r.lot_id "+
 						" from recycled_items r ";
 				String qw = "";
 				if(con == null){
@@ -100,6 +107,10 @@ public class RecycledItemList extends CommonInc{
 								if(!qw.equals("")) qw += " and ";
 								qw += " r.asset_id = ? ";
 						}
+						if(!lot_id.equals("")){
+								if(!qw.equals("")) qw += " and ";
+								qw += " r.lot_id = ? ";
+						}						
 						if(!type.equals("")){
 								if(!qw.equals("")) qw += " and ";
 								qw += " r.type = ? ";
@@ -127,6 +138,9 @@ public class RecycledItemList extends CommonInc{
 						if(!asset_id.equals("")){
 								pstmt.setString(jj++, asset_id);
 						}
+						if(!lot_id.equals("")){
+								pstmt.setString(jj++, lot_id);
+						}						
 						if(!type.equals("")){
 								pstmt.setString(jj++, type);
 						}						
@@ -143,7 +157,8 @@ public class RecycledItemList extends CommonInc{
 																		 rs.getString(5),
 																		 rs.getString(6),
 																		 rs.getString(7),
-																		 rs.getString(8)
+																		 rs.getString(8),
+																		 rs.getString(9)
 																		 );
 								recycledItems.add(one);
 						}

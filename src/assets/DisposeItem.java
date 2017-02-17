@@ -18,7 +18,8 @@ public class DisposeItem extends Item{
 	
 		static Logger logger = Logger.getLogger(DisposeItem.class);
 		static final long serialVersionUID = 1260L;			
-    String auction_id="", description="", location_id="", organization_id="";
+    String auction_id="", description="",
+				location_id="", organization_id="", lot_id="";
 		float value = 0.0f, weight=0.0f;
 		String method="";// Auction, Discard, Recycle, Donatation
 		String discard_method=""; 
@@ -34,8 +35,10 @@ public class DisposeItem extends Item{
 											 String val2,
 											 String val3,
 											 String val4,
-											 String val5){
-				super(deb, val, val2, val3, val4, val5); 
+											 String val5,
+											 String val6){
+				super(deb, val, val2, val3, val4, val5);
+				setLot_id(val6);
 
     }		
     //
@@ -45,12 +48,16 @@ public class DisposeItem extends Item{
 				if(val != null)		
 						auction_id = val;
     }
+    public void setLot_id(String val){
+				if(val != null && !val.equals("-1"))		
+						lot_id = val;
+    }		
     public void setLocation_id(String val){
-				if(val != null)		
+				if(val != null && !val.equals("-1"))		
 						location_id = val;
     }
     public void setOrganization_id(String val){
-				if(val != null)		
+				if(val != null && !val.equals("-1"))		
 						organization_id = val;
     }		
 		public void setValue(String val) {
@@ -87,6 +94,9 @@ public class DisposeItem extends Item{
     }
     public String  getLocation_id(){
 				return location_id;
+    }
+    public String  getLot_id(){
+				return lot_id;
     }		
 		public String getValue() {
 				return ""+value;
@@ -108,17 +118,17 @@ public class DisposeItem extends Item{
 		
 				String back = "";
 				if(method.equals("Auction")){
-						AuctionItem one = new AuctionItem(debug, null, asset_id, asset_num, type, auction_id, ""+value, description);
+						AuctionItem one = new AuctionItem(debug, null, asset_id, asset_num, type, auction_id, ""+value, description, lot_id);
 						back = one.doSave();
 						id = one.getId();
 				}
 				else if(method.equals("Donation")){
-						Donation one = new Donation(debug, null, asset_id, asset_num, type, date, organization_id, ""+value);
+						Donation one = new Donation(debug, null, asset_id, asset_num, type, date, organization_id, ""+value,lot_id);
 						back = one.doSave();
 						id = one.getId();
 				}
 				else if(method.equals("Recycle")){
-						RecycledItem one = new RecycledItem(debug, null, asset_id, asset_num, type, date, location_id, ""+weight, description);
+						RecycledItem one = new RecycledItem(debug, null, asset_id, asset_num, type, date, location_id, ""+weight, description, lot_id);
 						back = one.doSave();
 				}
 				else if(method.equals("Discard")){

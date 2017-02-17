@@ -47,6 +47,11 @@
 			<dd><s:radio name="method" value="%{method}" list="#{'Recycle':'Recycle','Donation':'Donation','Auction':'Auction','Discard':'Discard'}" /> 
 			</dd>
 		</dl>
+		<dl class="fn1-output-field">
+			<dt>Lot </dt>
+			<dd><s:select name="lot_id" value="%{lot_id}" list="lots" listKey="id" listValue="name" headerKey="-1" headerValue="Pick Lot" /> 
+			</dd>
+		</dl>		
 	</div>
 	<s:submit name="action" type="button" value="Next" class="fn1-btn"/></dd>
 </s:form>

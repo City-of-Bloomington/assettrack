@@ -17,11 +17,12 @@ public class RecycleAction extends TopAction{
 		static Logger logger = Logger.getLogger(RecycleAction.class);
 		//
 		RecycledItem item = null;
-		String recyclesTitle = " Most recent auction items";
+		String recyclesTitle = " Most recent Recycle items";
 		List<RecycledItem> items = null;
 		List<Type> locations = null;		// donations
-		String asset_id = "", asset_num="";
-		String type = "";		
+		String asset_id = "", asset_num="", lot_id="";
+		String type = "";
+		List<Lot> lots = null;
 		public String execute(){
 				String ret = SUCCESS;
 				String back = doPrepare();
@@ -98,7 +99,10 @@ public class RecycleAction extends TopAction{
 				}
 				if(!asset_num.equals("")){
 						item.setAsset_num(asset_num);
-				}				
+				}
+				if(!lot_id.equals("")){
+						item.setLot_id(lot_id);
+				}
 				return item;
 		}
 		public void setItem(RecycledItem val){
@@ -144,7 +148,25 @@ public class RecycleAction extends TopAction{
 		public void setAsset_num(String val){
 				if(val != null && !val.equals(""))		
 						asset_num = val;
+		}
+		public List<Lot> getLots(){
+				if(lots == null){
+						LotList ll = new LotList(debug);
+						ll.setStatus("Active");
+						String back = ll.find();
+						if(back.equals("")){
+								lots = ll.getLots();
+						}
+				}
+				return lots;
+		}
+		public String getLot_id(){
+				return lot_id;
 		}		
+		public void setLot_id(String val){
+				if(val != null && !val.equals(""))		
+						lot_id = val;
+		}				
 		
 }
 

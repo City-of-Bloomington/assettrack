@@ -9,7 +9,8 @@
 	<thead>
 		<tr>
 			<th align="center"><b>ID</b></th>
-			<th align="center"><b>Asset Num</b></th>			
+			<th align="center"><b>Asset Num</b></th>
+			<th align="center"><b>Serial Num</b></th>			
 			<th align="center"><b>Name</b></th>
 			<th align="center"><b>Related Device</b></th>
 			<th align="center"><b>Print Processor</b></th>
@@ -22,6 +23,7 @@
 			<tr>
 				<td><a href="<s:property value='#application.url' />printer.action?id=<s:property value='id' />"> <s:property value="ids" /> </a></td>
 				<td><s:property value="asset_num" /></td>
+				<td><s:property value="serial_num" /></td>				
 				<td><s:property value="name" /></td>				
 				<td><s:property value="device_id" /></td>
 				<td><s:property value="print_processor" /></td>

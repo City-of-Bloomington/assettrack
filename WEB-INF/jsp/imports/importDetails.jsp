@@ -11,6 +11,7 @@
 			<th align="center"><b>ID</b></th>
 			<th align="center"><b>Data Type</b></th>
 			<th align="center"><b>Status</b></th>
+			<th align="center"><b>Date/Time</b></th>			
 			<th align="center"><b>Error Message</b></th>
 		</tr>
 	</thead>
@@ -20,6 +21,7 @@
 				<td><s:property value="id" /> </td>
 				<td><s:property value="type" /></td>
 				<td><s:property value="status" /></td>
+				<td><s:property value="date_time" /></td>				
 				<td><s:property value="errorMessage" /></td>
 			</tr>
 		</s:iterator>

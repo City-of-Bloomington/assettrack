@@ -14,7 +14,7 @@ public class AuctionItemList extends CommonInc{
 
 		static Logger logger = Logger.getLogger(AuctionItemList.class);
 		static final long serialVersionUID = 1060L;			
-		String auction_id="";
+		String auction_id="", lot_id="", limit=" limit 50 ";
 		Auction auction = null;
 		ArrayList<AuctionItem> auctionItems = null;
 
@@ -29,6 +29,10 @@ public class AuctionItemList extends CommonInc{
 				if(val != null)
 						auction_id = val.trim();
 		}
+		public void setLot_id(String val){
+				if(val != null)
+						lot_id = val.trim();
+		}		
 		public void setAuction(Auction val){
 				if(val != null){
 						auction = val;
@@ -38,14 +42,16 @@ public class AuctionItemList extends CommonInc{
 		public List<AuctionItem> getAuctionItems(){
 				return auctionItems;
 		}
-
+		public void setNoLimit(){
+				limit = "";
+		}
 		public String find(){
 		
 				String back = "";
 				PreparedStatement pstmt = null;
 				ResultSet rs = null;
 				Connection con = Helper.getConnection();
-				String qq = "select id,asset_id,asset_num,type,auction_id,value,description "+
+				String qq = "select id,asset_id,asset_num,type,auction_id,value,description,lot_id "+
 						" from auction_items ";
 				String qw = "";
 				if(con == null){
@@ -55,9 +61,14 @@ public class AuctionItemList extends CommonInc{
 				}
 				else{
 						try{
+								
 								if(!auction_id.equals("")){
 										qw += " auction_id = ? ";
 								}
+								if(!lot_id.equals("")){
+										if(!qw.equals("")) qw += " and ";
+										qw += " lot_id = ? ";
+								}								
 								if(!qw.equals("")){
 										qq += " where "+qw;
 								}
@@ -69,6 +80,9 @@ public class AuctionItemList extends CommonInc{
 								if(!auction_id.equals("")){
 										pstmt.setString(jj++, auction_id);
 								}
+								if(!lot_id.equals("")){
+										pstmt.setString(jj++, lot_id);
+								}								
 								rs = pstmt.executeQuery();
 								while(rs.next()){
 										if(auctionItems == null)
@@ -81,7 +95,9 @@ public class AuctionItemList extends CommonInc{
 																				rs.getString(4),
 																				rs.getString(5),
 																				rs.getString(6),
-																				rs.getString(7));
+																				rs.getString(7),
+																				rs.getString(8)
+																				);
 										auctionItems.add(one);
 								}
 						}

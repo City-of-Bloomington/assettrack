@@ -20,6 +20,7 @@ public class DisposesAction extends TopAction{
 		List<Donation> items3 = null;
 		List<RecycledItem> items4 = null;
 		List<String[]> donationData = null;
+		List<Lot> lots = null;
 		String auctionItemsTitle = "Most recent auctioned items";
 		String discardsTitle = "Most recent dicarded items";
 		String donationsTitle = "Most recent donations";
@@ -27,7 +28,7 @@ public class DisposesAction extends TopAction{
 		String donationsReportTitle = "Donations classified by Organization, Type and Date ";
 		boolean showDiscards = true, showAuctions = true,
 				showRecycles = true, showDonations = true;
-		String date_from="", date_to="";
+		String date_from="", date_to="", lot_id="";
 		public String execute(){
 				String ret = SUCCESS;
 				String back = doPrepare();
@@ -51,6 +52,8 @@ public class DisposesAction extends TopAction{
 		public List<AuctionItem> getItems(){ 
 				if(items == null){
 						AuctionItemList dl = new AuctionItemList();
+						dl.setLot_id(lot_id);
+						dl.setNoLimit();
 						String back = dl.find();
 						items = dl.getAuctionItems();
 				}		
@@ -59,6 +62,7 @@ public class DisposesAction extends TopAction{
 		public List<DiscardItem> getItems2(){ 
 				if(items2 == null){
 						DiscardItemList dl = new DiscardItemList();
+						dl.setNoLimit();
 						String back = dl.find();
 						items2 = dl.getDiscards();
 				}		
@@ -69,6 +73,8 @@ public class DisposesAction extends TopAction{
 						DonationList dl = new DonationList();
 						dl.setDate_from(date_from);
 						dl.setDate_to(date_to);
+						dl.setLot_id(lot_id);
+						dl.setNoLimit();
 						String back = dl.find();
 						items3 = dl.getDonations();
 						dl.prepareReport();
@@ -84,6 +90,8 @@ public class DisposesAction extends TopAction{
 						RecycledItemList dl = new RecycledItemList();
 						dl.setDate_from(date_from);
 						dl.setDate_to(date_to);
+						dl.setLot_id(lot_id);
+						dl.setNoLimit();
 						String back = dl.find();
 						items4 = dl.getRecycledItems();
 				}		
@@ -142,7 +150,25 @@ public class DisposesAction extends TopAction{
 		}
 		public String getDate_to(){
 				return date_to;
+		}
+		public List<Lot> getLots(){
+				if(lots == null){
+						LotList ll = new LotList(debug);
+						ll.setStatus("Active");
+						String back = ll.find();
+						if(back.equals("")){
+								lots = ll.getLots();
+						}
+				}
+				return lots;
+		}
+		public String getLot_id(){
+				return lot_id;
 		}		
+		public void setLot_id(String val){
+				if(val != null && !val.equals(""))		
+						lot_id = val;
+		}					
 }
 
 

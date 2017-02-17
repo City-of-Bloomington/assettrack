@@ -6,30 +6,72 @@
 <table class="stat" border="1" width="95%">
 	-->
 
-<table class="fn1-table">	
+<table class="stats" width="100%">	
 	<caption><s:property value="#itemsTitle" /></caption>
-	<thead>
+	<tr>
+		<s:if test="lot.lotOpt.asset_id">
+			<td><b>Asset ID</b></td>
+		</s:if>
+		<s:if test="lot.lotOpt.asset_num">		
+			<td><b>Asset Num</b></td>
+		</s:if>
+		<s:if test="lot.lotOpt.serial_num">				
+			<td><b>Serial #</b></td>
+		</s:if>
+		<s:if test="lot.lotOpt.name">						
+			<td><b>Name</b></td>
+		</s:if>
+		<s:if test="lot.lotOpt.category">						
+			<td><b>Category</b></td>
+		</s:if>
+		<s:if test="lot.lotOpt.division">			
+			<td><b>Division</b></td>
+		</s:if>
+		<s:if test="lot.lotOpt.installed">						
+			<td><b>Installed Date</b></td>
+		</s:if>
+		<s:if test="lot.lotOpt.organization">						
+			<td><b>Organization</b></td>
+		</s:if>
+		<s:if test="lot.lotOpt.date">						
+			<td><b>Date</b></td>
+		</s:if>
+		<s:if test="lot.lotOpt.value">						
+			<td><b>Value</b></td>
+		</s:if>			
+	</tr>
+	<s:iterator var="one" value="#items">
 		<tr>
-			<th align="center"><b>ID</b></th>
-			<th align="center"><b>Asset ID</b></th>
-			<th align="center"><b>Asset Num</b></th>			
-			<th align="center"><b>Type </b></th>
-			<th align="center"><b>Organization</b></th>			
-			<th align="center"><b>Date</b></th>
-			<th align="center"><b>Value</b></th>			
-		</tr>
-	</thead>
-	<tbody>
-		<s:iterator var="one" value="#items">
-			<tr>
-				<td><a href="<s:property value='#application.url' />donation.action?id=<s:property value='id' />"><s:property value="id" /> </a></td>
-				<td><s:property value="asset_id" /></td>
-				<td><s:property value="asset_num" /></td>				
-				<td><s:property value="type" /></td>
-				<td><s:property value="organ" /></td>				
+			<s:if test="lot.lotOpt.asset_id">			
+				<td><a href="<s:property value='#application.url' />donation.action?id=<s:property value='id' />"><s:property value="asset_id" /> </a></td>
+			</s:if>
+			<s:if test="lot.lotOpt.asset_num">						
+				<td><s:property value="asset_num" /></td>
+			</s:if>
+			<s:if test="lot.lotOpt.serial_num">						
+				<td><s:property value="serial_num" /></td>
+			</s:if>
+			<s:if test="lot.lotOpt.name">						
+				<td><s:property value="name" /></td>
+			</s:if>
+			<s:if test="lot.lotOpt.category">						
+				<td><s:property value="categoryName" /></td>
+			</s:if>
+			<s:if test="lot.lotOpt.division">						
+				<td><s:property value="divisionName" /></td>
+			</s:if>
+			<s:if test="lot.lotOpt.installed">						
+				<td><s:property value="installed" /></td>
+			</s:if>
+			<s:if test="lot.lotOpt.organization">						
+				<td><s:property value="organ" /></td>
+			</s:if>
+			<s:if test="lot.lotOpt.date">		
 				<td><s:property value="date" /></td>
-				<td><s:property value="value" /></td>				
-			</tr>
-		</s:iterator>
-	</tbody>
+			</s:if>
+			<s:if test="lot.lotOpt.value">						
+				<td><s:property value="value" /></td>
+			</s:if>
+		</tr>
+	</s:iterator>
 </table>

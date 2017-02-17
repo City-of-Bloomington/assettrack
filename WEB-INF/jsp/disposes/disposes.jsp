@@ -18,7 +18,7 @@
 		</div>
   </s:elseif>
   <p>Most recent disposes classified by type <br />
-		Select the disposal types below.
+		Select the disposal types, lot below.
 	</p>
 	<div class="tt-row-container">
 		<dl class="fn1-output-field">
@@ -29,6 +29,10 @@
 			<dd><s:checkbox name="showDiscards" value="%{showDiscards}" /> Discarded Items</dd>
 		</dl>
 		<dl class="fn1-output-field">
+			<dt>Lot </dt>
+			<dd><s:select name="lot_id" value="%{lot_id}" list="%{lots}" listKey="id" listValue="name" headerKey="-1" headerValue="Pick a Lot" required="true" /></dd>
+		</dl>
+		<dl class="fn1-output-field">
 			<dt>Date, from </dt>
 			<dd><s:textfield name="date_from" value="%{date_from}" size="10" cssClass="date" /> to <s:textfield name="date_to" value="%{date_to}" size="10" cssClass="date" />
 			</dd>
@@ -37,17 +41,17 @@
 	<s:submit name="action" type="button" value="Submit" class="fn1-btn"/></dd>
 </s:form>			
 
-<s:if test="showAuctions">
+<s:if test="showAuctions && items != null">
 	<s:set var="items" value="items" />
 	<s:set var="itemsTitle" value="auctionItemsTitle" />
 	<%@  include file="auctionItems.jsp" %>
 </s:if>
-<s:if test="showDiscards">
+<s:if test="showDiscards && items2 != null">
 	<s:set var="items" value="items2" />
 	<s:set var="itemsTitle" value="discardsTitle" />
 	<%@  include file="discards.jsp" %>
 </s:if>
-<s:if test="showDonations">
+<s:if test="showDonations && items3 != null">
 	<s:set var="items" value="items3" />
 	<s:set var="itemsTitle" value="donationsTitle" />
 	<%@  include file="donations.jsp" %>
@@ -55,7 +59,7 @@
 	<s:set var="donationsReportTitle" value="donationsReportTitle" />
 	<%@  include file="donationReport.jsp" %>	
 </s:if>
-<s:if test="showRecycles">
+<s:if test="showRecycles && items4 != null">
 	<s:set var="items" value="items4" />
 	<s:set var="itemsTitle" value="recyclesTitle" />
 	<%@  include file="recycles.jsp" %>

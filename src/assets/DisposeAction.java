@@ -18,8 +18,9 @@ public class DisposeAction extends TopAction{
 		//
 		DisposeItem item = null;
 		String method = "Donation";
-		String asset_id = "", asset_num="";
+		String asset_id = "", asset_num="", lot_id="";
 		String type = "";
+		List<Lot> lots = null;
 		public String execute(){
 				String ret = SUCCESS;
 				String back = doPrepare();
@@ -35,7 +36,7 @@ public class DisposeAction extends TopAction{
 				}
 				if(action.equals("Next")){
 						String str = "";
-						String linkStr = ".action?asset_id="+asset_id+"&type="+type+"&asset_num="+asset_num;
+						String linkStr = ".action?asset_id="+asset_id+"&type="+type+"&asset_num="+asset_num+"&lot_id="+lot_id;
 						if(method.equals("Donation")){
 								str = url+"donation"+linkStr;
 						}
@@ -94,13 +95,31 @@ public class DisposeAction extends TopAction{
 				if(val != null && !val.equals(""))		
 						asset_id = val;
 		}
+		public String getLot_id(){
+				return lot_id;
+		}
+		public void setLot_id(String val){
+				if(val != null && !val.equals(""))		
+						lot_id = val;
+		}		
 		public String getAsset_num(){
 				return asset_num;
 		}
 		public void setAsset_num(String val){
 				if(val != null && !val.equals(""))		
 						asset_num = val;
-		}				
+		}
+		public List<Lot> getLots(){
+				if(lots == null){
+						LotList ll = new LotList(debug);
+						ll.setStatus("Active");
+						String back = ll.find();
+						if(back.equals("")){
+								lots = ll.getLots();
+						}
+				}
+				return lots;
+		}
 }
 
 

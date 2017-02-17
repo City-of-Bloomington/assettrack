@@ -21,7 +21,7 @@ public class ImportDetail extends CommonInc{
 	
 		static Logger logger = Logger.getLogger(ImportDetail.class);
 		static final long serialVersionUID = 1413L;	
-    String import_id="", status="", type="", id="", error_message="";
+    String import_id="", status="", type="", id="", error_message="", date_time="";
     public ImportDetail(){
 				super();
     }
@@ -33,7 +33,8 @@ public class ImportDetail extends CommonInc{
 												String val2,
 												String val3,
 												String val4,
-												String val5){
+												String val5,
+												String val6){
 
 				super(deb);
 				//
@@ -44,6 +45,7 @@ public class ImportDetail extends CommonInc{
 				setType(val3);
 				setStatus(val4);
 				setErrorMessage(val5);
+				setDate_time(val6);
     }	
     //
     // setters
@@ -59,7 +61,11 @@ public class ImportDetail extends CommonInc{
 		public void setType(String val){
 				if(val != null)
 						type = val;
-    }	
+    }
+		public void setDate_time(String val){
+				if(val != null)
+						date_time = val;
+    }		
 		public void setStatus(String val){
 				if(val != null)
 						status = val;
@@ -86,7 +92,9 @@ public class ImportDetail extends CommonInc{
 		public String getErrorMessage() {
 				return error_message;
 		}		
-
+		public String getDate_time() {
+				return date_time;
+		}
 }
 
 

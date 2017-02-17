@@ -6,7 +6,7 @@
 <table class="stat" border="1" width="95%">
 	-->
 
-<table class="fn1-table">	
+<table class="stats" width="80%">	
 	<caption><s:property value="#donationsReportTitle" /></caption>
 	<thead>
 		<tr>

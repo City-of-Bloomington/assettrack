@@ -15,7 +15,7 @@ public class AuctionAddItems extends CommonInc{
 		boolean debug = false;
 		static Logger logger = Logger.getLogger(AuctionAddItems.class);
 		static final long serialVersionUID = 1030L;			
-		String auction_id="", user_id="", whichDate="";
+		String auction_id="", lot_id="", user_id="", whichDate="";
 		Auction auction = null;
 		String [] item_ids = null;
 		String [] item_vals = null; // value
@@ -34,6 +34,9 @@ public class AuctionAddItems extends CommonInc{
 		public String getAuction_id() {
 				return auction_id;
 		}
+		public String getLot_id() {
+				return lot_id;
+		}		
 		public Auction getAuction() {
 				if(auction == null && !auction_id.equals("")){
 						auction = new Auction(debug, auction_id);
@@ -49,6 +52,10 @@ public class AuctionAddItems extends CommonInc{
 		public void setUser_id(String val) {
 				if(val != null)
 						user_id = val;
+		}
+		public void setLot_id(String val) {
+				if(val != null)
+						lot_id = val;
 		}		
 		public void setItem_ids(String[] vals) {
 				if(vals != null)
@@ -90,7 +97,7 @@ public class AuctionAddItems extends CommonInc{
 												break;
 										}
 								}
-								AuctionItem one = new AuctionItem(debug, null, auction_id, item_ids[i], null, type, val, null);
+								AuctionItem one = new AuctionItem(debug, null, auction_id, item_ids[i], null, type, val, null, lot_id);
 								String back = one.doSave();
 								if(!back.equals("")){
 										addError(back);

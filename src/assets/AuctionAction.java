@@ -20,6 +20,8 @@ public class AuctionAction extends TopAction{
 		Auction auction = null;
 		String auctionsTitle = " Most recent auctions";
 		List<Auction> auctions = null;
+		List<Lot> lots = null;
+		String lot_id="";
 		public String execute(){
 				String ret = SUCCESS;
 				String back = doPrepare();
@@ -100,6 +102,24 @@ public class AuctionAction extends TopAction{
 		public void setAction2(String val){
 				if(val != null && !val.equals(""))		
 						action = val;
+		}
+		public String getLot_id(){
+				return lot_id;
+		}		
+		public void setLot_id(String val){
+				if(val != null && !val.equals(""))		
+						lot_id = val;
+		}				
+		public List<Lot> getLots(){
+				if(lots == null){
+						LotList ll = new LotList(debug);
+						ll.setStatus("Active");
+						String back = ll.find();
+						if(back.equals("")){
+								lots = ll.getLots();
+						}
+				}
+				return lots;
 		}		
 
 }

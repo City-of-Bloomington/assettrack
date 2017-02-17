@@ -123,7 +123,7 @@ public class PrinterList extends CommonInc{
 				PreparedStatement pstmt = null;
 				ResultSet rs = null;
 				Connection con = Helper.getConnection();
-				String qq = "select u.id,u.external_id,u.asset_num,u.name,u.device_id,u.print_processor,u.description,date_format(u.date,'%m/%d/%Y'),u.status,u.notes,u.editable from printers u ";
+				String qq = "select u.id,u.external_id,u.asset_num,u.name,u.device_id,u.print_processor,u.description,date_format(u.date,'%m/%d/%Y'),u.status,u.notes,u.editable,u.serial_num from printers u ";
 				if(con == null){
 						back = "Could not connect to DB";
 						addError(back);
@@ -157,7 +157,7 @@ public class PrinterList extends CommonInc{
 						}
 						if(!date_from.equals("")){
 								if(!qw.equals("")) qw += " and ";
-						qw += " u.date >= ? ";
+								qw += " u.date >= ? ";
 						}
 						if(!date_to.equals("")){
 								if(!qw.equals("")) qw += " and ";
@@ -226,7 +226,8 @@ public class PrinterList extends CommonInc{
 																rs.getString(8),
 																rs.getString(9),
 																rs.getString(10),
-																rs.getString(11));
+																rs.getString(11),
+																rs.getString(12));
 								printers.add(one);
 						}
 				}

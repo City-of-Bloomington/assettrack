@@ -3,35 +3,34 @@
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL, see LICENSE.txt
  * @author W. Sibo <sibow@bloomington.in.gov>
  *
-<table class="stat" border="1" width="95%">
 	-->
 
-<table class="fn1-table">	
+<table class="stats" width="100%" border="1">	
 	<caption><s:property value="#itemsTitle" /></caption>
-	<thead>
-		<tr>
-			<th align="center"><b>ID</b></th>
-			<th align="center"><b>Asset ID</b></th>
-			<th align="center"><b>Asset Num</b></th>			
-			<th align="center"><b>Type </b></th>
-			<th align="center"><b>Recycle Location</b></th>
-			<th align="center"><b>Weight (lb)</b></th>			
-			<th align="center"><b>Date</b></th>
-			<th align="center"><b>Notes</b></th>			
-		</tr>
-	</thead>
-	<tbody>
+			<tr>
+				<td><b>Asset ID</b></td>
+				<td><b>Asset Num</b></td>
+				<td><b>Serial #</b></td>
+				<td><b>Name</b></td>
+				<td><b>Category</b></td>
+				<td><b>Installed</b></td>							
+				<!--  <td><b>Recycle Location</b></td> -->
+				<td><b>Description</b></td>			
+				<td><b>Date</b></td>
+			</tr>			
 		<s:iterator var="one" value="#items">
 			<tr>
-				<td><a href="<s:property value='#application.url' />recycle.action?id=<s:property value='id' />"><s:property value="id" /> </a></td>
-				<td><s:property value="asset_id" /></td>
-				<td><s:property value="asset_num" /></td>				
-				<td><s:property value="type" /></td>
-				<td><s:property value="location" /></td>				
-				<td><s:property value="weight" /></td>
+				<td><a href="<s:property value='#application.url' />recycle.action?id=<s:property value='id' />"><s:property value="asset_id" /> </a></td>
+				<td><s:property value="asset_num" /></td>
+				<td><s:property value="serial_num" /></td>
+				<td><s:property value="name" /></td>
+				<td><s:property value="categoryName" /></td>
+				<!-- <td><font size="-2"><s:property value="divisionName" /></font></td>	-->		
+				<td><s:property value="installed" /></td>
+				
+				<!--  <td><s:property value="location" /></td>	-->			
+				<td><s:property value="description" /></td>
 				<td><s:property value="date" /></td>
-				<td><s:property value="description" /></td>				
 			</tr>
 		</s:iterator>
-	</tbody>
 </table>

@@ -20,7 +20,17 @@
   <link rel="stylesheet" href="//bloomington.in.gov/static/fn1-releases/dev/css/kirkwood.css" type="text/css" />
   <link rel="stylesheet" href="<s:property value='#application.url' />css/screen.css" type="text/css" />
   <link rel="stylesheet" href="<s:property value='#application.url' />css/ol.css" type="text/css" />
-  <link rel="stylesheet" href="<s:property value='#application.url' />css/ol3-popup.css" type="text/css" />	
+  <link rel="stylesheet" href="<s:property value='#application.url' />css/ol3-popup.css" type="text/css" />
+<style>
+table stats{
+	border:1px solid;
+	width:100%;
+	}
+table.stats th, table.stats td {
+	border: 1px solid;
+	font-size:0.75em;
+	 }
+</style>	
   <title>AssetTrack</title>
   <script type="text/javascript">
     var APPLICATION_URL = '<s:property value='#application.url' />';
@@ -68,7 +78,8 @@
 				<a href="<s:property value='#application.url'/>monitorSearch.action">Monitors</a>
 				<a href="<s:property value='#application.url'/>printerSearch.action">Printers</a>
 				<a href="<s:property value='#application.url'/>softwareSearch.action">Softwares</a>				
-				<a href="<s:property value='#application.url'/>employeeSearch.action">Employees</a>								
+				<a href="<s:property value='#application.url'/>employeeSearch.action">Employees</a>
+				<a href="<s:property value='#application.url'/>lots.action">Lots</a>		
 				<a href="<s:property value='#application.url'/>disposes.action">Disposals</a>
 				<a href="<s:property value='#application.url'/>attachSearch.action">Attachments</a>				
       </nav>
