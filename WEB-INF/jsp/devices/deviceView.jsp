@@ -121,6 +121,11 @@
 				<dd><s:property value="%{device.notes}" /></dd>
 			</dl>
 			<dl class="fn1-output-field">
+				<dt>Inventory Date </dt>
+				<dd><s:property value="%{device.inventory_date}" /> 
+				</dd>
+			</dl>			
+			<dl class="fn1-output-field">
 				<dt>Status </dt>
 				<dd><s:property value="%{device.status}" /> 
 				</dd>

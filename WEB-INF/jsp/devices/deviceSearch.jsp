@@ -92,7 +92,15 @@
 		<dd><s:radio name="deviceList.status" value="%{deviceList.status}" list="#{'-1':'All','Active':'Active','Donated':'Donated','Recycled':'Recycled','Auctioned':'Auctioned','Disposed':'Discarded'}" /> </dd>
 	</dl>
 	<dl class="fn1-output-field">
-		<dt>Installed Date </dt>
+		<dt>Inventory Status</dt>
+		<dd><s:radio name="deviceList.inventory_status" value="%{deviceList.inventory_status}" list="#{'-1':'All','set':'Date Set','unset':'Date Unset'}" /> </dd>
+	</dl>	
+	<dl class="fn1-output-field">
+		<dt>Date Option </dt>
+		<dd><s:radio name="deviceList.whichDate" value="deviceList.whichDate" list="#{'installed':'Installed Date','inventory_date':'Inventory Date'}" /></dd>
+	</dl>
+	<dl class="fn1-output-field">
+		<dt>Date Range</dt>
 		<dd>from: <s:textfield name="deviceList.date_from" value="%{deviceList.date_from}" size="10" maxlength="10" cssClass="date" /> to:
 			<s:textfield name="deviceList.date_to" value="%{deviceList.date_to}" size="10" maxlength="10" cssClass="date" />					
 		</dd>

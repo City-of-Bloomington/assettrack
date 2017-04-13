@@ -14,7 +14,8 @@
 			<th align="center"><b>Name</b></th>
 			<th align="center"><b>Related Device</b></th>
 			<th align="center"><b>Print Processor</b></th>
-			<th align="center"><b>Date</b></th>
+			<th align="center"><b>Installed Date</b></th>
+			<th align="center"><b>Inventory Date</b></th>			
 			<th align="center"><b>Status</b></th>			
 		</tr>
 	</thead>
@@ -28,6 +29,7 @@
 				<td><s:property value="device_id" /></td>
 				<td><s:property value="print_processor" /></td>
 				<td><s:property value="date" /></td>
+				<td><s:property value="inventory_date" /></td>				
 				<td><s:property value="status" /></td>				
 			</tr>
 		</s:iterator>

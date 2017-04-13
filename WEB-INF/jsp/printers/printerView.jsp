@@ -58,6 +58,10 @@
 			<dd><s:property value="%{printer.date}" /> </dd>
 			</dl>
 			<dl class="fn1-output-field">
+				<dt>Inventory Date</dt>
+			<dd><s:property value="%{printer.inventory_date}" /> </dd>
+			</dl>			
+			<dl class="fn1-output-field">
 				<dt>Status</dt>
 				<dd><s:property value="%{printer.status}" /> </dd>
 			</dl>		

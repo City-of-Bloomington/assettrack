@@ -18,7 +18,8 @@ public class PrinterList extends CommonInc{
 		static final long serialVersionUID = 1560L;
 		SimpleDateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy");		
 		String name = "", id="", external_id="", print_processor="", device_id="",
-				editable="", asset_num="";
+				editable="", asset_num="", whichDate="u.date",
+				inventory_status="";
 		String date_from="", date_to="", status = "", limit =" limit 30 ";
 		List<Printer> printers = null;
 		public PrinterList(){
@@ -98,7 +99,13 @@ public class PrinterList extends CommonInc{
 						return "-1";
 				}
 				return status;
-		}		
+		}
+		public String getInventory_status() {
+				if(status.equals("")){
+						return "-1";
+				}
+				return inventory_status;
+		}				
 		public String getDevice_id(){
 				return device_id;
 		}
@@ -113,6 +120,17 @@ public class PrinterList extends CommonInc{
 		}
 		public String getEditable(){
 				return editable;
+		}
+		public String getWhichDate(){
+				return whichDate;
+		}
+		public void setWhichDate(String val){
+				if(val != null)
+						whichDate = val;
+		}
+		public void setInventory_status(String val){
+				if(val != null && !val.equals("-1"))
+						inventory_status = val;
 		}		
 		public void setNoLimit(){
 				limit = "";
@@ -123,7 +141,7 @@ public class PrinterList extends CommonInc{
 				PreparedStatement pstmt = null;
 				ResultSet rs = null;
 				Connection con = Helper.getConnection();
-				String qq = "select u.id,u.external_id,u.asset_num,u.name,u.device_id,u.print_processor,u.description,date_format(u.date,'%m/%d/%Y'),u.status,u.notes,u.editable,u.serial_num from printers u ";
+				String qq = "select u.id,u.external_id,u.asset_num,u.name,u.device_id,u.print_processor,u.description,date_format(u.date,'%m/%d/%Y'),u.status,u.notes,u.editable,u.serial_num,u.inventory_date from printers u ";
 				if(con == null){
 						back = "Could not connect to DB";
 						addError(back);
@@ -157,16 +175,23 @@ public class PrinterList extends CommonInc{
 						}
 						if(!date_from.equals("")){
 								if(!qw.equals("")) qw += " and ";
-								qw += " u.date >= ? ";
+								qw += whichDate+" >= ? ";
 						}
 						if(!date_to.equals("")){
 								if(!qw.equals("")) qw += " and ";
-								qw += " u.date <= ? ";
+								qw +=  whichDate+" <= ? ";
 						}
 						if(!status.equals("")){
 								if(!qw.equals("")) qw += " and ";
 								qw += " u.stats = ? ";
 						}
+						if(!inventory_status.equals("")){
+								if(!qw.equals("")) qw += " and ";
+								if(inventory_status.equals("set"))
+										qw += " u.inventory_date is not null ";
+								else
+										qw += " u.inventory_date is null ";												
+						}									
 				}
 				if(!qw.equals("")){
 						qq += " where "+qw;
@@ -227,7 +252,8 @@ public class PrinterList extends CommonInc{
 																rs.getString(9),
 																rs.getString(10),
 																rs.getString(11),
-																rs.getString(12));
+																rs.getString(12),
+																rs.getString(13));
 								printers.add(one);
 						}
 				}

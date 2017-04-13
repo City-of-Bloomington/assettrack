@@ -28,7 +28,7 @@ public class Monitor extends CommonInc{
 		String id="", external_id="", editable="", name="", asset_num="";
 		String serial_num="", model="", device_id="",screen_size="",
 				received="", type="",vertical_resolution="", horizontal_resolution="",
-				manufacturer="", 
+				manufacturer="", inventory_date="",
 				status="Active", notes="", expected_age="3";
 
 		String user_id="", employee_id="";
@@ -64,7 +64,8 @@ public class Monitor extends CommonInc{
 									 String _status,
 									 String _notes,
 									 
-									 String _editable
+									 String _editable,
+									 String _inventory_date
 									 ) {
 				debug = deb;
 				
@@ -88,7 +89,7 @@ public class Monitor extends CommonInc{
 				setNotes(_notes);
 				
 				setEditable(_editable);
-
+				setInventory_date(_inventory_date);
 		}	
 	
 		public String getId() {
@@ -157,6 +158,9 @@ public class Monitor extends CommonInc{
 		public void setExternal_id(String val) {
 				if(val != null)
 						external_id = val;
+		}
+		public String getInventory_date(){
+				return inventory_date;
 		}				
 		//
 		// setters
@@ -229,7 +233,10 @@ public class Monitor extends CommonInc{
 						user_id = val;
 				}
 		}
-		
+		public void setInventory_date(String val) {
+				if(val != null)
+						inventory_date = val;
+		}		
 		public void setUser(User val) {
 				if(val != null){
 						user = val;
@@ -404,7 +411,7 @@ public class Monitor extends CommonInc{
 				String qq = "insert into monitors values(0,?,"+
 						"?,?,?,?,?,"+
 						"?,?,?,?,?,"+
-						"?,?,'Active',?,'y')";			
+						"?,?,'Active',?,'y',null)";			
 				editable = "y";
 				con = Helper.getConnection();
 				if(con == null){
@@ -536,7 +543,8 @@ public class Monitor extends CommonInc{
 						if(received.equals(""))
 								pstmt.setNull(jj++,Types.DATE);
 						else
-								pstmt.setDate(jj++, new java.sql.Date(dateFormat.parse(received).getTime()));						
+								pstmt.setDate(jj++, new java.sql.Date(dateFormat.parse(received).getTime()));
+						
 						pstmt.setString(jj++,""+expected_age);
 						if(id.equals("")){
 								status="Active";
@@ -546,6 +554,10 @@ public class Monitor extends CommonInc{
 								pstmt.setNull(jj++,Types.VARCHAR);
 						else
 								pstmt.setString(jj++,notes);
+						if(inventory_date.equals(""))
+								pstmt.setNull(jj++,Types.DATE);
+						else
+								pstmt.setDate(jj++, new java.sql.Date(dateFormat.parse(inventory_date).getTime()));						
 						editable = "y";
 				}
 				catch(Exception ex){
@@ -571,7 +583,7 @@ public class Monitor extends CommonInc{
 				try{
 						qq = "update monitors set "+
 								"asset_num=?, screen_size=?,received=?, expected_age=?, "+
-								"notes=? "+
+								"notes=?,inventory_date=? "+
 								"where id=?";
 						
 						if(debug){
@@ -596,7 +608,11 @@ public class Monitor extends CommonInc{
 								pstmt.setNull(jj++,Types.VARCHAR);
 						else
 								pstmt.setString(jj++,notes);
-						pstmt.setString(6,id); 
+						if(inventory_date.equals(""))
+								pstmt.setNull(jj++,Types.DATE);
+						else
+								pstmt.setDate(jj++, new java.sql.Date(dateFormat.parse(inventory_date).getTime()));												
+						pstmt.setString(7,id); 
 						pstmt.executeUpdate();
 				}
 				catch(Exception ex){
@@ -633,7 +649,7 @@ public class Monitor extends CommonInc{
 								"name=?,asset_num=?,serial_num=?,screen_size=?,model=?,type=?,"+
 								"vertical_resolution=?,horizontal_resolution=?,manufacturer=?,"+
 								"received=?,expected_age=?, "+
-								"notes=? "+ // we do not change status here
+								"notes=?,inventory_date "+ // we do not change status here
 								"where id=?";
 						
 						if(debug){
@@ -642,7 +658,7 @@ public class Monitor extends CommonInc{
 						pstmt = con.prepareStatement(qq);
 						back = fillPStatement(pstmt);
 						if(back.equals("")){
-								pstmt.setString(15,id); // 17 - 2 (editable)
+								pstmt.setString(16,id); // 18 - 2 (editable)
 								pstmt.executeUpdate();
 						}
 				}
@@ -710,7 +726,8 @@ public class Monitor extends CommonInc{
 						"vertical_resolution,horizontal_resolution,"+
 						"manufacturer,"+
 						"date_format(received,'%m/%d/%Y'),"+
-						"expected_age,status,notes,editable "+
+						"expected_age,status,notes,editable, "+
+						"date_format(inventory_date,'%m/%d/%Y') "+						
 						" from monitors where id=?";
 				con = Helper.getConnection();
 				if(con == null){
@@ -743,6 +760,7 @@ public class Monitor extends CommonInc{
 										setStatus(rs.getString(14));
 										setNotes(rs.getString(15));
 										setEditable(rs.getString(16));
+										setInventory_date(rs.getString(17));
 								}
 								else{
 										return "Record "+id+" Not found";

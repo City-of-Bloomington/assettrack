@@ -564,7 +564,7 @@ public class ImportManager extends CommonInc{
 						"?,?,?,"+   // 9                     // 5,6,7
 						"?,null,?,null,?,"+               // 8,9,10
 						"'Active',?,?,null,null,"+        // 11,12
-						"?,?,null,null,null)";                      // 13,14
+						"?,?,null,null,null,null,null)";                      // 13,14
 				
 				String qq22 = " update devices set name=?,serial_num=?,model=?,employee_id=?,description=?,category_id=?,location_id=?,domain_id=?,processor=?,ram=?,mac_address=?,ip_address=? where external_id=? ";
 				// skip location
@@ -688,7 +688,10 @@ public class ImportManager extends CommonInc{
 																				null, // editable
 																				null, // related id
 																				// skip purchase date
-																				null); // purchase price
+																				null,// purchase price
+																				null, // inventory_date
+																				null // replace_asset_num
+																				); 
 								one.setLocationFlag(loc_flag);
 								if(oldSet != null && oldSet.contains(id)){
 										if(loc_flag)										
@@ -768,7 +771,7 @@ public class ImportManager extends CommonInc{
 				String qq2 = " insert into monitors values(0,?,?,?,null,?,"+ // 4
 						"null,?,?,?,?,"+                         // 4
 						"?,?,null,'Active',null,"+            // 2
-						"null)";                          // 0 = 10
+						"null,null)";                          
 				String qq3 = " update monitors set device_id=?,name=?,serial_num=?,"+
 						"model=?,type=?,vertical_resolution=?,horizontal_resolution=?,"+
 						"manufacturer=? where external_id=? ";
@@ -828,7 +831,8 @@ public class ImportManager extends CommonInc{
 																					"Active",
 																					null,
 																					
-																					null);
+																					null,
+																					null); //inventory_date
 								
 								if(found){
 										back = one.updateImport(pstmt3);										
@@ -969,7 +973,7 @@ public class ImportManager extends CommonInc{
 				String qq = " select id,name,computer_id,print_processor,printer_device,updated_on from printers where not (print_processor like 'win%' or print_processor like 'mod%')";
 				//
 				// asset_num = null
-				String qq2 = " insert into printers values(0,?,null,?,?, ?,?,?,'Active', null, null,null)";
+				String qq2 = " insert into printers values(0,?,null,?,?, ?,?,?,'Active', null, null,null,null)";
 				String qq3 = " update printers set name=?, device_id=?,print_processor=?,description=? where external_id = ? ";
 				con = Helper.getConnectionSqlite(sqliteDbFile);
 				if(con == null){
@@ -1011,7 +1015,7 @@ public class ImportManager extends CommonInc{
 								if(table.containsKey(old_device_id)){
 										device_id = ""+table.get(old_device_id);
 								}								
-								Printer one = new Printer(debug, null,""+external_id, null, str2, device_id, str4, str5, date,"Active", null, null, null);
+								Printer one = new Printer(debug, null,""+external_id, null, str2, device_id, str4, str5, date,"Active", null, null, null, null);
 								if(found){
 										back = one.updateImport(pstmt3);
 								}

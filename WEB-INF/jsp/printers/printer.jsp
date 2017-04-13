@@ -65,6 +65,10 @@
 				<dd><s:textfield name="printer.date" value="%{printer.date}" size="10" maxlength="10" cssClass="date" /> </dd>
 			</dl>
 			<dl class="fn1-output-field">
+				<dt>Inventory Date</dt>
+				<dd><s:textfield name="printer.inventory_date" value="%{printer.inventory_date}" size="10" maxlength="10" cssClass="date" /> </dd>
+			</dl>			
+			<dl class="fn1-output-field">
 				<dt>Notes</dt>
 				<dd><s:textarea name="printer.date" value="%{printer.date}" rows="10" cols="30" /> </dd>
 			</dl>			

@@ -74,6 +74,11 @@
 			<dd><s:property value="%{monitor.expected_age}" />(Years) 
 			</dd>
 		</dl>
+		<dl class="fn1-output-field">
+			<dt>Inventory Date </dt>
+			<dd><s:property value="%{monitor.inventory_date}" /> 
+			</dd>
+		</dl>		
 		<dl class="fn1-output-field">				
 			<dt>Notes </dt>
 			<dd><s:property value="%{monitor.notes}" /></dd>

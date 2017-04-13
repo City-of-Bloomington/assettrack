@@ -26,7 +26,7 @@ public class MonitorList extends CommonInc{
 		String serial_num="", model="", device_id="",
 				type="", received="", manufacturer="",
 				status="", asset_num="", 
-				editable = "",
+				editable = "", inventory_status="",
 				exclude_id="", limit = " limit 30 ";
 		//
 		// we need this flag to help find the devices that can be auctioned
@@ -78,6 +78,12 @@ public class MonitorList extends CommonInc{
 				}
 				return status;
 		}
+		public String getInventory_status() {
+				if(status.equals("")){
+						return "-1";
+				}
+				return inventory_status;
+		}		
 		public String getDate_from() {
 				return date_from;
 		}
@@ -158,7 +164,10 @@ public class MonitorList extends CommonInc{
 				if(val != null && !val.equals("-1"))
 						status = val;
 		}
-		
+		public void setInventory_status(String val){
+				if(val != null && !val.equals("-1"))
+						inventory_status = val;
+		}
 		public List<Monitor> getMonitors(){
 				return monitors;
 		}
@@ -176,7 +185,8 @@ public class MonitorList extends CommonInc{
 						"vertical_resolution,horizontal_resolution,"+
 						"manufacturer,"+
 						"date_format(received,'%m/%d/%Y'),"+
-						"expected_age,status,notes,editable "+
+						"expected_age,status,notes,editable, "+
+						"date_format(inventory_date,'%m/%d/%Y') "+		
 						" from monitors ";
 				String qw = "";
 				if(con == null){
@@ -233,6 +243,13 @@ public class MonitorList extends CommonInc{
 										if(!qw.equals("")) qw += " and ";	
 										qw += " not id = ? ";
 								}
+								if(!inventory_status.equals("")){
+										if(!qw.equals("")) qw += " and ";
+										if(inventory_status.equals("set"))
+												qw += " inventory_date is not null ";
+										else
+												qw += " inventory_date is null ";												
+								}								
 						}
 						if(!qw.equals("")){
 								qq += " where "+qw;
@@ -302,7 +319,8 @@ public class MonitorList extends CommonInc{
 																					rs.getString(14),
 																					rs.getString(15),
 																					rs.getString(16),
-																					rs.getString(17)
+																					rs.getString(17),
+																					rs.getString(18)
 																		);
 								monitors.add(one);
 						}

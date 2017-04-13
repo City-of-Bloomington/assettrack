@@ -56,10 +56,18 @@
 	<dl class="fn1-output-field">
 		<dt>Status </dt>
 		<dd><s:radio name="printerList.status" value="%{printerList.status}" list="#{'-1':'All','Active':'Active','Donated':'Donated','Recycled':'Recycled','Auctioned':'Auctioned','Disposed':'Discarded'}" headerKey="-1" headerValue="All" /> </dd>				
+	</dl>
+	<dl class="fn1-output-field">
+		<dt>Inventory Status</dt>
+		<dd><s:radio name="printerList.inventory_status" value="%{printerList.inventory_status}" list="#{'-1':'All','set':'Date Set','unset':'Date Unset'}" /> </dd>
+	</dl>		
+	<dl class="fn1-output-field">
+		<dt>Date Option </dt>
+		<dd><s:radio name="printerList.whichDate" value="printerList.whichDate" list="#{'u.date':'Installed Date','u.inventory_date':'Inventory Date'}" /></dd>
 	</dl>	
 	<dl class="fn1-output-field">
-		<dt>Date, From: </dt>
-		<dd>
+		<dt>Date Range </dt>
+		<dd>From:
 			<s:textfield name="printerList.date_from" value="%{printerList.date_from}" size="10" maxlength="10" cssClass="date" /> To:
 			<s:textfield name="printerList.date_to" value="%{printerList.date_to}" size="10" maxlength="10" cssClass="date" />
 		</dd>

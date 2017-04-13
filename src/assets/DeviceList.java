@@ -10,12 +10,6 @@ import java.io.*;
 import javax.sql.*;
 import org.apache.log4j.Logger;
 
-/**
- * The main data entry/view/update/delete form.
- *
- * @author Walid Sibo
- * @version %I%, %G%
- */
 
 public class DeviceList extends CommonInc{
 
@@ -29,7 +23,8 @@ public class DeviceList extends CommonInc{
 				dept_id="", status="", asset_num="", domain_id="",
 				division_id="", cost_from="", cost_to="",
 				processor="", employee_id="", employee_name="", editable = "",
-				exclude_id="", ip_address="", mac_address="", year="";
+				exclude_id="", ip_address="", mac_address="", inventory_status="",
+				year="";
 		String limit ="30";
 		//
 		// we need this flag to help find the devices that can be auctioned
@@ -96,6 +91,12 @@ public class DeviceList extends CommonInc{
 				}
 				return status;
 		}
+		public String getInventory_status() {
+				if(status.equals("")){
+						return "-1";
+				}
+				return inventory_status;
+		}		
 		public String getDate_from() {
 				return date_from;
 		}
@@ -154,6 +155,10 @@ public class DeviceList extends CommonInc{
 		public void setYear(String val) {
 				if(val != null && !val.equals("-1"))
 						year = val;
+		}
+		public void setInventory_status(String val) {
+				if(val != null && !val.equals("-1"))
+						inventory_status = val;
 		}		
 		public void setAsset_num(String val) {
 				if(val != null)
@@ -249,7 +254,8 @@ public class DeviceList extends CommonInc{
 						"date_format(d.installed,'%m/%d/%Y'),d.age_length,"+
 						" d.location_id,d.division_id,d.domain_id,"+
 						" d.status,d.processor,d.ram,d.hd_size,d.notes,"+
-						" d.mac_address,d.ip_address,d.editable,d.related_id,d.cost "+
+						" d.mac_address,d.ip_address,d.editable,d.related_id,d.cost, "+
+						" date_format(d.inventory_date, '%m/%d/%Y'),d.replace_asset_num "+
 						" from devices d left join divisions v on d.division_id=v.id  ";
 				String qw = "";
 				if(con == null){
@@ -308,6 +314,13 @@ public class DeviceList extends CommonInc{
 										if(!qw.equals("")) qw += " and ";
 										qw += " d.status = ? ";
 								}
+								if(!inventory_status.equals("")){
+										if(!qw.equals("")) qw += " and ";
+										if(inventory_status.equals("set"))
+												qw += " d.inventory_date is not null ";
+										else
+												qw += " d.inventory_date is null ";												
+								}
 								if(!year.equals("")){
 										if(!qw.equals("")) qw += " and ";
 										qw += " year("+whichDate+") = ? ";
@@ -342,12 +355,6 @@ public class DeviceList extends CommonInc{
 										if(!qw.equals("")) qw += " and ";
 										qw += " d.cost <= ? ";		
 								}								
-								/*
-								if(forAuction){ // still in service but expired
-										if(!qw.equals("")) qw += " and ";
-										qw +=" (status='In-Service' and warranty_expire < now())) ";
-								}
-								*/
 						}
 						if(!qw.equals("")){
 								qq += " where "+qw;
@@ -449,7 +456,9 @@ public class DeviceList extends CommonInc{
 																				rs.getString(21),
 																				rs.getString(22),
 																				rs.getString(23),
-																				rs.getString(24)
+																				rs.getString(24),
+																				rs.getString(25),
+																				rs.getString(26)
 																		);
 								devices.add(one);
 						}

@@ -57,6 +57,10 @@
 				<dd><s:textfield name="device.asset_num" value="%{device.asset_num}" size="10" maxlength="10" id="asset_num" /> </dd>
 			</dl>
 			<dl class="fn1-output-field">
+				<dt>Replaces Asset Num</dt>
+				<dd><s:textfield name="device.replace_asset_num" value="%{device.replace_asset_num}" size="10" maxlength="10" /> </dd>
+			</dl>			
+			<dl class="fn1-output-field">
 				<dt>Related Device </dt>
 				<dd><s:textfield name="device.related_id" value="%{device.related_id}" size="10" maxlength="10" /> (ID) </dd>
 			</dl>			
@@ -137,6 +141,10 @@
 				<dt>Notes </dt>
 				<dd><s:textarea name="device.notes" value="%{device.notes}" rows="5" cols="50" /></dd>
 			</dl>
+			<dl class="fn1-output-field">
+				<dt>Inventory Date </dt>
+				<dd><s:textfield name="device.inventory_date" value="%{device.inventory_date}" size="10" maxlength="10" cssClass="date" /> </dd>
+			</dl>			
 		</div>
 	</div>
 	<s:if test="device.id == ''">

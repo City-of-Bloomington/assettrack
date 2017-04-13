@@ -65,7 +65,15 @@
 		<dd><s:radio name="monitorList.status" value="%{monitorList.status}" list="#{'-1':'All','Active':'Active','Donated':'Donated','Recycled':'Recycled','Auctioned':'Auctioned','Disposed':'Discarded'}" headerKey="-1" headerValue="All" /> </dd>				
 	</dl>
 	<dl class="fn1-output-field">
-		<dt>Received Date </dt>
+		<dt>Inventory Status</dt>
+		<dd><s:radio name="monitorList.inventory_status" value="%{monitorList.inventory_status}" list="#{'-1':'All','set':'Date Set','unset':'Date Unset'}" /> </dd>
+	</dl>			
+	<dl class="fn1-output-field">
+		<dt>Date Option </dt>
+		<dd><s:radio name="monitorList.whichDate" value="monitorList.whichDate" list="#{'received':'Installed Date','inventory_date':'Inventory Date'}" /></dd>
+	</dl>		
+	<dl class="fn1-output-field">
+		<dt>Date Range </dt>
 		<dd>From: <s:textfield name="monitorList.date_from" value="%{monitorList.date_from}" size="10" maxlength="10" cssClass="date" /> To:
 				<s:textfield name="monitorList.date_to" value="%{monitorList.date_to}" size="10" maxlength="10" cssClass="date" /> </dd>
 	</dl>

@@ -19,6 +19,7 @@
 			<th align="center"><b>Type</b></th>
 			<th align="center"><b>Screen Size</b></th>			
 			<th align="center"><b>Received</b></th>
+			<th align="center"><b>Inventory Date</b></th>			
 			<th align="center"><b>Status</b></th>			
 		</tr>
 	</thead>
@@ -34,6 +35,7 @@
 				<td><s:property value="type" /></td>
 				<td><s:property value="screen_size" /></td>
 				<td><s:property value="received" /></td>
+				<td><s:property value="inventory_date" /></td>				
 				<td><s:property value="status" /></td>				
 			</tr>
 		</s:iterator>

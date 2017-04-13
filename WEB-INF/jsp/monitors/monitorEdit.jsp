@@ -54,6 +54,11 @@
 				<dd><s:property value="%{monitor.type}" /> </dd>
 			</dl>
 			<dl class="fn1-output-field">
+				<dt>Inventory Date </dt>
+				<dd><s:textfield name="monitor.inventory_date" value="%{monitor.inventory_date}" size="10" maxlength="10" cssClass="date" /> 
+				</dd>
+			</dl>						
+			<dl class="fn1-output-field">
 				<dt>Status </dt>
 				<dd><s:property value="%{monitor.status}" /></dd>
 			</dl>
