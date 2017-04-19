@@ -31,7 +31,7 @@ public class Device extends CommonInc{
 				warranty_expire="",location_id="", processor="", ram="", hd_size="",
 				division_id="",domain_id="",status="Active", notes="", age_length="3",
 				mac_address="",ip_address="", cost="", inventory_date="", replace_asset_num="";
-
+		String old_replace_asset_num=""; 
 		String user_id="", employee_id="", related_id="";
 		//
 		Type dept = null;
@@ -114,6 +114,8 @@ public class Device extends CommonInc{
 				setCost(_cost);
 				setInventory_date(_inventor_date);
 				setReplace_asset_num(_replace_asset_num);
+				// we need this to compare if new one is set
+				setOld_replace_asset_num(_replace_asset_num);
 		}	
 	
 		public String getId() {
@@ -346,6 +348,11 @@ public class Device extends CommonInc{
 		public void setReplace_asset_num(String val) {
 				if(val != null){
 						replace_asset_num = val;
+				}
+		}
+		public void setOld_replace_asset_num(String val) {
+				if(val != null){
+						old_replace_asset_num = val;
 				}
 		}		
 		public void setLocationFlag(boolean val){
@@ -632,8 +639,9 @@ public class Device extends CommonInc{
 								pstmt.setString(jj++,ram);
 						if(mac_address.equals(""))
 								pstmt.setNull(jj++,Types.VARCHAR);
-						else
+						else{
 								pstmt.setString(jj++,mac_address);
+						}
 						if(ip_address.equals(""))
 								pstmt.setNull(jj++,Types.VARCHAR);
 						else
@@ -699,7 +707,10 @@ public class Device extends CommonInc{
 						}
 						finally{
 								Helper.databaseDisconnect(con, pstmt, rs);
-						}			
+						}
+						if(back.equals("") && !replace_asset_num.equals("")){
+								back = updateRelatedDevices();
+						}
 				}
 				return back;
 
@@ -813,6 +824,80 @@ public class Device extends CommonInc{
 				}
 				return back;
 		}
+		private String updateRelatedDevices(){
+				String back = "";
+				//
+				if(id.equals("") && replace_asset_num.equals("")) return back;
+				// if this is done before, no need to do it again
+				if(replace_asset_num.equals(old_replace_asset_num)) return back;
+				Connection con = null;
+				PreparedStatement pstmt = null;
+				ResultSet rs = null;
+				String old_id="";
+				//
+				// first find the device id
+				//
+				String qs = " select id from devices where asset_num=? ";
+				String qq = " update devices set related_id=? where related_id=? ";
+				//
+				// these will be updated through the import update, but we are
+				// doing this anyway here as well
+				String qq2 = " update monitors set device_id=? where device_id=? ";
+				String qq3 = " update printers set device_id=? where device_id=? ";
+				con = Helper.getConnection();
+				if(con == null){
+						back = "Could not connect to DB";
+						addError(back);
+						return back;
+				}
+				
+				try{
+						if(debug){
+								logger.debug(qs);
+						}						
+						pstmt = con.prepareStatement(qs);
+						pstmt.setString(1, replace_asset_num);
+						rs = pstmt.executeQuery();
+						if(rs.next()){
+								old_id = rs.getString(1);
+						}
+						if(old_id.equals("")){
+								back=" device id not found for asset num: "+replace_asset_num;
+								return back;
+						}
+						if(debug){
+								logger.debug(qq);
+						}						
+						pstmt = con.prepareStatement(qq);
+						pstmt.setString(1, id);
+						pstmt.setString(2, old_id);
+						pstmt.executeUpdate();
+						if(debug){
+								logger.debug(qq2);
+						}
+						pstmt = con.prepareStatement(qq2);
+						pstmt.setString(1, id);
+						pstmt.setString(2, old_id);
+						pstmt.executeUpdate();
+						if(debug){
+								logger.debug(qq3);
+						}
+						pstmt = con.prepareStatement(qq3);
+						pstmt.setString(1, id);
+						pstmt.setString(2, old_id);
+						pstmt.executeUpdate();						
+				}
+				catch(Exception ex){
+						back += ex+":"+qq;
+						logger.error(back);
+						addError(back);
+				}
+				finally{
+						Helper.databaseDisconnect(con, pstmt, rs);
+				}
+				return back;						
+
+		}
 		//
 		public String doUpdate(){
 		
@@ -858,6 +943,9 @@ public class Device extends CommonInc{
 				finally{
 						Helper.databaseDisconnect(con, pstmt, rs);
 				}
+				if(back.equals("") && !replace_asset_num.equals("")){
+						back = updateRelatedDevices();
+				}				
 				return back;
 
 		}
@@ -929,6 +1017,9 @@ public class Device extends CommonInc{
 				finally{
 						Helper.databaseDisconnect(con, pstmt, rs);
 				}
+				if(back.equals("") && !replace_asset_num.equals("")){
+						back = updateRelatedDevices();
+				}				
 				if(back.equals("")){
 						back = doSelect();
 				}
@@ -1064,6 +1155,8 @@ public class Device extends CommonInc{
 										setCost(rs.getString(23));
 										setInventory_date(rs.getString(24));
 										setReplace_asset_num(rs.getString(25));
+										// replica
+										setOld_replace_asset_num(rs.getString(25));
 								}
 								else{
 										return "Record "+id+" Not found";

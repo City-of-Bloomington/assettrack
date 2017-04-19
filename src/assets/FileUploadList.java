@@ -129,7 +129,6 @@ public class FileUploadList{
 								qq += " where "+qw;
 						}
 						qq += " order by id desc "+limit;
-						System.err.println(qq);
 						pstmt = con.prepareStatement(qq);
 						int jj=1;
 						if(!id.equals("")){

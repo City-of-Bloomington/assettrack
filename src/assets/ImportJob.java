@@ -39,7 +39,6 @@ public class ImportJob implements Job{
 						if(str != null){
 								sqliteDbFile = str;
 						}
-						System.err.println(" sqlite db "+sqliteDbFile);
 						doInit();
 						doWork();
 						doDestroy();
@@ -63,7 +62,7 @@ public class ImportJob implements Job{
      */
     public void doWork(){
 				ImportManager im = new ImportManager(debug);
-				im.setAutoImportFlag(true);
+				im.setAutoImportFlag();
 				im.setSqliteDbFile(sqliteDbFile);
 				String back = im.doImport();
 				if(!back.equals("")){

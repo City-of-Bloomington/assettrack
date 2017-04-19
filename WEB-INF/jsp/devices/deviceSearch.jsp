@@ -97,7 +97,7 @@
 	</dl>	
 	<dl class="fn1-output-field">
 		<dt>Date Option </dt>
-		<dd><s:radio name="deviceList.whichDate" value="deviceList.whichDate" list="#{'installed':'Installed Date','inventory_date':'Inventory Date'}" /></dd>
+		<dd><s:radio name="deviceList.whichDate" value="deviceList.whichDate" list="#{'d.installed':'Installed Date','d.inventory_date':'Inventory Date'}" /></dd>
 	</dl>
 	<dl class="fn1-output-field">
 		<dt>Date Range</dt>

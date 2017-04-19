@@ -108,6 +108,9 @@ public class ImportManager extends CommonInc{
 		public void setAutoImportFlag(boolean val){
 				autoImportFlag = val;
 		}
+		public void setAutoImportFlag(){
+				autoImportFlag = true;
+		}		
 		public boolean getAutoImportFlag(){
 				return autoImportFlag; // for testing purpose
 		}		
