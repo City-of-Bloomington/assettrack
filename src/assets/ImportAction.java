@@ -18,7 +18,9 @@ public class ImportAction extends TopAction{
 		//
 		ImportManager impman = null;
 		List<ImportManager> imports = null;
-		String importsTitle = " Most recent imports";		
+		String importsTitle = " Most recent imports";
+		String detailsTitle = " This import details";
+		public List<ImportDetail> details = null;
 		public String execute(){
 				String ret = SUCCESS;
 				String back = doPrepare();
@@ -54,6 +56,10 @@ public class ImportAction extends TopAction{
 						if(!back.equals("")){
 								addActionError(back);
 						}
+						else{
+								details = impman.getDetails();
+								ret = "details";
+						}
 				}
 				else{
 						getImpman();
@@ -82,6 +88,9 @@ public class ImportAction extends TopAction{
 
 		public String getImportsTitle(){
 				return importsTitle;
+		}
+		public String getDetailsTitle(){
+				return detailsTitle;
 		}		
 		public void setAction2(String val){
 				if(val != null && !val.equals(""))		
@@ -102,6 +111,9 @@ public class ImportAction extends TopAction{
 						imports = dl.getImports();
 				}		
 				return imports;
+		}
+		public List<ImportDetail> getDetails(){
+				return details;
 		}
 
 }

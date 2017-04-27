@@ -69,6 +69,7 @@
 						method="execute">
 			<result>/WEB-INF/jsp/imports/import.jsp</result>
 			<result name="error">/WEB-INF/jsp/imports/import.jsp</result>
+			<result name="details">/WEB-INF/jsp/imports/importDetails.jsp</result>			
 		</action>		
 		<action name="device" 
 						class="assets.DeviceAction" 
@@ -273,15 +274,6 @@
 			<result name="error">/WEB-INF/jsp/users/employee.jsp</result>
 			<result name="success">/WEB-INF/jsp/users/employee.jsp</result>
 		</action>		
-		<!--		
-		<action name="report" 
-						class="assets.ReportAction" 
-						method="execute">
-			<result name="input">/WEB-INF/jsp/reportInput.jsp</result>		
-			<result name="error">/WEB-INF/jsp/reportInput.jsp</result>
-			<result name="success">/WEB-INF/jsp/reportResult.jsp</result>
-		</action>
-		-->
    </package>
 
 </struts>

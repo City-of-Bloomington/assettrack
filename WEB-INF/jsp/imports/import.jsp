@@ -82,16 +82,11 @@
 		</s:if>
 	</div>
 </s:form>
-<s:if test="impman.id != '' && impman.details != null">
-	<s:set var="details" value="impman.details" />
-	<s:set var="detailsTitle" value="'Import details'" />
-	<%@  include file="importDetails.jsp" %>
-</s:if>
-<s:elseif test="imports != null && imports.size() > 0">
+<s:if test="imports != null && imports.size() > 0">
 	<s:set var="imports" value="imports" />
 	<s:set var="importsTitle" value="importsTitle" />
 	<%@  include file="imports.jsp" %>
-</s:elseif>
+</s:if>
 
 <%@  include file="../gui/footer.jsp" %>
 
