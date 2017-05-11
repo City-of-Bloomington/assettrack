@@ -411,7 +411,7 @@ public class Monitor extends CommonInc{
 				String qq = "insert into monitors values(0,?,"+
 						"?,?,?,?,?,"+
 						"?,?,?,?,?,"+
-						"?,?,'Active',?,'y',null)";			
+						"?,?,'Active',?,'y',?)";			
 				editable = "y";
 				con = Helper.getConnection();
 				if(con == null){
@@ -557,7 +557,7 @@ public class Monitor extends CommonInc{
 						if(inventory_date.equals(""))
 								pstmt.setNull(jj++,Types.DATE);
 						else
-								pstmt.setDate(jj++, new java.sql.Date(dateFormat.parse(inventory_date).getTime()));						
+								pstmt.setDate(jj++, new java.sql.Date(dateFormat.parse(inventory_date).getTime()));
 						editable = "y";
 				}
 				catch(Exception ex){
@@ -649,7 +649,7 @@ public class Monitor extends CommonInc{
 								"name=?,asset_num=?,serial_num=?,screen_size=?,model=?,type=?,"+
 								"vertical_resolution=?,horizontal_resolution=?,manufacturer=?,"+
 								"received=?,expected_age=?, "+
-								"notes=?,inventory_date "+ // we do not change status here
+								"notes=?,inventory_date=? "+ // we do not change status here
 								"where id=?";
 						
 						if(debug){
