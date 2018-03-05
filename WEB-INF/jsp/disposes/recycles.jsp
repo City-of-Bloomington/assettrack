@@ -9,13 +9,15 @@
 	<caption><s:property value="#itemsTitle" /></caption>
 			<tr>
 				<td><b>Asset ID</b></td>
+				
 				<td><b>Asset Num</b></td>
 				<td><b>Serial #</b></td>
 				<td><b>Name</b></td>
 				<td><b>Category</b></td>
 				<td><b>Installed</b></td>							
 				<!--  <td><b>Recycle Location</b></td> -->
-				<td><b>Description</b></td>			
+				<td><b>Description</b></td>
+				<td><b>Location</b></td>
 				<td><b>Date</b></td>
 			</tr>			
 		<s:iterator var="one" value="#items">
@@ -30,6 +32,7 @@
 				
 				<!--  <td><s:property value="location" /></td>	-->			
 				<td><s:property value="description" /></td>
+				<td><s:property value="location" /></td>				
 				<td><s:property value="date" /></td>
 			</tr>
 		</s:iterator>

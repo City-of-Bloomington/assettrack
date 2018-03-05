@@ -10,8 +10,8 @@ import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.Set;
 import java.util.HashSet;
-import javax.naming.*;
-import javax.naming.directory.*;
+import java.nio.charset.Charset;
+import java.nio.charset.CharsetEncoder;
 
 import java.text.SimpleDateFormat;
 import org.apache.log4j.Logger;
@@ -22,11 +22,14 @@ public class ImportManager extends CommonInc{
 		static String sqliteDbFile = "";
 		static Logger logger = Logger.getLogger(ImportManager.class);
 		static final long serialVersionUID = 1420L;
-		Hashtable<String, String> domains = new Hashtable<String, String>();
-		Hashtable<String, String> locations = new Hashtable<String, String>();
-		Hashtable<String, String> employees = new Hashtable<String, String>();
-		Hashtable<String, String> types = new Hashtable<String, String>();
-		
+		static CharsetEncoder asciiEncoder = Charset.forName("US-ASCII").newEncoder(); 
+
+		Hashtable<String, String> domains = new Hashtable<>();
+		Hashtable<String, String> locations = new Hashtable<>();
+		Hashtable<String, String> employees = new Hashtable<>();
+		Hashtable<String, String> types = new Hashtable<>();
+		Hashtable<String, Integer> devHash = new Hashtable<>();
+		Hashtable<Integer,Integer> devIdHash = new Hashtable<>();
 		SimpleDateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy");
 
 		boolean employeeFlag = false, deviceFlag = false, softwareFlag=false,
@@ -417,7 +420,7 @@ public class ImportManager extends CommonInc{
 		//
 		// we need the users to be
 		//
-		public Set<Integer> prepareForDeviceImport(){
+		public Set<String> prepareForDeviceImport(){
 				Connection con = null;
 				PreparedStatement pstmt = null;
 				ResultSet rs = null;
@@ -432,8 +435,8 @@ public class ImportManager extends CommonInc{
 				}
 				// now we need the list of old devices external_id to figure out if we need to do update or insert
 				//
-				Set<Integer> set = new HashSet<Integer>();
-				String qq = " select external_id from devices ";
+				Set<String> set = new HashSet<>();
+				String qq = " select name from devices where external_id is not null and name is not null";
 				con = Helper.getConnection();
 				if(con == null){
 						back = "Could not connect to DB";
@@ -447,7 +450,7 @@ public class ImportManager extends CommonInc{
 						pstmt = con.prepareStatement(qq);
 						rs = pstmt.executeQuery();
 						while(rs.next()){
-								int one = rs.getInt(1);
+								String one = rs.getString(1);
 								set.add(one);
 						}
 				}
@@ -492,7 +495,7 @@ public class ImportManager extends CommonInc{
 								set.add(one);
 						}
 				}
-				catch(Exception ex){
+ 				catch(Exception ex){
 						logger.error(ex);
 						addError(""+ex);
 				}
@@ -501,21 +504,23 @@ public class ImportManager extends CommonInc{
 				}						
 				return set;
 		}
-		public Hashtable<Integer, Integer> getDeviceHash(){
+		public void getDeviceHash(){
 				Connection con = null;
 				PreparedStatement pstmt = null;
 				ResultSet rs = null;
 				String back = "";
 				//
-				// now we need the list of old devices external_id to figure out if we need to do update or insert
+				// name is unique, external_id is not 
+				// now we need the list of old devices name to figure out if we need to do update or insert
 				//
-				Hashtable<Integer, Integer> table = new Hashtable<Integer, Integer>();
-				String qq = " select id,external_id from devices where external_id is not null ";
+				//Hashtable<String, Integer> table = new Hashtable<>();
+				String qq = " select id,name,external_id from devices where external_id is not null  and name is not null";
+				
 				con = Helper.getConnection();
 				if(con == null){
 						back = "Could not connect to DB";
 						addError(back);
-						return null;
+						return;
 				}				
 				if(debug){
 						logger.debug(qq);
@@ -525,8 +530,10 @@ public class ImportManager extends CommonInc{
 						rs = pstmt.executeQuery();
 						while(rs.next()){
 								int id = rs.getInt(1);
-								int exid = rs.getInt(2);
-								table.put(exid,id);
+								String name = rs.getString(2).toLowerCase();
+								int ext_id = rs.getInt(3);
+								devHash.put(name,id);
+								devIdHash.put(ext_id, id);
 						}
 				}
 				catch(Exception ex){
@@ -536,18 +543,23 @@ public class ImportManager extends CommonInc{
 				finally{
 						Helper.databaseDisconnect(con, pstmt, rs);
 				}						
-				return table;
-		}				
-		
+				// return table;
+		}
+		private boolean isPureAscii(String str){
+				return asciiEncoder.canEncode(str);
+		}
 		public String importDevices(){
+				
 
 				/**
 					 SELECT name FROM sqlite_master WHERE type='table' and sql like '%service_tag%';
 					 //static.spiceworks.com/images/products/0008/7044/optiplex-desktop-7010-overview3_profile_preview.jpg
 
 				 */
-				Set<Integer> oldSet = prepareForDeviceImport();				
+				// Set<String> oldSet = prepareForDeviceImport();
+				// Hashtable<String, Integer> devHash = getDeviceHash();
 				prepareHashes();
+				getDeviceHash();
 				String back = "", msg="";
 		
 				Connection con = null, con2=null;
@@ -567,24 +579,25 @@ public class ImportManager extends CommonInc{
 						"?,?,?,"+   // 9                     // 5,6,7
 						"?,null,?,null,?,"+               // 8,9,10
 						"'Active',?,?,null,null,"+        // 11,12
-						"?,?,null,null,null,null,null)";                      // 13,14
+						"?,?,null,null,null,null,null,null)";                      // 13,14
 				
-				String qq22 = " update devices set name=?,serial_num=?,model=?,employee_id=?,description=?,category_id=?,location_id=?,domain_id=?,processor=?,ram=?,mac_address=?,ip_address=? where external_id=? ";
+				String qq22 = " update devices set external_id=?,serial_num=?,model=?,employee_id=?,description=?,category_id=?,location_id=?,domain_id=?,processor=?,ram=?,mac_address=?,ip_address=? where id = ? ";
 				// skip location
-				String qq23 = " update devices set name=?,serial_num=?,model=?,employee_id=?,description=?,category_id=?,domain_id=?,processor=?,ram=?,mac_address=?,ip_address=? where external_id=? ";				
+				// not sure about this one
+				String qq23 = " update devices set external_id=?,serial_num=?,model=?,employee_id=?,description=?,category_id=?,domain_id=?,processor=?,ram=?,mac_address=?,ip_address=? where id=? ";				
 				//
 				// getting hard drive info
 				//
 				String qq3 = "select size,computer_id from disks where name like 'C:%'";
-				String qq4 = "update devices set hd_size=? where external_id=? ";
+				String qq4 = "update devices set hd_size=? where id = ? ";
 				//
 				// after the import we set the asset_num field using
 				// mysql regexp looking for names that start with 3 characters and then
 				// 5 or more numbers (could end with letter or not)
 				// see prepare.java for more info about mysql regexp
 				//
-				// for asset_num
-				String qq5 = " update devices p set p.asset_num=substring(p.name,4) where  p.name regexp '^[a-z]{3}[0-9]{5,}' " ;
+				// for asset_num for new inserts only
+				String qq5 = " update devices p set p.asset_num=substring(p.name,4) where  p.name regexp '^[a-z]{3}[0-9]{5,}' and p.asset_num is null" ;
 				// for dept_id 
 				String qq6 = " update devices p,divisions d set p.division_id=d.id where  p.name regexp '^[a-z]{3}[0-9]{5,}' and substring(p.name,1,3)=d.code " ;							
 				con = Helper.getConnectionSqlite(sqliteDbFile);
@@ -616,7 +629,15 @@ public class ImportManager extends CommonInc{
 										location_id=null, date=null;
 								String str="", str2="", str3="",str4="";
 								long ram = 0;
-								int id = rs.getInt(1);
+								int ext_id = rs.getInt(1);
+								String name = rs.getString(2);
+								if(name != null){
+										if(!isPureAscii(name)){
+												continue;
+										}
+										name = name.toLowerCase();
+								}
+								
 								str = rs.getString(6); // current_user
 								if(str != null && str.indexOf("\\") > 0){
 										str2 = str.substring(str.indexOf("\\")+1);
@@ -624,6 +645,10 @@ public class ImportManager extends CommonInc{
 												emp_id = employees.get(str2);
 										}
 								}
+								str = rs.getString(7); // description
+								// we do not import data with error in the description
+								// such as 'Window computer with error'
+								if(str != null && str.indexOf("error") > -1) continue;
 								str2 = rs.getString(8); // device_type
 								if(str2 != null){
 										if(types.containsKey(str2)){
@@ -693,16 +718,22 @@ public class ImportManager extends CommonInc{
 																				// skip purchase date
 																				null,// purchase price
 																				null, // inventory_date
-																				null // replace_asset_num
+																				null, // replace_asset_num
+																				false  // voided
 																				); 
 								one.setLocationFlag(loc_flag);
-								if(oldSet != null && oldSet.contains(id)){
+								if(devHash != null && devHash.containsKey(name)){
+										int id = devHash.get(name);
+										devIdHash.put(ext_id, id);
+										// System.err.println(name+" found "+id);
+										one.setId(""+id);
 										if(loc_flag)										
 												back = one.updateImport(pstmt3);
 										else
 												back = one.updateImport(pstmt30);
 								}
 								else{
+										// System.err.println("not found "+name);
 										back = one.saveImport(pstmt2);
 								}
 								if(!back.equals("")){
@@ -764,7 +795,6 @@ public class ImportManager extends CommonInc{
 				PreparedStatement pstmt = null, pstmt2=null, pstmt3=null;
 				ResultSet rs = null;
 				Set<Integer> oldSet = getOldMonitorSet();
-				Hashtable<Integer, Integer> table = getDeviceHash();
 				String qq = " select id,computer_id,name,null,serial_number,"+
 						" null,model_name,monitor_type,screen_width,screen_height,"+
 						" manufacturer,manufacturer_date,null,null,null,"+
@@ -811,8 +841,8 @@ public class ImportManager extends CommonInc{
 								if(oldSet.contains(external_id)){
 										found = true;
 								}
-								if(table.containsKey(old_device_id)){
-										device_id = ""+table.get(old_device_id);
+								if(devIdHash.containsKey(old_device_id)){
+										device_id = ""+devIdHash.get(old_device_id);
 								}
 								Monitor one = new Monitor(debug,
 																					null, // id
@@ -972,7 +1002,6 @@ public class ImportManager extends CommonInc{
 				PreparedStatement pstmt = null, pstmt2=null, pstmt3=null;
 				ResultSet rs = null;
 				Set<Integer> oldSet = getOldPrinterSet();
-				Hashtable<Integer, Integer> table = getDeviceHash();				
 				String qq = " select id,name,computer_id,print_processor,printer_device,updated_on from printers where not (print_processor like 'win%' or print_processor like 'mod%')";
 				//
 				// asset_num = null
@@ -1015,8 +1044,8 @@ public class ImportManager extends CommonInc{
 								if(oldSet.contains(external_id)){
 										found = true;
 								}
-								if(table.containsKey(old_device_id)){
-										device_id = ""+table.get(old_device_id);
+								if(devIdHash.containsKey(old_device_id)){
+										device_id = ""+devIdHash.get(old_device_id);
 								}								
 								Printer one = new Printer(debug, null,""+external_id, null, str2, device_id, str4, str5, date,"Active", null, null, null, null);
 								if(found){
@@ -1028,7 +1057,6 @@ public class ImportManager extends CommonInc{
 								if(!back.equals("")){
 										msg += back;
 								}
-								// System.err.println(external_id+" "+str2+" "+old_device_id+" "+str4+" "+str5+" "+str6);
 						}
 				}
 				catch(Exception ex){
@@ -1386,7 +1414,7 @@ public class ImportManager extends CommonInc{
 				String qq2 = " insert into software_installations values(0,?,?,?,?,?,null)";
 				String qq3 = " update software_installations set software_id=?,device_id=?,license_id=? where external_id=? ";
 				Set<Integer> oldSet = getOldInstallationSet();
-				Hashtable<Integer, Integer> deviceTable = getDeviceHash();
+				// Hashtable<Integer, Integer> deviceTable = getDeviceHash();
 				Hashtable<Integer, Integer> softwareTable = getSoftwareHash();
 				Hashtable<Integer, Integer> licenseTable = getLicenseHash();
 				con = Helper.getConnectionSqlite(sqliteDbFile);
@@ -1429,8 +1457,8 @@ public class ImportManager extends CommonInc{
 								if(softwareTable.containsKey(old_soft_id)){
 										new_soft_id = ""+softwareTable.get(old_soft_id);
 								}
-								if(deviceTable.containsKey(old_device_id)){
-										new_device_id = ""+deviceTable.get(old_device_id);
+								if(devIdHash.containsKey(old_device_id)){
+										new_device_id = ""+devIdHash.get(old_device_id);
 								}
 								if(licenseTable.containsKey(old_lic_id)){
 										new_lic_id = ""+licenseTable.get(old_lic_id);

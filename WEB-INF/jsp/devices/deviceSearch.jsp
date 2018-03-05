@@ -89,7 +89,11 @@
 	</dl>
 	<dl class="fn1-output-field">
 		<dt>Status </dt>
-		<dd><s:radio name="deviceList.status" value="%{deviceList.status}" list="#{'-1':'All','Active':'Active','Donated':'Donated','Recycled':'Recycled','Auctioned':'Auctioned','Disposed':'Discarded'}" /> </dd>
+		<dd><s:radio name="deviceList.status" value="%{deviceList.status}" list="#{'-1':'All','Active':'Active','Donated':'Donated','Recycled':'Recycled','Auctioned':'Auctioned','Disposed':'Discarded'}" /></dd>
+	</dl>
+	<dl class="fn1-output-field">
+		<dt>Include </dt>	
+		<dd><s:checkbox name="deviceList.includeVoided" value="%{deviceList.includeVoided}" /> Voided devices </dd>
 	</dl>
 	<dl class="fn1-output-field">
 		<dt>Inventory Status</dt>

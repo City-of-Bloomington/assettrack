@@ -39,7 +39,15 @@ public class Item extends CommonInc{
     }
     public Item(boolean deb){
 				super(deb);
-    }		
+    }
+		public Item(boolean deb, String val){
+
+				super(deb);
+				//
+				// initialize
+				//
+				setId(val);
+    }			
 		public Item(boolean deb, String val, String val2, String val3){
 
 				super(deb);

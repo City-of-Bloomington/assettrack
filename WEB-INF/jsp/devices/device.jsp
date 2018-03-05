@@ -57,6 +57,10 @@
 				<dd><s:textfield name="device.asset_num" value="%{device.asset_num}" size="10" maxlength="10" id="asset_num" /> </dd>
 			</dl>
 			<dl class="fn1-output-field">
+				<dt>Mark as </dt>
+				<dd><s:checkbox name="device.voided" value="%{device.voided}" /> Void (for duplicates)</dd>
+			</dl>			
+			<dl class="fn1-output-field">
 				<dt>Replaces Asset Num</dt>
 				<dd><s:textfield name="device.replace_asset_num" value="%{device.replace_asset_num}" size="10" maxlength="10" /> </dd>
 			</dl>			
@@ -100,6 +104,7 @@
 				<dd><s:property value="%{device.status}" /> 
 				</dd>
 			</dl>
+			
 		</div>
 		<div class="tt-split-container">		
 			<dl class="fn1-output-field">

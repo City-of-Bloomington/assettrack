@@ -26,6 +26,7 @@ public class DeviceList extends CommonInc{
 				exclude_id="", ip_address="", mac_address="", inventory_status="",
 				year="";
 		String limit ="30";
+		boolean includeVoided = false;
 		//
 		// we need this flag to help find the devices that can be auctioned
 		// this could be disposed devices or warranty expired and not list in
@@ -236,6 +237,14 @@ public class DeviceList extends CommonInc{
 				if(val != null)
 						limit = val;
 		}
+		public void setIncludeVoided(boolean val){
+				if(val)
+					 includeVoided = true;
+				
+		}
+		public boolean getIncludeVoided(){
+				return includeVoided;
+		}
 		public void setNoLimit(){
 				limit = "";
 		}
@@ -255,7 +264,8 @@ public class DeviceList extends CommonInc{
 						" d.location_id,d.division_id,d.domain_id,"+
 						" d.status,d.processor,d.ram,d.hd_size,d.notes,"+
 						" d.mac_address,d.ip_address,d.editable,d.related_id,d.cost, "+
-						" date_format(d.inventory_date, '%m/%d/%Y'),d.replace_asset_num "+
+						" date_format(d.inventory_date, '%m/%d/%Y'),d.replace_asset_num, "+
+						" d.voided "+
 						" from devices d left join divisions v on d.division_id=v.id  ";
 				String qw = "";
 				if(con == null){
@@ -264,10 +274,17 @@ public class DeviceList extends CommonInc{
 						return back;
 				}
 				try{
+						if(!includeVoided){
+								qw += " d.voided is null ";
+						}
+						else
+								qw += " d.voided is not null ";
 						if(!id.equals("")){
+								if(!qw.equals("")) qw += " and ";
 								qw += " d.id = ? ";
 						}
 						else if(!external_id.equals("")){
+								if(!qw.equals("")) qw += " and ";
 								qw += " d.external_id = ? ";
 						}
 						else if(!asset_num.equals("")){
@@ -276,6 +293,7 @@ public class DeviceList extends CommonInc{
 						}														
 						else {
 								if(!dept_id.equals("")){
+										if(!qw.equals("")) qw += " and ";
 										qw += " v.dept_id = ? ";
 								}
 								if(!related_id.equals("")){
@@ -438,27 +456,33 @@ public class DeviceList extends CommonInc{
 																				rs.getString(3),
 																				rs.getString(4),
 																				rs.getString(5),
+																				
 																				rs.getString(6),
 																				rs.getString(7),
 																				rs.getString(8),
 																				rs.getString(9),
 																				rs.getString(10),
+																				
 																				rs.getString(11),
 																				rs.getString(12),
 																				rs.getString(13),
 																				rs.getString(14),
 																				rs.getString(15),
+																				
 																				rs.getString(16),
 																				rs.getString(17),
 																				rs.getString(18),
 																				rs.getString(19),
 																				rs.getString(20),
+																				
 																				rs.getString(21),
 																				rs.getString(22),
 																				rs.getString(23),
 																				rs.getString(24),
 																				rs.getString(25),
-																				rs.getString(26)
+																				
+																				rs.getString(26),
+																				rs.getString(27) != null
 																		);
 								devices.add(one);
 						}

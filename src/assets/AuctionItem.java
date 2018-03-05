@@ -29,6 +29,10 @@ public class AuctionItem extends Item{
 				// initialize
 				//
     }
+		public AuctionItem(boolean deb, String val){
+
+				super(deb, val);
+    }		
 		public AuctionItem(boolean deb, String val, String val2){
 
 				super(deb);
@@ -38,23 +42,6 @@ public class AuctionItem extends Item{
 				setAuction_id(val);
 				setAsset_id(val2);
     }
-		/*
-		public AuctionItem(boolean deb,
-											 String val,
-											 String val2,
-											 String val3,
-											 String val4,
-											 String val5,
-											 String val6){
-				super(deb, val, val2, val3, val4, null); // no date for auction
-
-				//
-				// initialize
-				//
-				setAuction_id(val);
-				setDescription(val5);
-    }
-		*/
 		public AuctionItem(boolean deb,
 											 String val,  // id
 											 String val2, // asset_id

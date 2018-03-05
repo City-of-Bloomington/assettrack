@@ -24,7 +24,10 @@ public class DiscardItem extends Item{
 		public DiscardItem(boolean deb) {
 				super(deb);
 		}
-		
+		public DiscardItem(boolean deb,
+											 String val){
+				super(deb, val);
+		}			
 		public DiscardItem(boolean deb,
 											 String val,
 											 String val2,

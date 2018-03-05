@@ -27,9 +27,12 @@ public class DisposeItem extends Item{
 
 				super();
 				//
-				// initialize
-				//
     }
+		public DisposeItem(boolean deb,
+											 String val){
+
+				super(deb, val);
+		}
 		public DisposeItem(boolean deb,
 											 String val,
 											 String val2,

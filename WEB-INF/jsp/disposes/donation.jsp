@@ -96,6 +96,7 @@
 	</s:if>
 	<s:else>
 		<s:submit name="action" type="button" value="Save Changes" class="fn1-btn"/>
+		<a href="<s:property value='#application.url'/>changeDispose.action?id=<s:property value='item.id' />&method_from=Donation" class="fn1-btn"> Change Dispose Method</a>			
 	</s:else>
 </s:form>
 <s:if test="item.id == '' && donations != null">

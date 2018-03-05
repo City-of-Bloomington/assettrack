@@ -30,7 +30,7 @@ public class Device extends CommonInc{
 				service_tag="", express_service_tag="", category_id="", installed="",
 				warranty_expire="",location_id="", processor="", ram="", hd_size="",
 				division_id="",domain_id="",status="Active", notes="", age_length="3",
-				mac_address="",ip_address="", cost="", inventory_date="", replace_asset_num="";
+				mac_address="",ip_address="", cost="", inventory_date="", replace_asset_num="", voided="";
 		String old_replace_asset_num=""; 
 		String user_id="", employee_id="", related_id="";
 		//
@@ -85,7 +85,9 @@ public class Device extends CommonInc{
 									String _related_id,
 									String _cost,
 									String _inventor_date,
-									String _replace_asset_num
+									
+									String _replace_asset_num,
+									boolean _voided
 									) {
 				debug = deb;
 				setId(_id);
@@ -93,29 +95,35 @@ public class Device extends CommonInc{
 				setName(_name);
 				setAsset_num(_asset_num);
 				setSerial_num(_serial_num);
+				
 				setModel(_model);
 				setEmployee_id(_employee_id);
 				setDescription(_description);
 				setCategory_id(_category_id);
 				setInstalled(_installed);
+				
 				setAge_length(_age_length);
 				setLocation_id(_location_id);
 				setDivision_id(_division_id);
 				setDomain_id(_domain_id);
-				setStatus(_status);				
+				setStatus(_status);
+				
 				setProcessor(_processor);
 				setRam(_ram);
 				setHd_size(_hd_size);
 				setNotes(_notes);
 				setMac_address(_mac_address);
+				
 				setIp_address(_ip_address);
 				setEditable(_editable);
 				setRelated_id(_related_id);
 				setCost(_cost);
 				setInventory_date(_inventor_date);
+				
 				setReplace_asset_num(_replace_asset_num);
 				// we need this to compare if new one is set
 				setOld_replace_asset_num(_replace_asset_num);
+				setVoided(_voided);
 		}	
 	
 		public String getId() {
@@ -137,6 +145,9 @@ public class Device extends CommonInc{
 		public String getName() {
 				return name;
 		}
+		public boolean getVoided() {
+				return !voided.equals("");
+		}		
 		public String getSerial_num() {
 				return serial_num;
 		}
@@ -213,7 +224,8 @@ public class Device extends CommonInc{
 		}
 		public String getReplace_asset_num() {
 				return replace_asset_num;
-		}		
+		}
+		
 		//
 		// setters
 		//
@@ -340,6 +352,11 @@ public class Device extends CommonInc{
 						cost = val;
 				}
 		}
+		public void setVoided(boolean val) {
+				if(val){
+						voided = "y";
+				}
+		}		
 		public void setInventory_date(String val) {
 				if(val != null){
 						inventory_date = val;
@@ -528,45 +545,46 @@ public class Device extends CommonInc{
 				String msg = "";
 				try{
 						int jj=1;
-						pstmt.setString(jj++, external_id); 
+						pstmt.setString(jj++, external_id);  // 1
 						if(name.equals(""))
 								pstmt.setNull(jj++, Types.VARCHAR);
 						else
-								pstmt.setString(jj++, name);
+								pstmt.setString(jj++, name);  // 2
 						if(serial_num.equals(""))
 								pstmt.setNull(jj++,Types.VARCHAR);
 						else
-								pstmt.setString(jj++,serial_num);
+								pstmt.setString(jj++,serial_num); // 3
 						if(model.equals(""))
 								pstmt.setNull(jj++,Types.VARCHAR);
 						else
-								pstmt.setString(jj++,model);
+								pstmt.setString(jj++,model); // 4
 						//
 						if(employee_id.equals(""))
 								pstmt.setNull(jj++,Types.VARCHAR);
 						else
-								pstmt.setString(jj++,employee_id);
+								pstmt.setString(jj++,employee_id); // 5
 						if(description.equals(""))
 								pstmt.setNull(jj++,Types.VARCHAR);
 						else
-								pstmt.setString(jj++,description);
+								pstmt.setString(jj++,description); // 6
 						if(category_id.equals(""))
 								pstmt.setNull(jj++,Types.VARCHAR);
 						else
-								pstmt.setString(jj++,category_id);
+								pstmt.setString(jj++,category_id); //7 
 						// 
 						if(installed.equals(""))
 								pstmt.setNull(jj++,Types.DATE);
 						else
-								pstmt.setString(jj++, installed);	// as text
+								pstmt.setString(jj++, installed);	// // 8
 						if(location_id.equals(""))
 								pstmt.setNull(jj++,Types.INTEGER);
 						else
-								pstmt.setString(jj++,location_id);
+								pstmt.setString(jj++,location_id); // 9
 						if(domain_id.equals(""))
 								pstmt.setNull(jj++,Types.INTEGER);
 						else
-								pstmt.setString(jj++,domain_id);
+								pstmt.setString(jj++,domain_id); // 10
+						
 						if(processor.equals(""))
 								pstmt.setNull(jj++,Types.VARCHAR);
 						else
@@ -594,10 +612,10 @@ public class Device extends CommonInc{
 				String msg = "";
 				try{
 						int jj=1;
-						if(name.equals(""))
-								pstmt.setNull(jj++, Types.VARCHAR);
+						if(external_id.equals(""))
+								pstmt.setNull(jj++, Types.INTEGER);
 						else
-								pstmt.setString(jj++, name);
+								pstmt.setString(jj++, external_id);
 						if(serial_num.equals(""))
 								pstmt.setNull(jj++,Types.VARCHAR);
 						else
@@ -620,9 +638,6 @@ public class Device extends CommonInc{
 						else
 								pstmt.setString(jj++,category_id);
 						if(locationFlag){
-								//if(location_id.equals(""))
-								//	pstmt.setNull(jj++, Types.INTEGER);
-								// else
 								pstmt.setString(jj++, location_id);
 						}
 						if(domain_id.equals(""))
@@ -646,10 +661,10 @@ public class Device extends CommonInc{
 								pstmt.setNull(jj++,Types.VARCHAR);
 						else
 								pstmt.setString(jj++,ip_address);
-						pstmt.setString(jj++, external_id); 
+						pstmt.setString(jj++, id); 
 						pstmt.executeUpdate();
 				}catch(Exception ex){
-						msg += " update "+external_id+" "+ex;
+						msg += " update "+id+" "+ex;
 						logger.error(msg);
 				}
 				return msg;
@@ -666,8 +681,8 @@ public class Device extends CommonInc{
 						"?,?,?,?,?,"+
 						"?,?,?,?,?,"+
 						"?,?,?,?,?,"+			
-						"?,?,?,?,'y',?,?,"+
-						"?,?)"; // inventory_date, replace #
+						"?,?,?,?,'y',"+
+						"?,?,?,?,null)"; // inventory_date, replace #
 				editable = "y";
 				con = Helper.getConnection();
 				if(con == null){
@@ -816,7 +831,11 @@ public class Device extends CommonInc{
 						if(replace_asset_num.equals(""))
 								pstmt.setNull(jj++,Types.VARCHAR);
 						else
-								pstmt.setString(jj++,replace_asset_num);						
+								pstmt.setString(jj++,replace_asset_num);
+						if(voided.equals(""))
+								pstmt.setNull(jj++,Types.CHAR);
+						else
+								pstmt.setString(jj++,"y");						
 				}
 				catch(Exception ex){
 						logger.error(ex);
@@ -920,7 +939,8 @@ public class Device extends CommonInc{
 								"category_id=?,installed=?,age_length=?, "+
 								"location_id=?,division_id=?,domain_id=?,status=?,processor=?, "+
 								"ram=?,hd_size=?,notes=?,mac_address=?,ip_address=?,"+
-								"related_id=?,cost=?,inventory_date=?,replace_asset_num=? "+
+								"related_id=?,cost=?,inventory_date=?,replace_asset_num=?, "+
+								"voided=? "+
 								"where id=?";
 						
 						if(debug){
@@ -929,7 +949,7 @@ public class Device extends CommonInc{
 						pstmt = con.prepareStatement(qq);
 						back = fillPStatement(pstmt);
 						if(back.equals("")){
-								pstmt.setString(25,id); // 24 - 1 (editable)
+								pstmt.setString(26,id); // 24 - 1 (editable)
 								pstmt.executeUpdate();
 						}
 						DeviceHistory ih = new DeviceHistory(debug, null, id, status, null,user_id);
@@ -967,7 +987,7 @@ public class Device extends CommonInc{
 						qq = "update devices set "+
 								"asset_num=?, age_length=?, "+
 								"division_id=?, notes=?, location_id=?, related_id=?, "+
-								"inventory_date=?, replace_asset_num=? "+
+								"inventory_date=?, replace_asset_num=?,voided=? "+
 								"where id=?";
 						if(debug){
 								logger.debug(qq);
@@ -1002,8 +1022,12 @@ public class Device extends CommonInc{
 						if(replace_asset_num.equals(""))
 								pstmt.setNull(jj++,Types.VARCHAR);
 						else
-								pstmt.setString(jj++,replace_asset_num);						
-						pstmt.setString(9, id); 
+								pstmt.setString(jj++,replace_asset_num);
+						if(voided.equals(""))
+								pstmt.setNull(jj++,Types.CHAR);
+						else
+								pstmt.setString(jj++,"y");						
+						pstmt.setString(10, id); 
 						pstmt.executeUpdate();
 						status="Active";
 						DeviceHistory ih = new DeviceHistory(debug, null, id, status, null,user_id);
@@ -1113,7 +1137,7 @@ public class Device extends CommonInc{
 						"location_id,division_id,domain_id,status, "+
 						"processor,ram,hd_size,notes,mac_address,ip_address,editable, "+
 						"related_id,cost, "+
-						"date_format(inventory_date,'%m/%d/%Y'),replace_asset_num "+
+						"date_format(inventory_date,'%m/%d/%Y'),replace_asset_num,voided "+
 						" from devices where id=?";
 				con = Helper.getConnection();
 				if(con == null){
@@ -1157,6 +1181,7 @@ public class Device extends CommonInc{
 										setReplace_asset_num(rs.getString(25));
 										// replica
 										setOld_replace_asset_num(rs.getString(25));
+										setVoided(rs.getString(26) != null);
 								}
 								else{
 										return "Record "+id+" Not found";

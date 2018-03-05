@@ -130,6 +130,13 @@
 			<result name="error">/WEB-INF/jsp/disposes/dispose.jsp</result>
 			<result name="success">/WEB-INF/jsp/disposes/dispose.jsp</result>
 		</action>
+		<action name="changeDispose" 
+						class="assets.DisposeChangeAction" 
+						method="execute">
+			<result name="input">/WEB-INF/jsp/disposes/changeDispose.jsp</result>		
+			<result name="error">/WEB-INF/jsp/disposes/changeDispose.jsp</result>
+			<result name="success">/WEB-INF/jsp/disposes/changeDispose.jsp</result>
+		</action>		
 		<action name="doUpload" 
 						class="assets.UploadAction" 
 						method="execute">

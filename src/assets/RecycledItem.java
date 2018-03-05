@@ -31,6 +31,10 @@ public class RecycledItem extends Item{
 				//
     }
 		public RecycledItem(boolean deb,
+												String val){
+				super(deb, val);
+    }			
+		public RecycledItem(boolean deb,
 												String val,
 												String val2,
 												String val3,

@@ -27,10 +27,14 @@ public class Donation extends Item{
     public Donation(){
 				super();
     }
+		public Donation(boolean deb, String val){
+				super(deb, val);
+    }		
 		public Donation(boolean deb, String val, String val2, String val3){
 
 				super(deb, val, val2, val3);
-    }	
+    }
+		
 		public Donation(boolean deb,
 										String val,
 										String val2,

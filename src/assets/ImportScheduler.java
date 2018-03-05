@@ -40,8 +40,8 @@ public class ImportScheduler implements ServletContextListener{
 				try{
 						Calendar cal = new GregorianCalendar();
 						cal.set(year, (month-1), day);
-						cal.set(Calendar.HOUR_OF_DAY, 23);//to run at 11pm of the specified day
-						cal.set(Calendar.MINUTE, 0);
+						cal.set(Calendar.HOUR_OF_DAY, 7);//to run at 7:45 am of the specified day
+						cal.set(Calendar.MINUTE, 45);
 						startDate = cal.getTime();
 						if(sqliteDbFile == null){
 								ServletContext ctx = sce.getServletContext();
