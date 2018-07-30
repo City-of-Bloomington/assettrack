@@ -832,10 +832,12 @@ public class Device extends CommonInc{
 								pstmt.setNull(jj++,Types.VARCHAR);
 						else
 								pstmt.setString(jj++,replace_asset_num);
-						if(voided.equals(""))
-								pstmt.setNull(jj++,Types.CHAR);
-						else
-								pstmt.setString(jj++,"y");						
+						if(!id.equals("")){
+								if(voided.equals(""))
+										pstmt.setNull(jj++,Types.CHAR);
+								else
+										pstmt.setString(jj++,"y");
+						}
 				}
 				catch(Exception ex){
 						logger.error(ex);
