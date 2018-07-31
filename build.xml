@@ -121,7 +121,7 @@
 -->
   <property name="src.home"      value="${basedir}/src"/>
   <property name="web.home"      value="${basedir}/web"/>
-  <property name="tomcat.home"      value="c:/tomcat7"/>
+  <property name="tomcat.home"      value="c:/tomcat"/>
 
 <!-- ================== Custom Ant Task Definitions ======================= -->
 
