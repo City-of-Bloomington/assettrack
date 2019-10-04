@@ -178,8 +178,7 @@ public class DonationList extends CommonInc{
 						" o.name name, "+
 						" d.type type, "+
 						" date_format(d.date,'%m/%d/%Y') date,"+						
-						" count(*), "+
-						" sum(d.value) total "+
+						" count(*) "+
 						" from donations d,organizations o ";
 				String qw = " d.organization_id=o.id ";
 				if(con == null){
@@ -223,8 +222,8 @@ public class DonationList extends CommonInc{
 								}								
 								rs = pstmt.executeQuery();
 								while(rs.next()){
-										String[] arr = new String[5];
-										for(int i=0;i<5;i++){
+										String[] arr = new String[4];
+										for(int i=0;i<4;i++){
 												String str = rs.getString(i+1);
 												if(str != null){
 														arr[i] = str;

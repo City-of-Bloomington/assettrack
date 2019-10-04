@@ -14,7 +14,6 @@
 			<th align="center"><b>Type</b></th>
 			<th align="center"><b>Date</b></th>
 			<th align="center"><b>Count</b></th>
-			<th align="center"><b>Total Value ($)</b></th>
 		</tr>
 	</thead>
 	<tbody>

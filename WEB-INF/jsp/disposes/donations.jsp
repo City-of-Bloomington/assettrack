@@ -9,69 +9,27 @@
 <table class="stats" width="100%">	
 	<caption><s:property value="#itemsTitle" /></caption>
 	<tr>
-		<s:if test="lot.lotOpt.asset_id">
-			<td><b>Asset ID</b></td>
-		</s:if>
-		<s:if test="lot.lotOpt.asset_num">		
-			<td><b>Asset Num</b></td>
-		</s:if>
-		<s:if test="lot.lotOpt.serial_num">				
-			<td><b>Serial #</b></td>
-		</s:if>
-		<s:if test="lot.lotOpt.name">						
-			<td><b>Name</b></td>
-		</s:if>
-		<s:if test="lot.lotOpt.category">						
-			<td><b>Category</b></td>
-		</s:if>
-		<s:if test="lot.lotOpt.division">			
-			<td><b>Division</b></td>
-		</s:if>
-		<s:if test="lot.lotOpt.installed">						
-			<td><b>Installed Date</b></td>
-		</s:if>
-		<s:if test="lot.lotOpt.organization">						
-			<td><b>Organization</b></td>
-		</s:if>
-		<s:if test="lot.lotOpt.date">						
-			<td><b>Date</b></td>
-		</s:if>
-		<s:if test="lot.lotOpt.value">						
-			<td><b>Value</b></td>
-		</s:if>			
+		<td><b>Asset ID</b></td>
+		<td><b>Asset Num</b></td>
+		<td><b>Serial #</b></td>
+		<td><b>Name</b></td>
+		<td><b>Category</b></td>
+		<td><b>Division</b></td>
+		<td><b>Installed Date</b></td>
+		<td><b>Organization</b></td>
+		<td><b>Date</b></td>
 	</tr>
 	<s:iterator var="one" value="#items">
 		<tr>
-			<s:if test="lot.lotOpt.asset_id">			
-				<td><a href="<s:property value='#application.url' />donation.action?id=<s:property value='id' />"><s:property value="asset_id" /> </a></td>
-			</s:if>
-			<s:if test="lot.lotOpt.asset_num">						
-				<td><s:property value="asset_num" /></td>
-			</s:if>
-			<s:if test="lot.lotOpt.serial_num">						
-				<td><s:property value="serial_num" /></td>
-			</s:if>
-			<s:if test="lot.lotOpt.name">						
-				<td><s:property value="name" /></td>
-			</s:if>
-			<s:if test="lot.lotOpt.category">						
-				<td><s:property value="categoryName" /></td>
-			</s:if>
-			<s:if test="lot.lotOpt.division">						
-				<td><s:property value="divisionName" /></td>
-			</s:if>
-			<s:if test="lot.lotOpt.installed">						
-				<td><s:property value="installed" /></td>
-			</s:if>
-			<s:if test="lot.lotOpt.organization">						
-				<td><s:property value="organ" /></td>
-			</s:if>
-			<s:if test="lot.lotOpt.date">		
-				<td><s:property value="date" /></td>
-			</s:if>
-			<s:if test="lot.lotOpt.value">						
-				<td><s:property value="value" /></td>
-			</s:if>
+			<td><a href="<s:property value='#application.url' />donation.action?id=<s:property value='id' />"><s:property value="asset_id" /> </a></td>
+			<td><s:property value="asset_num" />&nbsp;</td>
+			<td><s:property value="serial_num" />&nbsp;</td>
+			<td><s:property value="name" />&nbsp;</td>
+			<td><s:property value="categoryName" />&nbsp;</td>
+			<td><s:property value="divisionName" />&nbsp;</td>
+			<td><s:property value="installed" />&nbsp;</td>
+			<td><s:property value="organ" />&nbsp;</td>
+			<td><s:property value="date" />&nbsp;</td>
 		</tr>
 	</s:iterator>
 </table>

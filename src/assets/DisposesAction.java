@@ -29,6 +29,7 @@ public class DisposesAction extends TopAction{
 		boolean showDiscards = true, showAuctions = true,
 				showRecycles = true, showDonations = true;
 		String date_from="", date_to="", lot_id="";
+		String date_range = "";
 		public String execute(){
 				String ret = SUCCESS;
 				String back = doPrepare();
@@ -40,7 +41,10 @@ public class DisposesAction extends TopAction{
 								return super.execute();
 						}catch(Exception ex){
 								System.err.println(ex);
-						}	
+						}
+				}
+				if(!date_from.equals("") && !date_to.equals("")){
+						date_range = date_from+" - "+date_to;
 				}
 				return ret;
 		}
@@ -98,19 +102,19 @@ public class DisposesAction extends TopAction{
 				return items4;
 		}
 		public String getAuctionItemsTitle(){
-				return auctionItemsTitle;
+				return auctionItemsTitle+" "+date_range;
 		}
 		public String getDiscardsTitle(){
-				return discardsTitle;
+				return discardsTitle+" "+date_range;
 		}
 		public String getDonationsTitle(){
-				return donationsTitle;
+				return donationsTitle+" "+date_range;
 		}
 		public String getDonationsReportTitle(){
-				return donationsReportTitle;
+				return donationsReportTitle+" "+date_range;
 		}		
 		public String getRecyclesTitle(){
-				return recyclesTitle;
+				return recyclesTitle+" "+date_range;
 		}
 		
 		public boolean getShowRecycles(){

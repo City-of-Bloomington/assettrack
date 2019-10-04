@@ -30,7 +30,7 @@ public class RecycledItemList extends CommonInc{
 				setLocation_id(val2);
 		}
 		public void setLocation_id(String val){
-				if(val != null)
+				if(val != null && !val.equals("-1"))
 						location_id = val;
 		}
 		public void setAsset_id(String val){
@@ -38,7 +38,7 @@ public class RecycledItemList extends CommonInc{
 						asset_id = val;
 		}
 		public void setLot_id(String val){
-				if(val != null)
+				if(val != null && !val.equals("-1"))
 						lot_id = val;
 		}		
 		public void setType(String val){

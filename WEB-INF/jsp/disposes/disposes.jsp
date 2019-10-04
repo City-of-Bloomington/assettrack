@@ -40,28 +40,29 @@
 	</div>
 	<s:submit name="action" type="button" value="Submit" class="fn1-btn"/></dd>
 </s:form>			
-
-<s:if test="showAuctions && items != null">
-	<s:set var="items" value="items" />
-	<s:set var="itemsTitle" value="auctionItemsTitle" />
-	<%@  include file="auctionItems.jsp" %>
-</s:if>
-<s:if test="showDiscards && items2 != null">
-	<s:set var="items" value="items2" />
-	<s:set var="itemsTitle" value="discardsTitle" />
-	<%@  include file="discards.jsp" %>
-</s:if>
-<s:if test="showDonations && items3 != null">
-	<s:set var="items" value="items3" />
-	<s:set var="itemsTitle" value="donationsTitle" />
-	<%@  include file="donations.jsp" %>
-	<s:set var="donItems" value="donationData" />
-	<s:set var="donationsReportTitle" value="donationsReportTitle" />
-	<%@  include file="donationReport.jsp" %>	
-</s:if>
-<s:if test="showRecycles && items4 != null">
-	<s:set var="items" value="items4" />
-	<s:set var="itemsTitle" value="recyclesTitle" />
-	<%@  include file="recycles.jsp" %>
+<s:if test="action != ''">
+	<s:if test="showAuctions && items != null">
+		<s:set var="items" value="items" />
+		<s:set var="itemsTitle" value="auctionItemsTitle" />
+		<%@  include file="auctionItems.jsp" %>
+	</s:if>
+	<s:if test="showDiscards && items2 != null">
+		<s:set var="items" value="items2" />
+		<s:set var="itemsTitle" value="discardsTitle" />
+		<%@  include file="discards.jsp" %>
+	</s:if>
+	<s:if test="showDonations && items3 != null">
+		<s:set var="items" value="items3" />
+		<s:set var="itemsTitle" value="donationsTitle" />
+		<%@  include file="donations.jsp" %>
+		<s:set var="donItems" value="donationData" />
+		<s:set var="donationsReportTitle" value="donationsReportTitle" />
+		<%@  include file="donationReport.jsp" %>	
+	</s:if>
+	<s:if test="showRecycles && items4 != null">
+		<s:set var="items" value="items4" />
+		<s:set var="itemsTitle" value="recyclesTitle" />
+		<%@  include file="recycles.jsp" %>
+	</s:if>
 </s:if>
 <%@  include file="../gui/footer.jsp" %>
