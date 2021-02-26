@@ -20,6 +20,10 @@
 	<p>Search Disposal Lots</p>
 	<div class="tt-row-container">
 		<dl class="fn1-output-field">
+			<dt>ID </dt>
+			<dd><s:textfield name="lotList.id" value="%{lotList.id}" size="8" maxlength="8"/> </dd>
+		</dl>		
+		<dl class="fn1-output-field">
 			<dt>Lot Status </dt>
 			<dd><s:radio name="lotList.status" value="%{lotList.status}" list="#{'-1':'All','Active':'Active','Approval':'Approval','Complete':'Complete'}"/> </dd>
 		</dl>
@@ -28,8 +32,8 @@
 			<dd><s:radio name="lotList.type" value="%{lotList.type}" list="#{'-1':'All','Donation':'Donation','Recycle':'Recycle','Auction':'Auction'}"/> </dd>
 		</dl>		
 		<dl class="fn1-output-field">
-			<dt>Lot </dt>
-			<dd><s:select name="lotList.id" value="%{lotList.id}" list="%{lots}" listKey="id" listValue="name" headerKey="-1" headerValue="Pick a Lot" required="true" /></dd>
+			<dt>Active Lot </dt>
+			<dd><s:select name="lotList.active_id" value="%{lotList.active_id}" list="%{activeLots}" listKey="id" listValue="name" headerKey="-1" headerValue="Pick a Lot" /></dd>
 		</dl>
 		<dl class="fn1-output-field">
 			<dt>Date, from </dt>

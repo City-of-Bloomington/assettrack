@@ -16,6 +16,7 @@ public class LotsAction extends TopAction{
 		static final long serialVersionUID = 1275L;	
 		static Logger logger = Logger.getLogger(LotsAction.class);
 		List<Lot> lots = null;
+		List<Lot> activeLots = null;		
 		LotList lotList = null;
 		String lotsTitle = "Most recent active lots";
 		public String execute(){
@@ -70,15 +71,26 @@ public class LotsAction extends TopAction{
 						lotList = new LotList(debug); 
 				}
 				return lotList;
-		}		
-		public void setAction2(String val){
+		}
+		@Override
+		public void setAction(String val){
 				if(val != null && !val.equals(""))		
 						action = val;
+		}
+		public List<Lot> getActiveLots(){
+				if(activeLots == null){
+						LotList ll = new LotList(debug);
+						ll.setStatus("Active");
+						String back = ll.find();
+						if(back.equals("")){
+								activeLots = ll.getLots();
+						}
+				}
+				return activeLots;
 		}
 		public List<Lot> getLots(){
 				if(lots == null){
 						LotList ll = new LotList(debug);
-						ll.setStatus("Active");
 						String back = ll.find();
 						if(back.equals("")){
 								lots = ll.getLots();

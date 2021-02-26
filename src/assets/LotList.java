@@ -15,12 +15,18 @@ public class LotList extends CommonInc{
 		static Logger logger = Logger.getLogger(LotList.class);
 		static final long serialVersionUID = 1075L;			
 		String date_from="", date_to="", id="", name="", status="", type="";
+		String active_id="";
 		String limit = " limit 10 ";
 		List<Lot> lots = null;
 		
     public String getId(){
 				return id;
     }
+    public String getActive_id(){
+				if(active_id.isEmpty())
+						return "-1";
+				return active_id;
+    }		
     public String getName(){
 				return name;
     }
@@ -42,9 +48,13 @@ public class LotList extends CommonInc{
     // setters
     //
     public void setId (String val){
-				if(val != null)
-						id = val.trim();
+				if(val != null && !val.isEmpty())
+						id = val;
     }
+    public void setActive_id (String[] vals){
+				if(vals != null && !vals[0].equals("-1"))
+						active_id = vals[0].trim();
+    }		
     public void setName (String val){
 				if(val != null)
 						name = val.trim();
@@ -96,30 +106,37 @@ public class LotList extends CommonInc{
 						addError(back);
 						return back;
 				}
-				if(!id.equals("")){
+				String id2 = "";
+				if(!active_id.isEmpty()){
+						id2 = active_id;
+				}
+				else if(!id.isEmpty()){
+						id2 = id;
+				}
+				if(!id2.isEmpty()){
 						qw += " id = ? ";
 				}
 				else {
-						if(!name.equals("")){
+						if(!name.isEmpty()){
 								qw += " name like ? ";
 						}
-						if(!type.equals("")){
+						if(!type.isEmpty()){
 								qw += " type = ? ";
 						}
-						if(!status.equals("")){
+						if(!status.isEmpty()){
 								qw += " status = ? ";
 						}								
-						if(!date_from.equals("")){
+						if(!date_from.isEmpty()){
 								if(!qw.equals("")) qw += " and ";
 								qw += " date >= str_to_date('"+date_from+"','%m/%d/%Y') ";
 						}
-						if(!date_to.equals("")){
+						if(!date_to.isEmpty()){
 								if(!qw.equals("")) qw += " and ";
 								qw += " date <= str_to_date('"+date_to+"','%m/%d/%Y') ";
 						}					
 				}
 				try{
-						if(!qw.equals("")){
+						if(!qw.isEmpty()){
 								qq += " where "+qw;
 						}
 						qq += " order by date DESC "+limit;
@@ -127,18 +144,18 @@ public class LotList extends CommonInc{
 								logger.debug(qq);
 						}
 						pstmt = con.prepareStatement(qq);
-						if(!id.equals("")){
-								pstmt.setString(1, id);
+						if(!id2.isEmpty()){
+								pstmt.setString(1, id2);
 						}
 						else {
 								int jj=1;
-								if(!name.equals("")){
+								if(!name.isEmpty()){
 										pstmt.setString(jj++, "%"+name+"%");
 								}
-								if(!type.equals("")){
+								if(!type.isEmpty()){
 										pstmt.setString(jj++, type);
 								}
-								if(!status.equals("")){
+								if(!status.isEmpty()){
 										pstmt.setString(jj++, status);
 								}
 						}
@@ -153,7 +170,8 @@ public class LotList extends CommonInc{
 														rs.getString(5));
 								if(lots == null)
 										lots = new ArrayList<Lot>();
-								lots.add(one);
+								if(!lots.contains(one))
+										lots.add(one);
 						}
 						if(lots == null || lots.size() == 0){
 								message= "No match found";
