@@ -1,0 +1,286 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts PUBLIC
+"-//Apache Software Foundation//DTD Struts Configuration 2.5//EN"
+"http://struts.apache.org/dtds/struts-2.5.dtd">
+
+<struts>
+  <constant name="struts.devMode" value="true" />
+   <constant name="struts.ui.theme" value="simple" />
+   <constant name="struts.action.excludePattern" value="/Login*,/AuctionService*,/UserService*,/DonationService*,/TypeService*,/SoftwareService*,/EmployeeService*,/doDownload*,/TicketStatsService*,/LotPrintPdf*,/LoginServlet*" />
+
+   <!-- to use this we need to use annotation
+	<constant name="struts.convention.result.path" value="/WEB-INF/jsp/" />
+   -->
+   <package name="default" extends="struts-default">
+
+     <!-- this is a global action that makes sure user is logged in -->
+		
+     <global-results>
+      <result name="login" type="redirect">welcome.action</result>
+     </global-results>
+		
+     <action name="home">
+       <interceptor-ref name="defaultStack"></interceptor-ref>
+       <result>/Login</result>
+     </action>
+     
+     <action name="logout" class="assets.action.LogoutAction">
+       <result>/WEB-INF/jsp/gui/welcome.jsp</result>
+     </action>	 
+     
+     <action name="welcome" class="assets.action.WelcomeAction">
+       <result name="success">/WEB-INF/jsp/gui/welcome.jsp</result>
+       <result name="error">/Login</result>			
+       <result name="login">/Login</result>	   
+     </action>
+     
+     <action name="dept" 
+	     class="assets.action.DeptAction" 
+	     method="execute">
+       <result>/WEB-INF/jsp/depts/dept.jsp</result>
+       <result name="error">/WEB-INF/jsp/depts/dept.jsp</result>
+     </action>
+     <action name="type" 
+	     class="assets.action.TypeAction" 
+	     method="execute">
+       <result>/WEB-INF/jsp/types/type.jsp</result>
+       <result name="error">/WEB-INF/jsp/types/type.jsp</result>
+     </action>
+     <action name="auction" 
+	     class="assets.action.AuctionAction" 
+	     method="execute">
+       <result>/WEB-INF/jsp/types/auction.jsp</result>
+       <result name="error">/WEB-INF/jsp/types/auction.jsp</result>
+     </action>
+     <action name="organization" 
+	     class="assets.action.OrganizationAction" 
+	     method="execute">
+       <result>/WEB-INF/jsp/types/organization.jsp</result>
+       <result name="error">/WEB-INF/jsp/types/organization.jsp</result>
+     </action>		
+     <action name="division" 
+	     class="assets.action.DivisionAction" 
+	     method="execute">
+       <result>/WEB-INF/jsp/depts/division.jsp</result>
+       <result name="error">/WEB-INF/jsp/depts/division.jsp</result>
+     </action>		
+     <action name="import" 
+	     class="assets.action.ImportAction" 
+	     method="execute">
+       <result>/WEB-INF/jsp/imports/import.jsp</result>
+       <result name="error">/WEB-INF/jsp/imports/import.jsp</result>
+       <result name="details">/WEB-INF/jsp/imports/importDetails.jsp</result>			
+     </action>		
+     <action name="device" 
+	     class="assets.action.DeviceAction" 
+	     method="execute">
+       <result name="input">/WEB-INF/jsp/devices/device.jsp</result>		
+       <result name="error">/WEB-INF/jsp/devices/device.jsp</result>
+       <result name="success">/WEB-INF/jsp/devices/device.jsp</result>
+       <result name="partial">/WEB-INF/jsp/devices/deviceEdit.jsp</result>
+       <result name="view">/WEB-INF/jsp/devices/deviceView.jsp</result>			
+     </action>
+     <action name="monitor" 
+	     class="assets.action.MonitorAction" 
+	     method="execute">
+       <result name="input">/WEB-INF/jsp/monitors/monitor.jsp</result>		
+       <result name="error">/WEB-INF/jsp/monitors/monitor.jsp</result>
+       <result name="success">/WEB-INF/jsp/monitors/monitor.jsp</result>
+       <result name="view">/WEB-INF/jsp/monitors/monitorView.jsp</result>
+       <result name="partial">/WEB-INF/jsp/monitors/monitorEdit.jsp</result>			
+     </action>
+     <action name="printer" 
+	     class="assets.action.PrinterAction" 
+	     method="execute">
+       <result name="input">/WEB-INF/jsp/printers/printer.jsp</result>		
+       <result name="error">/WEB-INF/jsp/printers/printer.jsp</result>
+       <result name="success">/WEB-INF/jsp/printers/printer.jsp</result>
+       <result name="view">/WEB-INF/jsp/printers/printerView.jsp</result>
+       <result name="partial">/WEB-INF/jsp/printers/printerEdit.jsp</result>			
+     </action>		
+     <action name="software" 
+	     class="assets.action.SoftwareAction" 
+	     method="execute">
+       <result name="input">/WEB-INF/jsp/softwares/software.jsp</result>		
+       <result name="error">/WEB-INF/jsp/softwares/software.jsp</result>
+       <result name="success">/WEB-INF/jsp/softwares/software.jsp</result>
+       <result name="view">/WEB-INF/jsp/softwares/softwareView.jsp</result>			
+     </action>
+     <action name="license" 
+	     class="assets.action.SoftwareLicenseAction" 
+	     method="execute">
+       <result name="input">/WEB-INF/jsp/softwares/license.jsp</result>		
+       <result name="error">/WEB-INF/jsp/softwares/license.jsp</result>
+       <result name="success">/WEB-INF/jsp/softwares/license.jsp</result>
+       <result name="view">/WEB-INF/jsp/softwares/licenseView.jsp</result>			
+     </action>
+     <action name="installation" 
+	     class="assets.action.SoftwareInstallationAction" 
+	     method="execute">
+       <result name="input">/WEB-INF/jsp/softwares/installation.jsp</result>		
+       <result name="error">/WEB-INF/jsp/softwares/installation.jsp</result>
+       <result name="success">/WEB-INF/jsp/softwares/installation.jsp</result>
+       <result name="view">/WEB-INF/jsp/softwares/installationView.jsp</result>
+     </action>
+     
+     <action name="dispose" 
+	     class="assets.action.DisposeAction" 
+	     method="execute">
+       <result name="input">/WEB-INF/jsp/disposes/dispose.jsp</result>		
+       <result name="error">/WEB-INF/jsp/disposes/dispose.jsp</result>
+       <result name="success">/WEB-INF/jsp/disposes/dispose.jsp</result>
+     </action>
+     <action name="changeDispose" 
+	     class="assets.action.DisposeChangeAction" 
+	     method="execute">
+       <result name="input">/WEB-INF/jsp/disposes/changeDispose.jsp</result>		
+       <result name="error">/WEB-INF/jsp/disposes/changeDispose.jsp</result>
+       <result name="success">/WEB-INF/jsp/disposes/changeDispose.jsp</result>
+     </action>		
+     <action name="doUpload" 
+	     class="assets.action.UploadAction" 
+	     method="execute">
+       <result name="input">/WEB-INF/jsp/attachments/fileUpload.jsp</result>		
+       <result name="error">/WEB-INF/jsp/attachments/fileUpload.jsp</result>
+       <result name="success">/WEB-INF/jsp/attachments/fileUpload.jsp</result>
+     </action>
+     <action name="attachSearch" 
+	     class="assets.action.AttachSearchAction" 
+	     method="execute">
+       <result name="input">/WEB-INF/jsp/attachments/search.jsp</result>		
+       <result name="error">/WEB-INF/jsp/attachments/search.jsp</result>
+       <result name="success">/WEB-INF/jsp/attachments/search.jsp</result>
+     </action>		
+     <action name="donation" 
+	     class="assets.action.DonationAction" 
+	     method="execute">
+       <result name="input">/WEB-INF/jsp/disposes/donation.jsp</result>		
+       <result name="error">/WEB-INF/jsp/disposes/donation.jsp</result>
+       <result name="success">/WEB-INF/jsp/disposes/donation.jsp</result>
+     </action>
+     <action name="auctionItem" 
+	     class="assets.action.AuctionItemAction" 
+	     method="execute">
+       <result name="input">/WEB-INF/jsp/disposes/auctionItem.jsp</result>		
+       <result name="error">/WEB-INF/jsp/disposes/auctionItem.jsp</result>
+       <result name="success">/WEB-INF/jsp/disposes/auctionItem.jsp</result>
+     </action>
+     <action name="recycle" 
+	     class="assets.action.RecycleAction" 
+	     method="execute">
+       <result name="input">/WEB-INF/jsp/disposes/recycle.jsp</result>		
+       <result name="error">/WEB-INF/jsp/disposes/recycle.jsp</result>
+       <result name="success">/WEB-INF/jsp/disposes/recycle.jsp</result>
+     </action>
+     <action name="discard" 
+	     class="assets.action.DiscardAction" 
+	     method="execute">
+       <result name="input">/WEB-INF/jsp/disposes/discard.jsp</result>		
+       <result name="error">/WEB-INF/jsp/disposes/discard.jsp</result>
+       <result name="success">/WEB-INF/jsp/disposes/discard.jsp</result>
+     </action>				
+     <action name="disposes" 
+	     class="assets.action.DisposesAction" 
+	     method="execute">
+       <result name="input">/WEB-INF/jsp/disposes/disposes.jsp</result>		
+       <result name="error">/WEB-INF/jsp/disposes/disposes.jsp</result>
+       <result name="success">/WEB-INF/jsp/disposes/disposes.jsp</result>
+     </action>
+     <action name="lot" 
+	     class="assets.action.LotAction" 
+	     method="execute">
+       <result name="input">/WEB-INF/jsp/disposes/lot.jsp</result>		
+       <result name="error">/WEB-INF/jsp/disposes/lot.jsp</result>
+       <result name="success">/WEB-INF/jsp/disposes/lot.jsp</result>
+       <result name="view">/WEB-INF/jsp/disposes/lotView.jsp</result>
+       <result name="print">/WEB-INF/jsp/disposes/lotPrint.jsp</result>			
+     </action>
+     <action name="lotOpt" 
+	     class="assets.action.LotOptAction" 
+	     method="execute">
+       <result name="input">/WEB-INF/jsp/disposes/lotOpt.jsp</result>		
+       <result name="error">/WEB-INF/jsp/disposes/lotOpt.jsp</result>
+       <result name="success">/WEB-INF/jsp/disposes/lotOpt.jsp</result>
+     </action>		
+     <action name="lots" 
+	     class="assets.action.LotsAction" 
+	     method="execute">
+       <result name="input">/WEB-INF/jsp/disposes/lotsSearch.jsp</result>		
+       <result name="error">/WEB-INF/jsp/disposes/lotsSearch.jsp</result>
+       <result name="success">/WEB-INF/jsp/disposes/lotsSearch.jsp</result>
+     </action>		
+     <action name="deviceSearch" 
+	     class="assets.action.DevicesAction" 
+	     method="execute">
+       <result name="input">/WEB-INF/jsp/devices/deviceSearch.jsp</result>		
+       <result name="error">/WEB-INF/jsp/devices/deviceSearch.jsp</result>
+       <result name="success">/WEB-INF/jsp/devices/deviceSearch.jsp</result>
+       <result name="csv">/WEB-INF/jsp/devices/devicesCsv.jsp</result>			
+     </action>
+     <action name="report" 
+	     class="assets.action.ReportAction" 
+	     method="execute">
+       <result name="input">/WEB-INF/jsp/devices/report.jsp</result>		
+       <result name="error">/WEB-INF/jsp/devices/report.jsp</result>
+       <result name="success">/WEB-INF/jsp/devices/report.jsp</result>
+       <result name="csv">/WEB-INF/jsp/devices/devicesCsv.jsp</result>			
+     </action>		
+     <action name="barcodeSearch" 
+	     class="assets.action.BarcodeSearchAction" 
+	     method="execute">
+       <result name="input">/WEB-INF/jsp/devices/barcodeSearch.jsp</result>		
+       <result name="error">/WEB-INF/jsp/devices/barcodeSearch.jsp</result>
+       <result name="success">/WEB-INF/jsp/devices/barcodeSearch.jsp</result>
+     </action>		
+     <action name="monitorSearch" 
+	     class="assets.action.MonitorSearchAction" 
+	     method="execute">
+       <result name="input">/WEB-INF/jsp/monitors/monitorSearch.jsp</result>		
+       <result name="error">/WEB-INF/jsp/monitors/monitorSearch.jsp</result>
+       <result name="success">/WEB-INF/jsp/monitors/monitorSearch.jsp</result>
+     </action>
+     <action name="userSearch" 
+	     class="assets.action.UserSearchAction" 
+	     method="execute">
+       <result name="input">/WEB-INF/jsp/users/userSearch.jsp</result>		
+       <result name="error">/WEB-INF/jsp/users/userSearch.jsp</result>
+       <result name="success">/WEB-INF/jsp/users/userSearch.jsp</result>
+     </action>
+     <action name="employeeSearch" 
+	     class="assets.action.EmployeeSearchAction" 
+	     method="execute">
+       <result name="input">/WEB-INF/jsp/users/employeeSearch.jsp</result>		
+       <result name="error">/WEB-INF/jsp/users/employeeSearch.jsp</result>
+       <result name="success">/WEB-INF/jsp/users/employeeSearch.jsp</result>
+     </action>						
+     <action name="printerSearch" 
+	     class="assets.action.PrinterSearchAction" 
+	     method="execute">
+       <result name="input">/WEB-INF/jsp/printers/printerSearch.jsp</result>		
+       <result name="error">/WEB-INF/jsp/printers/printerSearch.jsp</result>
+       <result name="success">/WEB-INF/jsp/printers/printerSearch.jsp</result>
+     </action>
+     <action name="softwareSearch" 
+	     class="assets.action.SoftwareSearchAction" 
+	     method="execute">
+       <result name="input">/WEB-INF/jsp/softwares/softwareSearch.jsp</result>		
+       <result name="error">/WEB-INF/jsp/softwares/softwareSearch.jsp</result>
+       <result name="success">/WEB-INF/jsp/softwares/softwareSearch.jsp</result>
+     </action>
+     <action name="user" 
+	     class="assets.action.UserAction" 
+	     method="execute">
+       <result name="input">/WEB-INF/jsp/users/user.jsp</result>		
+       <result name="error">/WEB-INF/jsp/users/user.jsp</result>
+       <result name="success">/WEB-INF/jsp/users/user.jsp</result>
+     </action>
+     <action name="employee" 
+	     class="assets.action.EmployeeAction" 
+	     method="execute">
+       <result name="input">/WEB-INF/jsp/users/employee.jsp</result>		
+       <result name="error">/WEB-INF/jsp/users/employee.jsp</result>
+       <result name="success">/WEB-INF/jsp/users/employee.jsp</result>
+     </action>		
+   </package>
+   
+</struts>
