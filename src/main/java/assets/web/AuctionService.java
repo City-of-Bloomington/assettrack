@@ -48,12 +48,6 @@ public class AuctionService extends TopServlet{
 	String term ="", type="";
 	boolean success = true;
 	HttpSession session = null;
-	if(url.equals("")){
-	    url    = getServletContext().getInitParameter("url");
-	    //
-	    String str = getServletContext().getInitParameter("debug");
-	    if(str.equals("true")) debug = true;
-	}
 	Enumeration values = req.getParameterNames();
 	String [] vals = null;
 	while (values.hasMoreElements()){

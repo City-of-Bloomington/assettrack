@@ -133,7 +133,7 @@ public class FileDownload extends TopServlet{
 	    }
 	    //
 	    // Get content type by filename.
-	    String contentType = getServletContext().getMimeType(file.getName());
+	    String contentType = context.getMimeType(file.getName());
 	    //
 	    // To add new content types, add new mime-mapping entry in web.xml.
 	    if (contentType == null) {

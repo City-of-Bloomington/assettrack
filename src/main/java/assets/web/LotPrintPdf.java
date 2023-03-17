@@ -50,12 +50,6 @@ public class LotPrintPdf extends TopServlet {
 	boolean success=true;
 	BufferedWriter bw=null,bw2=null;
 	Enumeration<String> values = req.getParameterNames();
-	if(url.equals("")){
-	    url    = getServletContext().getInitParameter("url");
-	    url2   = getServletContext().getInitParameter("url2");
-	    String str = getServletContext().getInitParameter("debug");
-	    if(str != null && str.equals("true")) debug = true;
-	}
 	User user = null;
 	HttpSession session = req.getSession(false);
 	if(session != null){
@@ -171,7 +165,7 @@ public class LotPrintPdf extends TopServlet {
 	    phrase.add(Chunk.NEWLINE);
 	    Paragraph pp = new Paragraph();
 	    pp.setAlignment(Element.ALIGN_CENTER);
-	    ch = new Chunk("IT Department", fntb2);
+	    ch = new Chunk("ITS Department/City of Bloomington", fntb2);
 	    phrase.add(ch);
 	    phrase.add(Chunk.NEWLINE);
 	    ch = new Chunk(lot.getName(), fntb);
