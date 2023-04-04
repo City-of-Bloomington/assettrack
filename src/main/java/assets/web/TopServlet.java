@@ -17,6 +17,7 @@ import java.io.*;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import assets.utils.*;
+import assets.model.*;
 
 public class TopServlet extends HttpServlet {
     static String url = "";
@@ -26,6 +27,7 @@ public class TopServlet extends HttpServlet {
     static Configuration config = null;
     static Logger logger = LogManager.getLogger(TopServlet.class);
     static ServletContext context = null;
+    static EnvBean envBean = null;
     public void init(ServletConfig conf){
 	try{
 	    context = conf.getServletContext();
@@ -40,6 +42,13 @@ public class TopServlet extends HttpServlet {
 	    str = context.getInitParameter("cookieValue");
 	    if(str != null)
 		cookieValue = str;
+	    envBean = new EnvBean();
+	    str = context.getInitParameter("ldap_url");
+	    envBean.setUrl(str);
+	    str = context.getInitParameter("ldap_principle");
+	    envBean.setPrinciple(str);
+	    str = context.getInitParameter("ldap_password");
+	    envBean.setPassword(str);	    
 	    String username = context.getInitParameter("adfs_username");
 	    String auth_end_point = context.getInitParameter("auth_end_point");
 	    String token_end_point = context.getInitParameter("token_end_point");

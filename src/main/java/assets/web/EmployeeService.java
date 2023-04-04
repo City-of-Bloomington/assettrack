@@ -64,7 +64,7 @@ public class EmployeeService extends TopServlet{
 		action = value;  
 	    }
 	    else if (name.equals("withDevice")){ 
-		withDevice = value;  
+		//withDevice = value;  
 	    }						
 	    else{
 		// System.err.println(name+" "+value);

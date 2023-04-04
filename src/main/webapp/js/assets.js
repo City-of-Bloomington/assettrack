@@ -30,10 +30,27 @@ $("#employee_name").autocomplete({
     delay: 100,
     select: function( event, ui ) {
         if(ui.item){
-            $("#employee_id").val(ui.item.id);
+            $("#employee_id").val(ui.item.id); // return full name
         }
     }
 });
+
+$("#emp_name").autocomplete({
+    source: APPLICATION_URL + "EmpService?format=json",
+    minLength: 2,
+    dataType:"json",
+    delay: 100,
+    select: function( event, ui ) {
+        if(ui.item){
+            $("#last_name_id").val(ui.item.last_name);
+            $("#first_name_id").val(ui.item.first_name);
+            $("#username_id").val(ui.item.id);
+            $("#office_phone_id").val(ui.item.office_phone);
+        }
+    }
+})
+
+
 $("#user_name").autocomplete({
     source: APPLICATION_URL + "UserService?format=json",
     minLength: 2,

@@ -84,6 +84,7 @@ public class Employee extends CommonInc implements java.io.Serializable{
     public String getLast_name(){
 	return last_name;
     }
+    
     public String getFullName(){
 	if(fullName.equals("")){
 	    fullName = last_name;
@@ -120,6 +121,9 @@ public class Employee extends CommonInc implements java.io.Serializable{
 	if(val != null)
 	    last_name = val;
     }
+    public void setFullName(String val){
+	// needed for auto_complete 
+    }    
     public void setOffice_phone(String val){
 	if(val != null)
 	    office_phone = val;
@@ -217,7 +221,7 @@ public class Employee extends CommonInc implements java.io.Serializable{
 		
 	String str="", msg="";
 	String qq = "";
-	if(id.equals("") || username.equals("") || last_name.equals("")){
+	if(username.equals("") || last_name.equals("")){
 	    msg = "Employee id, username or last name not set";
 	    return msg;
 	}
@@ -243,6 +247,7 @@ public class Employee extends CommonInc implements java.io.Serializable{
 		stmt.setNull(3,Types.VARCHAR);
 	    else
 		stmt.setString(3,first_name);
+	    //
 	    stmt.setString(4,last_name);
 	    if(office_phone.equals(""))
 		stmt.setNull(5,Types.VARCHAR);
