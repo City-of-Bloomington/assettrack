@@ -19,7 +19,7 @@ import assets.utils.*;
 //
 // for Cas login
 // for using ADFS comment out the next line
-@WebServlet(urlPatterns = {"/Login","/login"}, loadOnStartup = 1)
+@WebServlet(urlPatterns = {"/CasLogin","/caslogin"}, loadOnStartup = 1)
 public class Login extends TopServlet{
 
     static final long serialVersionUID = 1470L;	

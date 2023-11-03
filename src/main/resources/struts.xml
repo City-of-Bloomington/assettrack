@@ -6,7 +6,7 @@
 <struts>
   <constant name="struts.devMode" value="true" />
    <constant name="struts.ui.theme" value="simple" />
-   <constant name="struts.action.excludePattern" value="/Login*,/AuctionService*,/UserService*,/DonationService*,/TypeService*,/SoftwareService*,/EmployeeService*,/doDownload*,/TicketStatsService*,/LotPrintPdf*,/LoginServlet*,/EmpService*" />
+   <constant name="struts.action.excludePattern" value="/Login*,/AuctionService*,/UserService*,/DonationService*,/TypeService*,/SoftwareService*,/EmployeeService*,/doDownload*,/TicketStatsService*,/LotPrintPdf*,/LoginServlet*,/EmpService*,/callback*" />
 
    <!-- to use this we need to use annotation
 	<constant name="struts.convention.result.path" value="/WEB-INF/jsp/" />

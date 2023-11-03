@@ -38,6 +38,7 @@
      </listener-class>
    </listener>
    -->
+   <!--
    <filter>
      <filter-name>CAS Authentication Filter</filter-name>
      <filter-class>org.jasig.cas.client.authentication.AuthenticationFilter</filter-class>
@@ -62,6 +63,7 @@
       <filter-name>CAS HttpServletRequest Wrapper Filter</filter-name>
       <url-pattern>/Login</url-pattern>
     </filter-mapping>
+    -->
     <session-config>
       <cookie-config>
 	<http-only>true</http-only>        

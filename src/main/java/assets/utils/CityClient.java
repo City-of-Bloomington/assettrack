@@ -143,7 +143,7 @@ public class CityClient {
 	}
 	System.err.println(username2);
 	try{
-	    User user2 = new User(false, username2);
+	    User user2 = new User(false, null, username2);
 	    String back = user2.doSelect();
 	    if(!back.equals("")){
 		message += back; // an error or no user found

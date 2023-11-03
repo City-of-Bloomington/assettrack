@@ -183,6 +183,7 @@ public class DisposeChange extends Item{
     public String doChange(){
 		
 	String back = "";
+	String new_status = "";
 	if(id.equals("")){
 	    back = " previous operation id not set ";
 	    return back;
@@ -196,6 +197,7 @@ public class DisposeChange extends Item{
 	    return back;
 	}
 	if(method_from.equals("Auction")){
+	    new_status="Auctioned";	    
 	    AuctionItem one = new AuctionItem(debug, id);
 	    back = one.doSelect();
 	    if(back.equals("")){
@@ -206,6 +208,7 @@ public class DisposeChange extends Item{
 	    }
 	}
 	else if(method_from.equals("Donation")){
+	    new_status = "Donated";
 	    Donation one = new Donation(debug, id);
 	    back = one.doSelect();
 	    if(back.equals("")){
@@ -216,6 +219,7 @@ public class DisposeChange extends Item{
 	    }						
 	}
 	else if(method_from.equals("Recycle")){
+	    new_status= "Recycled";
 	    RecycledItem one = new RecycledItem(debug, id);
 	    back = one.doSelect();
 	    if(back.equals("")){
@@ -226,6 +230,7 @@ public class DisposeChange extends Item{
 	    }
 	}
 	else if(method_from.equals("Discard")){
+	    new_status="Disposed";
 	    DiscardItem one = new DiscardItem(debug, id);
 	    back = one.doSelect();
 	    if(back.equals("")){
@@ -237,6 +242,14 @@ public class DisposeChange extends Item{
 	}
 	else{
 	    back = "Unknown dispose method "+method_from;
+	}
+	if(back.isEmpty()){
+	    // change the status in the original record
+	    if(type.equals("device")){
+		Device dd = new Device(debug, asset_id);
+		back = dd.doSelect();
+		back = dd.updateStatus(new_status);
+	    }
 	}
 	return back;
     }

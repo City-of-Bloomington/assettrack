@@ -30,7 +30,7 @@ import assets.utils.*;
  */
 // uncomment this line if you want to use ADFS
 //
-@WebServlet(urlPatterns = {"/OpenIdLogin","/openidlogin"}, loadOnStartup = 1)
+@WebServlet(urlPatterns = {"/Login","/login"}, loadOnStartup = 1)
 public class LoginServlet extends TopServlet {
 
     static Logger logger = LogManager.getLogger(LoginServlet.class);

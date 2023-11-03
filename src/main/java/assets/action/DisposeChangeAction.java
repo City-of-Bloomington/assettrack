@@ -20,9 +20,9 @@ public class DisposeChangeAction extends TopAction{
     static final long serialVersionUID = 1320L;	
     static Logger logger = LogManager.getLogger(DisposeChangeAction.class);
     //
-    DisposeChange item = null;
+    DisposeChange dispose = null;
     String title = " Most recent changes";
-    List<Type> organizations = null;		// donations
+    List<Type> organizations = null;	// for donations	
     List<Lot> lots = null;
     List<Auction> auctions = null;
     List<Type> locations = null;	// for recycle		
@@ -41,19 +41,19 @@ public class DisposeChangeAction extends TopAction{
 	    }	
 	}
 	if(action.equals("Change")){
-	    item.setUser_id(user.getId());
-	    back = item.doChange();
+	    dispose.setUser_id(user.getId());
+	    back = dispose.doChange();
 	    if(!back.equals("")){
 		addActionError(back);
 	    }
 	    else{
-		id = item.getId();
+		id = dispose.getId();
 		addActionMessage("Changed Successfully");
 	    }
 	}
 	else{
-	    getItem();
-	    back = item.doSelect();
+	    getDispose();
+	    back = dispose.doSelect();
 	    if(!back.equals("")){
 		addActionError(back);
 	    }						
@@ -73,24 +73,24 @@ public class DisposeChangeAction extends TopAction{
 	}
 	return organizations;
     }
-    public DisposeChange getItem(){
-	if(item == null){
-	    item = new DisposeChange();
+    public DisposeChange getDispose(){
+	if(dispose == null){
+	    dispose = new DisposeChange();
 	}
 	if(!id.equals(""))
-	    item.setId(id);
+	    dispose.setId(id);
 	if(!method_from.equals(""))
-	    item.setMethod_from(method_from);
-	return item;
+	    dispose.setMethod_from(method_from);
+	return dispose;
     }
-    public void setItem(DisposeChange val){
+    public void setDispose(DisposeChange val){
 	if(val != null){
-	    item = val;
+	    dispose = val;
 	    if(!id.equals("")){
-		item.setId(id);
+		dispose.setId(id);
 	    }
 	    if(!method_from.equals("")){
-		item.setMethod_from(method_from);
+		dispose.setMethod_from(method_from);
 	    }						
 	}
     }
