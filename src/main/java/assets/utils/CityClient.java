@@ -79,7 +79,7 @@ public class CityClient {
 	    HttpPost httpPost = new HttpPost(uri);
 	    httpPost.setHeader("Content-Type","application/x-www-form-urlencoded");
 	    String nonce = UUID.randomUUID().toString();
-	    System.err.println(" nonce "+nonce);
+	    // System.err.println(" nonce "+nonce);
 	    List<NameValuePair> params = new ArrayList<NameValuePair>();
 	    params.add(new BasicNameValuePair("code", code));
 						
@@ -93,13 +93,13 @@ public class CityClient {
 	    CloseableHttpResponse response = client.execute(httpPost);
 	    // check if not 200				
 	    int resStatus = response.getStatusLine().getStatusCode();
-	    System.err.println(" res status "+resStatus);
+	    // System.err.println(" res status "+resStatus);
 	    String jsonString = EntityUtils.toString(response.getEntity());
-	    System.err.println("response json str "+jsonString);
+	    // System.err.println("response json str "+jsonString);
 	    JSONObject json = new JSONObject(jsonString);
 	    String access_token = json.getString("access_token");
 	    String id_token = json.getString("id_token");
-	    System.err.println(" id_token "+id_token);
+	    // System.err.println(" id_token "+id_token);
 
 	    client.close();
 	    String[] chunks = id_token.split("\\.");
@@ -113,11 +113,11 @@ public class CityClient {
 	    String header = new String(decoder.decode(header_chunk));
 	    String payload = new String(decoder.decode(payLoad_chunk));
 						
-	    System.err.println(" header "+header);
-	    System.err.println(" payload "+payload);
+	    // System.err.println(" header "+header);
+	    // System.err.println(" payload "+payload);
 	    JSONObject jjson = new JSONObject(payload);
 	    String username = jjson.getString(config.getUsername());
-	    System.err.println(" username "+username);
+	    // System.err.println(" username "+username);
 	    if(username != null && !username.isEmpty()){
 		user = getUser(username);
 	    }
@@ -141,7 +141,7 @@ public class CityClient {
 	else{
 	    username2 = username;
 	}
-	System.err.println(username2);
+	// System.err.println(username2);
 	try{
 	    User user2 = new User(false, null, username2);
 	    String back = user2.doSelect();
@@ -163,7 +163,7 @@ public class CityClient {
     // convert client secret to SecretKey
     //
     private SecretKey convertStringToSecretKey(String encodedKey) {
-	System.err.println(" convert string to secret key");
+	// System.err.println(" convert string to secret key");
 	byte[] decodedKey = Base64.getUrlDecoder().decode(encodedKey);
 	SecretKey originalKey = new SecretKeySpec(decodedKey, 0, decodedKey.length, "HmacSHA256"); // AES, DES, HmacSHA256
 	return originalKey;
@@ -175,13 +175,13 @@ public class CityClient {
 	    String key = config.getClientSecret();
 	    SecretKey secretKey = convertStringToSecretKey(key);
 	    String content = (header_chunk + "." + payLoad_chunk);
-	    System.err.println(" content "+content);
+	    // System.err.println(" content "+content);
 	    byte[] content_bytes = content.getBytes("UTF-8");
 	    mac.init(secretKey);
 	    byte[] digest = mac.doFinal(content_bytes);
 	    String digest_str = Base64.getUrlEncoder().encodeToString(digest);
-	    System.err.println(" sig "+signature);
-	    System.err.println(" sig2 "+digest_str);
+	    // System.err.println(" sig "+signature);
+	    // System.err.println(" sig2 "+digest_str);
 	    if(signature.equals(digest_str)){
 		return true;
 	    }
